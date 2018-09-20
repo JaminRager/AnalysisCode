@@ -1,0 +1,138 @@
+double GetSigma(double energy);
+
+// I add this double "BDMMean" because you will want to scan this mean value of the BDM Gaussian later
+double JaminBkgModelExample(double BDMMean = 15., bool bBDMFit = true)
+{
+  gSystem->Load("libRooFit");
+  using namespace RooFit;
+
+  ///Low energy model done as extended likelihood - USE THIS!
+  ///First import data
+  TFile *file = new TFile("CombinedEnrUnbinned.root");
+  TH1D* hh = (TH1D*) gDirectory->Get("spect");
+  hh->GetXaxis()->SetRangeUser(5, 10000);
+  RooRealVar x("x","x",0.,2000.);
+  // Set the range where you want to fit here so the plots are prettier
+  x.setRange(5.,200.);
+  RooDataHist data("data","dataset with enrHE",x, Import(*hh));
+
+  // Load cosmogenic peaks -- I have saved them into histograms here
+  TFile *gausFile = new TFile("GausCosmoPDFs_Jamin.root");
+  TH1D *Fe55Spec = (TH1D*)gausFile->Get("hFe55");
+  TH1D *Co57Spec = (TH1D*)gausFile->Get("hCo57");
+  TH1D *Zn65Spec = (TH1D*)gausFile->Get("hZn65");
+  TH1D *Ga68Spec = (TH1D*)gausFile->Get("hGa68");
+  TH1D *Ge68Spec = (TH1D*)gausFile->Get("hGe68");
+  TH1D *Pb210Spec = (TH1D*)gausFile->Get("hPb210");
+
+  // Load Tritium here -- again it's a histogram
+  TFile *tritFile = new TFile("TritSpec_Jamin.root");
+  TH1D *tritSpec = (TH1D*)tritFile->Get("tritHist");
+
+  // We'll just use a polynomial as the background
+  RooPolynomial bkgflat("Background", "Linear Background function", x, RooArgList());
+
+  RooDataHist tritRooHist("tritBulk", "Tritium Histogram (Bulk)", x, Import(*tritSpec));
+  RooDataHist Fe55RooHist("Fe55", "Fe55 Histogram", x, Import(*Fe55Spec));
+  RooDataHist Co57RooHist("Co57", "Co57 Histogram", x, Import(*Co57Spec));
+  RooDataHist Zn65RooHist("Zn65", "Zn65 Histogram", x, Import(*Zn65Spec));
+  RooDataHist Ga68RooHist("Ga68", "Ga68 Histogram", x, Import(*Ga68Spec));
+  RooDataHist Ge68RooHist("Ge68", "Ge68 Histogram", x, Import(*Ge68Spec));
+  RooDataHist Pb210RooHist("Pb210", "Pb210 Histogram", x, Import(*Pb210Spec));
+
+  // If you have a histogram for the tritium spectrum, you can load it in the exact same as
+  // The RooDataHist can be converted to a Pdf -- the "1" at the end is the type of interpolation
+  RooHistPdf tritPdf("tritPdf", "TritiumPdf", x, tritRooHist, 1);
+  RooHistPdf Fe55_gauss("Fe55_gauss", "Fe55_gauss", x, Fe55RooHist, 1);
+  RooHistPdf Co57_gauss("Co57_gauss", "Co57_gauss", x, Co57RooHist, 1);
+  RooHistPdf Zn65_gauss("Zn65_gauss", "Zn65_gauss", x, Zn65RooHist, 1);
+  RooHistPdf Ga68_gauss("Ga68_gauss", "Ga68_gauss", x, Ga68RooHist, 1);
+  RooHistPdf Ge68_gauss("Ge68_gauss", "Ge68_gauss", x, Ge68RooHist, 1);
+  RooHistPdf Pb210_gauss("Pb210_gauss", "Pb210_gauss", x, Pb210RooHist, 1);
+
+  RooRealVar num_trit("Tritium", "Tritium", 1000.0, 0.0, 100000.);
+  RooRealVar num_bkg("Bkg", "Bkg", 1500, 0.0, 50000.);
+  RooRealVar num_Fe55("Fe55", "Fe55", 3.0, 0.0, 5000.);
+  RooRealVar num_Co57("Co57", "Co57", 0.0, 0.0, 5000.);
+  RooRealVar num_Zn65("Zn65", "Zn65", 10.0, 0.0, 5000.);
+  RooRealVar num_Ga68("Ga68", "Ga68", 1.0, 0.0, 1000.);
+  RooRealVar num_Ge68("Ge68", "Ge68", 50.0, 0.0, 5000.);
+  RooRealVar num_Pb210("Pb210", "Pb210", 300.0, 0.0, 5000.);
+
+  // Extended PDF model -- use this to create an extended model
+  RooExtendPdf tritPdfe("tritPdfe", "Extended Tritium", tritPdf, num_trit);
+  RooExtendPdf Fe55_gausse("Fe55_gausse", "Extended Fe55_gauss", Fe55_gauss, num_Fe55);
+  RooExtendPdf Co57_gausse("Co57_gausse", "Extended Co57_gauss", Co57_gauss, num_Co57);
+  RooExtendPdf Zn65_gausse("Zn65_gausse", "Extended Zn65_gauss", Zn65_gauss, num_Zn65);
+  RooExtendPdf Ga68_gausse("Ga68_gausse", "Extended Ga68_gauss", Ga68_gauss, num_Ga68);
+  RooExtendPdf Ge68_gausse("Ge68_gausse", "Extended Ge68_gauss", Ge68_gauss, num_Ge68);
+  RooExtendPdf Pb210_gausse("Pb210_gausse", "Extended Pb210_gauss", Pb210_gauss, num_Pb210);
+  RooExtendPdf bkgflate("bkgflate", "Extended bkgflat", bkgflat, num_bkg);
+
+  // This is for the BDM signal -- the mean and sigma can vary according to your input
+  RooRealVar BDM_mean("BDM_mean", "BDM_mean", BDMMean);
+  RooRealVar BDM_sigma("BDM_sigma", "BDM_sigma", GetSigma(BDMMean));
+  RooGaussian BDM_gauss("BDM_gauss", "BDM Gaussian", x, BDM_mean, BDM_sigma);
+  RooRealVar num_BDM("BDM", "BDM", 0.0, 0.0, 50000.);
+  RooExtendPdf BDM_gausse("BDM_gausse", "Extended BDM_gauss", BDM_gauss, num_BDM);
+
+  RooArgList modelList(tritPdfe, bkgflate, Fe55_gausse, Zn65_gausse, Ge68_gausse, Ga68_gausse, Pb210_gausse);
+  // If the flag is turned on to fit the BDM gaussian, add it to the list of the models
+  if(bBDMFit)
+  {
+    modelList.add(BDM_gausse);
+  }
+  // Combine into total model
+  RooAddPdf model("model","model", modelList);
+
+
+  // Create a plot
+  TCanvas *cSpec = new TCanvas("cSpec", "cSpec", 800,600);
+  // Set log scale (comment out for linear scale)
+  cSpec->SetLogy();
+
+  RooPlot* xframe = x.frame();
+  // You can actually save the results of the fit into a "RooFitResult" object
+  // Make sure this fit Range is the same as the 'x.setRange()' from earlier, or else it'll look weird
+  RooFitResult *fitResult = model.fitTo(data, Range(5,200.), Minos(), Save());
+  data.plotOn(xframe);
+  model.plotOn(xframe);
+  // Draw some individual components of stuff
+  model.plotOn(xframe, Components("tritPdfe"), LineColor(kRed), LineStyle(kDashed));
+  // Draw the BDM peak if we're fitting for it
+  if(bBDMFit)
+  {
+    model.plotOn(xframe, Components("BDM_gausse"), LineColor(kBlack), LineStyle(kDashed));
+  }
+
+  xframe->Draw();
+
+  // It's nice because you can just print out the results for cross checking
+  fitResult->Print("v");
+
+  // You can grab the result of any single value by searching for the
+  double BDMValue = 0;
+  double BDMErrorHi = 0;
+  double BDMErrorLo = 0;
+  if(bBDMFit)
+  {
+    BDMValue = dynamic_cast<RooRealVar*>(fitResult->floatParsFinal().find("BDM"))->getValV();
+    BDMErrorHi = dynamic_cast<RooRealVar*>(fitResult->floatParsFinal().find("BDM"))->getErrorHi();
+    BDMErrorLo = dynamic_cast<RooRealVar*>(fitResult->floatParsFinal().find("BDM"))->getErrorLo();
+    cout << "BDM Mean (keV): " << BDMMean << " BDM Best Fit Value: " << BDMValue << " (+" << BDMErrorHi << ", -" << BDMErrorLo << ")" << endl;
+  }
+
+  return BDMValue;
+}
+
+// This function calculates the energy resolution
+//based off of the energy resolution function
+// The parameters I use here are from DS0, probably want to slightly change this in the future
+double GetSigma(double energy)
+{
+  	// double sig = std::sqrt(std::pow(sig0,2) + eps * F * energy);
+    double p0 = 0.147; double p1=0.0173; double p2=0.0003;
+    double sig = std::sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy );
+
+	return sig;
+}

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#--SBATCH -t 4:00:00  --ntasks=1
+#SBATCH --job-name=mjd-data_clean
+#SBATCH --account=majorana
+#SBATCH --output=/global/homes/j/jrager/LowE/Logs/test.sh.o%j                                                             
+#SBATCH --error=/global/homes/j/jrager/LowE/Logs/test.sh.o%j                                                             
+#SBATCH -p realtime --image=custom:pdsf-chos-sl64:v4
+#
+
+#---------------------------------------------------------------------------------------------------------------
+shifter  --volume=/global/project:/project  /bin/bash  /global/homes/j/jrager/LowE/Scripts/test.sh

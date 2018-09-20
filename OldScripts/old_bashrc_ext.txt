@@ -1,0 +1,37 @@
+# begin .bashrc.ext
+[ -e $HOME/.dbgdot ] && echo "entering .bashrc.ext"
+
+echo "sourcing .bashrc.ext"
+ 
+# User additions to .bashrc go in this file
+
+#Setup GAT to run Clint's stuff.
+source ~/env/EnvSetup.sh
+
+#Uncomment this to get normal analysis code to work.
+#export SETUP_MJSW201610PROD true
+#source /project/projectdirs/majorana/setupMajorana.sh
+
+#Find libMGDOROOT
+#export PATH="/project/projectdirs/majorana/software/sl64/mjsw/mjsw201706Prod/MGDO/install/lib:$PATH"
+#source ~/.bash_profile.ext
+
+#source /project/projectdirs/majorana/setupMajorana.sh
+
+#setenv MAGEDIR /global/u1/j/jrager/Dev/MaGe
+#setenv G4WORKDIR /global/u1/j/jrager/Dev/MaGe
+#setenv PATH $MAGEDIR/bin/Linux-g++:$PATH
+#setenv PATH /global/project/projectdirs/majorana/software/sl64/CLHEP/2.3.3.1/CLHEP/lib:$PATH
+
+# Un-comment and modify the following template for system-specific
+# personal settings.
+#
+# if [ "$NERSC_HOST" == "hopper" ]
+# then
+#   export MY_ENV_VAR="my_val"
+# fi
+
+
+
+[ -e $HOME/.dbgdot ] && echo "exiting .bashrc.ext"
+# end .bashrc.ext

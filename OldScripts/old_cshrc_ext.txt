@@ -1,0 +1,35 @@
+echo "sourcing /global/homes/j/jrager/old_cshrc_ext.txt"
+
+# begin .cshrc.ext
+if (-e $HOME/.dbgdot) then
+  echo "entering .cshrc.ext"
+endif
+ 
+# User additions to .cshrc go in this file
+
+#setenv SETUP_MJSW201612PROD true
+
+#Was using this one most recently
+setenv SETUP_MJSW201610PROD true
+
+#source /common/majorana/scripts/setupMajorana.csh
+
+setenv MAGEDIR /global/u1/j/jrager/Dev/MaGe
+setenv G4WORKDIR /global/u1/j/jrager/Dev/MaGe
+#setenv MAGERESULTS /global/u1/j/jrager/Dev/mageData
+#setenv GATRESULTS /global/u1/j/jrager/Dev/mageData
+setenv GATRESULTS /global/projecta/projectdirs/majorana/users/jrager/outputFiles
+setenv MAGERESULTS /global/projecta/projectdirs/majorana/users/jrager/outputFiles 
+
+# Un-comment and modify the following template for system-specific
+# personal settings.
+#
+ #if ($NERSC_HOST == "pdsf") then
+   #setenv TMPDIR  "/global/homes/j/jrager"
+   #setenv MAGERESULTS  "/global/u1/j/jrager"
+ #endif
+
+if (-e $HOME/.dbgdot) then
+  echo "exiting .cshrc.ext"
+endif
+# end .cshrc.ext

@@ -1,0 +1,37 @@
+# begin .bashrc.ext
+[ -e $HOME/.dbgdot ] && echo "entering .bashrc.ext"
+
+echo "sourcing .bashrc.ext"
+ 
+export HOMEDIR=/global/homes/j/jrager
+export SWDIR=/project/projectdirs/majorana/software/sl64
+export CXXFLAGS='-std=c++11'
+alias rootmj="root -b -l ~/env/rootlogon.C"
+alias qloginmj="qlogin -l h_vmem=2G -q mndl_prod.q"
+alias qsubmj="qsub -l h_vmem=2G -q mndl_prod.q"
+
+export MJSWDIR=${SWDIR}/mjsw/mjsw201706Prod
+export SETUP_MJSW201706PROD="jamin is great"
+
+# The DTN's can't find these scripts, that's why there's an interactive check
+source /etc/profile.d/modules.sh
+
+# run setup scripts
+source /project/projectdirs/majorana/setupMajorana.sh
+source /project/projectdirs/majorana/software/sl64/setupMajoranaSL64.sh
+
+
+
+
+# Un-comment and modify the following template for system-specific
+# personal settings.
+#
+# if [ "$NERSC_HOST" == "hopper" ]
+# then
+#   export MY_ENV_VAR="my_val"
+# fi
+
+
+
+[ -e $HOME/.dbgdot ] && echo "exiting .bashrc.ext"
+# end .bashrc.ext

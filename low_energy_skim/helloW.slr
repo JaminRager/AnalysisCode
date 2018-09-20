@@ -1,0 +1,9 @@
+#!/bin/bash
+#$ -l projectio=1 -j y  -l h_cpu=24:00:00 -l h_vmem=4G -m e  -M ragerj@unc.edu
+source ~/.bashrc.ext
+#source ~/env/EnvSetup.sh
+#export HOMEDIR=/global/homes/j/jrager
+#export SWDIR=/project/projectdirs/majorana/software/sl64
+#export CXXFLAGS='-std=c++11'
+
+sbatch -p realtime helloWrealtime.sh

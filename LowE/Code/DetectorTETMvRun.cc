@@ -136,6 +136,7 @@ int main()
 	detectorChannels.insert(600);
 	detectorChannels.insert(598);
 	detectorChannels.insert(592);
+	detectorChannels.insert(594);
 	std::cout << "Added skimfiles and detectors for DS-3" << std::endl;
     }
 

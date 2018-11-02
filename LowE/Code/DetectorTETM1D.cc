@@ -38,7 +38,7 @@ int main()
     UInt_t runNumb;
     std::string dataFile;
 
-    std::string DSets = "2";
+    std::string DSets = "3";
     std::stringstream ss;  // General use stream for string to number conversion.
     std::string outFileName;
     std::cout << "std::string things initialized." << std::endl;
@@ -136,6 +136,7 @@ int main()
 	detectorChannels.insert(600);
 	detectorChannels.insert(598);
 	detectorChannels.insert(592);
+	detectorChannels.insert(594);
 	std::cout << "Added skimfiles and detectors for DS-3" << std::endl;
     }
 

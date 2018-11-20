@@ -13,6 +13,7 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TGraphAsymmErrors.h"
+#include "TEfficiency.h"
 
 #include "GATDataSet.hh"
 #include <string>
@@ -21,16 +22,39 @@
 #include <TStyle.h>
 #include "TColor.h"
 
-int main()
-{
-  TFile *f1 = new TFile("/global/u1/j/jrager/LowE/ClopperErrorDS2Ch592.root");
-  cout << "Creating outpout file" <<  endl;
+int main(int argc, char *argv[])
+{ 
+  std::cout << "Efficiency with Clopper-Pearson error bars." << std::endl;
   
-  TFile *f2 = new TFile("/global/homes/j/jrager/LowE/Data/EfficiencyDS2chan592.root");
-  TH1F *hFull= (TH1F*)f->Get("Tot");
-  TH1F *hCut = (TH1F*)f->Get("Pass");
-  TEfficiency *eff = new TEfficiency("eff","Efficiency", 25, 0, 100);
-  f1.cd();
+  if(argc != 2) {
+    std::cout << "Need 1 arguments to give detector channel!" << std::endl;
+    std::cout << "Usage: ClopperPearsonError chan#" << std::endl;
+    std::cout << "For example, detector channel 582." << std::endl;
+    return 0;
+  }
+
+  // Data file
+  std::string dataFile; 
+
+  // Path to data file.  
+  std::string dataPath("/global/homes/j/jrager/LowE/Data/PassFailPlots/");
+
+  // File where output will be saved
+  std::string outFile; 
+
+  // Directory where file will be saved.  
+  std::string savePath("/global/homes/j/jrager/LowE/Data/IndivEffeciencies/");
+
+  dataFile = dataPath + "EfficiencyDS1chan" + std::string(argv[1]) + ".root";
+  TFile f1(dataFile.c_str());
+  //TFile *f1 = new TFile("/global/homes/j/jrager/LowE/Data/EfficiencyDS1chan582.root");
+  outFile = savePath + "ClopperErrorDS1Ch" + std::string(argv[1]) + ".root";
+  TFile f2(outFile.c_str(), "RECREATE");
+  f2.cd();
+
+  TH1F *hFull= (TH1F*)f1.Get("Tot");
+  TH1F *hCut = (TH1F*)f1.Get("Pass");
+  TEfficiency *eff = new TEfficiency("eff","Efficiency", 20, 0, 100);
     
   // Dummy variables
   double deffHi = 0;
@@ -39,35 +63,41 @@ int main()
   double dCut = 0;
 
   // Arrays for the efficiencies and intervals
-  double x[25] = {};
-  double xerr[25] = {};
-  double effArr[25] = {};
-  double effHi[25] = {};
-  double effLo[25] = {};
+  double x[20] = {};
+  double xerr[20] = {};
+  double effArr[20] = {};
+  double effHi[20] = {};
+  double effLo[20] = {};
 
   // Calculate the upper and lower for each bin
-  for(int i = 0; i < hFull->GetNbinsX(); i++)
+  // It is important to start at i=1, and  stop at GetNbinsX()+1
+  for(int i = 1; i < ((hFull->GetNbinsX())+1); i++)
   {
     dFull = hFull->GetBinContent(i);
     dCut = hCut->GetBinContent(i);
     deffHi = eff->ClopperPearson(dFull, dCut, 0.9, true);
     deffLo = eff->ClopperPearson(dFull, dCut, 0.9, false);
-    cout <<"Bin: " << i << " Full Counts: " << dFull << " Cut Counts: " << dCut << " Upper CL: " << deffHi << " Lower CL: " << deffLo << endl;
+    std::cout <<"Bin: " << i << " Full Counts: " << dFull << " Cut Counts: " << dCut << " Upper CL: " << deffHi << " Lower CL: " << deffLo << std::endl;
 
-    x[i] = i;
-    xerr[i] = 0;
-    effArr[i] = dCut/dFull;
+    x[i-1] = (i*5.0)-5.0;
+    xerr[i-1] = 0;
+    effArr[i-1] = dCut/dFull;
     // Here make sure the error bars are calculated properly
-    effHi[i] = deffHi - dCut/dFull;
-    effLo[i] = dCut/dFull - deffLo;
+    effHi[i-1] = deffHi - dCut/dFull;
+    effLo[i-1] = dCut/dFull - deffLo;
   }
 
-  TGraphAsymmErrors *geff = new TGraphAsymmErrors(25, x, effArr, xerr, xerr, effLo, effHi);
+  TGraphAsymmErrors *geff = new TGraphAsymmErrors(20, x, effArr, xerr, xerr, effLo, effHi);
+  //TCanvas *c2 = new TCanvas("c2","c2",800,600);
   geff->SetMarkerStyle(21);
   geff->SetMarkerColor(kRed);
-  geff->SetTitle("Efficiency with ClopperPearson intervals");
+  //geff->SetTitle("Efficiency with ClopperPearson intervals");
+  geff->GetXaxis()->SetTitle("trapENFCal (keV)");
+  geff->GetYaxis()->SetTitle("efficiency");
   //geff->Draw("AP");
+  //geff->SetDrawOption("AP");
   geff->Write();
+  f2.Close();
 
   return 0;
 }

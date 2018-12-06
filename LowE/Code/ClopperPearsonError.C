@@ -47,7 +47,7 @@ void ClopperPearsonError()
   cout << "Creating outpout file" <<  endl;
   f2->cd();
     
-  TGraphAsymmErrors *geff = new TGraphAsymmErrors(50, x, effArr, xerr, xerr, effLo, effHi);
+  TGraphAsymmErrors *geff = new TGraphAsymmErrors(20, x, effArr, xerr, xerr, effLo, effHi);
   TCanvas *c2 = new TCanvas("c2","c2",800,600);
   geff->SetMarkerStyle(21);
   geff->SetMarkerColor(kRed);

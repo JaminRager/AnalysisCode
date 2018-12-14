@@ -100,47 +100,56 @@
     double xerr[20] = {};
     cout << "Initializing arrays" << endl;
 
-    double LT = 58.7676;
+    double LT1 = 57.7280;
     double M1 = 0.979;
     double errM1 = 0.013;
+    double LT2 = 57.8146;
     double M2 = 0.811;
     double errM2 = 0.012;
+    double LT3 = 57.3137;
     double M3 = 0.968;
     double errM3 = 0.013;
     //double M4 = 0.560;
     //double errM4 = 0.013;
+    double LT5 = 53.7221;
     double M5 = 0.723;
     double errM5 = 0.011;
+    double LT6 = 57.8028;
     double M6 = 0.659;
     double errM6 = 0.011;
+    double LT7 = 56.8070;
     double M7 = 0.886;
     double errM7 = 0.012;
+    double LT8 = 56.9828;
     double M8 = 0.949;
     double errM8 = 0.013;
+    double LT9 = 54.2328;
     double M9 = 1.024;
     double errM9 = 0.014;
+    double LT10 = 49.6427;
     double M10 = 0.632;
     double errM10 = 0.011;
+    double LT11 = 52.6169;
     double M11 = 0.732;
     double errM11 = 0.011;
+    double LT12 = 58.1395;
     double M12 = 0.701;
     double errM12 = 0.011;
+    double LT13 = 57.4076;
     double M13 = 0.5722;
     double errM13 = 0.0094;
     //double M14 = 0.561;
     //double errM14 = 0.013;
+    double LT15 = 57.3239;
     double M15 = 0.710;
     double errM15 = 0.011;
+    double LT16 = 47.2601;
     double M16 = 0.5908;
     double errM16 = 0.009;
+    double LT17 = 53.8322;
     double M17 = 0.964;
     double errM17 = 0.013;
-    //double LT = 1.0;
-    //double M1 = 1.0;
-    //double errM1 = 1.0;
-    //double M2 = 1.0;
-    //double errM2 = 1.0;
-
+    
 
     cout << "Beginning loop" << endl;
     for(int i = 0; i < 20; i++)
@@ -196,12 +205,11 @@
     errlow16[i] = geff16->GetErrorYlow(i);
     errhi17[i] = geff17->GetErrorYhigh(i);
     errlow17[i] = geff17->GetErrorYlow(i);
-    effSum[i] = (LT*M1*eff1[i]) + (LT*M2*eff2[i]) + (LT*M3*eff3[i]) + (LT*M5*eff5[i]) + (LT*M6*eff6[i]) + (LT*M7*eff7[i]) + (LT*M8*eff8[i]) + (LT*M9*eff9[i]) + (LT*M10*eff10[i]) + (LT*M11*eff11[i]) + (LT*M12*eff12[i]) + (LT*M13*eff13[i]) +  (LT*M15*eff15[i]) + (LT*M16*eff16[i]) + (LT*M17*eff17[i]);
-	errSumhi[i] = sqrt(((errhi1[i]*M1*LT)*(errhi1[i]*M1*LT)) + ((errM1*eff1[i]*LT)*(errM1*eff1[i]*LT)) + ((errhi2[i]*M2*LT)*(errhi2[i]*M2*LT)) + ((errM2*eff2[i]*LT)*(errM2*eff2[i]*LT)) + ((errhi3[i]*M3*LT)*(errhi3[i]*M3*LT)) + ((errM3*eff3[i]*LT)*(errM3*eff3[i]*LT)) + ((errhi5[i]*M5*LT)*(errhi5[i]*M5*LT)) + ((errM5*eff5[i]*LT)*(errM5*eff5[i]*LT)) + ((errhi6[i]*M6*LT)*(errhi6[i]*M6*LT)) + ((errM6*eff6[i]*LT)*(errM6*eff6[i]*LT)) + ((errhi7[i]*M7*LT)*(errhi7[i]*M7*LT)) + ((errM7*eff7[i]*LT)*(errM7*eff7[i]*LT)) + ((errhi8[i]*M8*LT)*(errhi8[i]*M8*LT)) + ((errM8*eff8[i]*LT)*(errM8*eff8[i]*LT)) + ((errhi9[i]*M9*LT)*(errhi9[i]*M9*LT)) + ((errM9*eff9[i]*LT)*(errM9*eff9[i]*LT)) + ((errhi10[i]*M10*LT)*(errhi10[i]*M10*LT)) + ((errM10*eff10[i]*LT)*(errM10*eff10[i]*LT)) + ((errhi11[i]*M11*LT)*(errhi11[i]*M11*LT)) + ((errM11*eff11[i]*LT)*(errM11*eff11[i]*LT)) + ((errhi12[i]*M12*LT)*(errhi12[i]*M12*LT)) + ((errM12*eff12[i]*LT)*(errM12*eff12[i]*LT)) + ((errhi13[i]*M13*LT)*(errhi13[i]*M13*LT)) + ((errM13*eff13[i]*LT)*(errM13*eff13[i]*LT)) + ((errhi15[i]*M15*LT)*(errhi15[i]*M5*LT)) + ((errM15*eff15[i]*LT)*(errM15*eff15[i]*LT)) + ((errhi16[i]*M16*LT)*(errhi16[i]*M16*LT)) + ((errM16*eff16[i]*LT)*(errM16*eff16[i]*LT)) + ((errhi17[i]*M17*LT)*(errhi17[i]*M17*LT)) + ((errM17*eff17[i]*LT)*(errM17*eff17[i]*LT)));
-    errSumlow[i] = sqrt(((errlow1[i]*M1*LT)*(errlow1[i]*M1*LT)) + ((errM1*eff1[i]*LT)*(errM1*eff1[i]*LT)) + ((errlow2[i]*M2*LT)*(errlow2[i]*M2*LT)) + ((errM2*eff2[i]*LT)*(errM2*eff2[i]*LT)) + ((errlow3[i]*M3*LT)*(errlow3[i]*M3*LT)) + ((errM3*eff3[i]*LT)*(errM3*eff3[i]*LT)) + ((errlow5[i]*M5*LT)*(errlow5[i]*M5*LT)) + ((errM5*eff5[i]*LT)*(errM5*eff5[i]*LT)) + ((errlow6[i]*M6*LT)*(errlow6[i]*M6*LT)) + ((errM6*eff6[i]*LT)*(errM6*eff6[i]*LT)) + ((errlow7[i]*M7*LT)*(errlow7[i]*M7*LT)) + ((errM7*eff7[i]*LT)*(errM7*eff7[i]*LT)) + ((errlow8[i]*M8*LT)*(errlow8[i]*M8*LT)) + ((errM8*eff8[i]*LT)*(errM8*eff8[i]*LT)) + ((errlow9[i]*M9*LT)*(errlow9[i]*M9*LT)) + ((errM9*eff9[i]*LT)*(errM9*eff9[i]*LT)) + ((errlow10[i]*M10*LT)*(errlow10[i]*M10*LT)) + ((errM10*eff10[i]*LT)*(errM10*eff10[i]*LT)) + ((errlow11[i]*M11*LT)*(errlow11[i]*M11*LT)) + ((errM11*eff11[i]*LT)*(errM11*eff11[i]*LT)) + ((errlow12[i]*M12*LT)*(errlow12[i]*M12*LT)) + ((errM12*eff12[i]*LT)*(errM12*eff12[i]*LT)) + ((errlow13[i]*M13*LT)*(errlow13[i]*M13*LT)) + ((errM13*eff13[i]*LT)*(errM13*eff13[i]*LT)) + ((errlow15[i]*M15*LT)*(errlow15[i]*M15*LT)) + ((errM15*eff15[i]*LT)*(errM15*eff15[i]*LT)) + ((errlow16[i]*M16*LT)*(errlow16[i]*M16*LT)) + ((errM16*eff16[i]*LT)*(errM16*eff16[i]*LT)) + ((errlow17[i]*M17*LT)*(errlow17[i]*M17*LT)) + ((errM17*eff17[i]*LT)*(errM17*eff17[i]*LT)));
-    //effSum[i] = (LT*M1*eff1[i]) + (LT*M2*eff2[i]) + (LT*M3*eff3[i]) + (LT*M4*eff4[i]) + (LT*M5*eff5[i]) + (LT*M6*eff6[i]) + (LT*M7*eff7[i]) + (LT*M8*eff8[i]) + (LT*M9*eff9[i]) + (LT*M10*eff10[i]) + (LT*M11*eff11[i]) + (LT*M12*eff12[i]) + (LT*M13*eff13[i]) + (LT*M14*eff14[i]) + (LT*M15*eff15[i]) + (LT*M16*eff16[i]) + (LT*M17*eff17[i]);
-    //errSumhi[i] = sqrt(((errhi1[i]*M1*LT)*(errhi1[i]*M1*LT)) + ((errM1*eff1[i]*LT)*(errM1*eff1[i]*LT)) + ((errhi2[i]*M2*LT)*(errhi2[i]*M2*LT)) + ((errM2*eff2[i]*LT)*(errM2*eff2[i]*LT)) + ((errhi3[i]*M3*LT)*(errhi3[i]*M3*LT)) + ((errM3*eff3[i]*LT)*(errM3*eff3[i]*LT)) + ((errhi4[i]*M4*LT)*(errhi4[i]*M4*LT)) + ((errM4*eff4[i]*LT)*(errM4*eff4[i]*LT)) + ((errhi5[i]*M5*LT)*(errhi5[i]*M5*LT)) + ((errM5*eff5[i]*LT)*(errM5*eff5[i]*LT)) + ((errhi6[i]*M6*LT)*(errhi6[i]*M6*LT)) + ((errM6*eff6[i]*LT)*(errM6*eff6[i]*LT)) + ((errhi7[i]*M7*LT)*(errhi7[i]*M7*LT)) + ((errM7*eff7[i]*LT)*(errM7*eff7[i]*LT)) + ((errhi8[i]*M8*LT)*(errhi8[i]*M8*LT)) + ((errM8*eff8[i]*LT)*(errM8*eff8[i]*LT)) + ((errhi9[i]*M9*LT)*(errhi9[i]*M9*LT)) + ((errM9*eff9[i]*LT)*(errM9*eff9[i]*LT)) + ((errhi10[i]*M10*LT)*(errhi10[i]*M10*LT)) + ((errM10*eff10[i]*LT)*(errM10*eff10[i]*LT)) + ((errhi11[i]*M11*LT)*(errhi11[i]*M11*LT)) + ((errM11*eff11[i]*LT)*(errM11*eff11[i]*LT)) + ((errhi12[i]*M12*LT)*(errhi12[i]*M12*LT)) + ((errM12*eff12[i]*LT)*(errM12*eff12[i]*LT)) + ((errhi13[i]*M13*LT)*(errhi13[i]*M13*LT)) + ((errM13*eff13[i]*LT)*(errM13*eff13[i]*LT)) + ((errhi14[i]*M14*LT)*(errhi14[i]*M14*LT)) + ((errM14*eff14[i]*LT)*(errM14*eff14[i]*LT)) + ((errhi15[i]*M15*LT)*(errhi15[i]*M5*LT)) + ((errM15*eff15[i]*LT)*(errM15*eff15[i]*LT)) + ((errhi16[i]*M16*LT)*(errhi16[i]*M16*LT)) + ((errM16*eff16[i]*LT)*(errM16*eff16[i]*LT)) + ((errhi17[i]*M17*LT)*(errhi17[i]*M17*LT)) + ((errM17*eff17[i]*LT)*(errM17*eff17[i]*LT)));
-    //errSumlow[i] = sqrt(((errlow1[i]*M1*LT)*(errlow1[i]*M1*LT)) + ((errM1*eff1[i]*LT)*(errM1*eff1[i]*LT)) + ((errlow2[i]*M2*LT)*(errlow2[i]*M2*LT)) + ((errM2*eff2[i]*LT)*(errM2*eff2[i]*LT)) + ((errlow3[i]*M3*LT)*(errlow3[i]*M3*LT)) + ((errM3*eff3[i]*LT)*(errM3*eff3[i]*LT)) + ((errlow4[i]*M4*LT)*(errlow4[i]*M4*LT)) + ((errM4*eff4[i]*LT)*(errM4*eff4[i]*LT)) + ((errlow5[i]*M5*LT)*(errlow5[i]*M5*LT)) + ((errM5*eff5[i]*LT)*(errM5*eff5[i]*LT)) + ((errlow6[i]*M6*LT)*(errlow6[i]*M6*LT)) + ((errM6*eff6[i]*LT)*(errM6*eff6[i]*LT)) + ((errlow7[i]*M7*LT)*(errlow7[i]*M7*LT)) + ((errM7*eff7[i]*LT)*(errM7*eff7[i]*LT)) + ((errlow8[i]*M8*LT)*(errlow8[i]*M8*LT)) + ((errM8*eff8[i]*LT)*(errM8*eff8[i]*LT)) + ((errlow9[i]*M9*LT)*(errlow9[i]*M9*LT)) + ((errM9*eff9[i]*LT)*(errM9*eff9[i]*LT)) + ((errlow10[i]*M10*LT)*(errlow10[i]*M10*LT)) + ((errM10*eff10[i]*LT)*(errM10*eff10[i]*LT)) + ((errlow11[i]*M11*LT)*(errlow11[i]*M11*LT)) + ((errM11*eff11[i]*LT)*(errM11*eff11[i]*LT)) + ((errlow12[i]*M12*LT)*(errlow12[i]*M12*LT)) + ((errM12*eff12[i]*LT)*(errM12*eff12[i]*LT)) + ((errlow13[i]*M13*LT)*(errlow13[i]*M13*LT)) + ((errM13*eff13[i]*LT)*(errM13*eff13[i]*LT)) + ((errlow14[i]*M14*LT)*(errlow14[i]*M14*LT)) + ((errM14*eff14[i]*LT)*(errM14*eff14[i]*LT)) + ((errlow15[i]*M15*LT)*(errlow15[i]*M15*LT)) + ((errM15*eff15[i]*LT)*(errM15*eff15[i]*LT)) + ((errlow16[i]*M16*LT)*(errlow16[i]*M16*LT)) + ((errM16*eff16[i]*LT)*(errM16*eff16[i]*LT)) + ((errlow17[i]*M17*LT)*(errlow17[i]*M17*LT)) + ((errM17*eff17[i]*LT)*(errM17*eff17[i]*LT)));
+    effSum[i] = (LT1*M1*eff1[i]) + (LT2*M2*eff2[i]) + (LT3*M3*eff3[i]) + (LT5*M5*eff5[i]) + (LT6*M6*eff6[i]) + (LT7*M7*eff7[i]) + (LT8*M8*eff8[i]) + (LT9*M9*eff9[i]) + (LT10*M10*eff10[i]) + (LT11*M11*eff11[i]) + (LT12*M12*eff12[i]) + (LT13*M13*eff13[i]) +  (LT15*M15*eff15[i]) + (LT16*M16*eff16[i]) + (LT17*M17*eff17[i]);
+	errSumhi[i] = sqrt(((errhi1[i]*M1*LT1)*(errhi1[i]*M1*LT1)) + ((errM1*eff1[i]*LT1)*(errM1*eff1[i]*LT1)) + ((errhi2[i]*M2*LT2)*(errhi2[i]*M2*LT2)) + ((errM2*eff2[i]*LT2)*(errM2*eff2[i]*LT2)) + ((errhi3[i]*M3*LT3)*(errhi3[i]*M3*LT3)) + ((errM3*eff3[i]*LT3)*(errM3*eff3[i]*LT3)) + ((errhi5[i]*M5*LT5)*(errhi5[i]*M5*LT5)) + ((errM5*eff5[i]*LT5)*(errM5*eff5[i]*LT5)) + ((errhi6[i]*M6*LT6)*(errhi6[i]*M6*LT6)) + ((errM6*eff6[i]*LT6)*(errM6*eff6[i]*LT6)) + ((errhi7[i]*M7*LT7)*(errhi7[i]*M7*LT7)) + ((errM7*eff7[i]*LT7)*(errM7*eff7[i]*LT7)) + ((errhi8[i]*M8*LT8)*(errhi8[i]*M8*LT8)) + ((errM8*eff8[i]*LT8)*(errM8*eff8[i]*LT8)) + ((errhi9[i]*M9*LT9)*(errhi9[i]*M9*LT9)) + ((errM9*eff9[i]*LT9)*(errM9*eff9[i]*LT9)) + ((errhi10[i]*M10*LT10)*(errhi10[i]*M10*LT10)) + ((errM10*eff10[i]*LT10)*(errM10*eff10[i]*LT10)) + ((errhi11[i]*M11*LT11)*(errhi11[i]*M11*LT11)) + ((errM11*eff11[i]*LT11)*(errM11*eff11[i]*LT11)) + ((errhi12[i]*M12*LT12)*(errhi12[i]*M12*LT12)) + ((errM12*eff12[i]*LT12)*(errM12*eff12[i]*LT12)) + ((errhi13[i]*M13*LT13)*(errhi13[i]*M13*LT13)) + ((errM13*eff13[i]*LT13)*(errM13*eff13[i]*LT13)) + ((errhi15[i]*M15*LT15)*(errhi15[i]*M15*LT15)) + ((errM15*eff15[i]*LT15)*(errM15*eff15[i]*LT15)) + ((errhi16[i]*M16*LT16)*(errhi16[i]*M16*LT16)) + ((errM16*eff16[i]*LT16)*(errM16*eff16[i]*LT16)) + ((errhi17[i]*M17*LT17)*(errhi17[i]*M17*LT17)) + ((errM17*eff17[i]*LT17)*(errM17*eff17[i]*LT17)));
+    errSumlow[i] = sqrt(((errlow1[i]*M1*LT1)*(errlow1[i]*M1*LT1)) + ((errM1*eff1[i]*LT1)*(errM1*eff1[i]*LT1)) + ((errlow2[i]*M2*LT2)*(errlow2[i]*M2*LT2)) + ((errM2*eff2[i]*LT2)*(errM2*eff2[i]*LT2)) + ((errlow3[i]*M3*LT3)*(errlow3[i]*M3*LT3)) + ((errM3*eff3[i]*LT3)*(errM3*eff3[i]*LT3)) + ((errlow5[i]*M5*LT5)*(errlow5[i]*M5*LT5)) + ((errM5*eff5[i]*LT5)*(errM5*eff5[i]*LT5)) + ((errlow6[i]*M6*LT6)*(errlow6[i]*M6*LT6)) + ((errM6*eff6[i]*LT6)*(errM6*eff6[i]*LT6)) + ((errlow7[i]*M7*LT7)*(errlow7[i]*M7*LT7)) + ((errM7*eff7[i]*LT7)*(errM7*eff7[i]*LT7)) + ((errlow8[i]*M8*LT8)*(errlow8[i]*M8*LT8)) + ((errM8*eff8[i]*LT8)*(errM8*eff8[i]*LT8)) + ((errlow9[i]*M9*LT9)*(errlow9[i]*M9*LT9)) + ((errM9*eff9[i]*LT9)*(errM9*eff9[i]*LT9)) + ((errlow10[i]*M10*LT10)*(errlow10[i]*M10*LT10)) + ((errM10*eff10[i]*LT10)*(errM10*eff10[i]*LT10)) + ((errlow11[i]*M11*LT11)*(errlow11[i]*M11*LT11)) + ((errM11*eff11[i]*LT11)*(errM11*eff11[i]*LT11)) + ((errlow12[i]*M12*LT12)*(errlow12[i]*M12*LT12)) + ((errM12*eff12[i]*LT12)*(errM12*eff12[i]*LT12)) + ((errlow13[i]*M13*LT13)*(errlow13[i]*M13*LT13)) + ((errM13*eff13[i]*LT13)*(errM13*eff13[i]*LT13)) + ((errlow15[i]*M15*LT15)*(errlow15[i]*M15*LT15)) + ((errM15*eff15[i]*LT15)*(errM15*eff15[i]*LT15)) + ((errlow16[i]*M16*LT16)*(errlow16[i]*M16*LT16)) + ((errM16*eff16[i]*LT16)*(errM16*eff16[i]*LT16)) + ((errlow17[i]*M17*LT17)*(errlow17[i]*M17*LT17)) + ((errM17*eff17[i]*LT17)*(errM17*eff17[i]*LT17)));
+    
+        
 	x[i] = i*5;
     xerr[i] = 0;
     }

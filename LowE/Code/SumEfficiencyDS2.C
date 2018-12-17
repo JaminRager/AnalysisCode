@@ -41,7 +41,6 @@
     cout << "Loading data files" << endl;
 
 
-
     double eff1[20] = {};
     double eff2[20] = {};
     double eff3[20] = {};

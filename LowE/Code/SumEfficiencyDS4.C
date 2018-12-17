@@ -82,7 +82,6 @@
     double xerr[20] = {};
     cout << "Initializing arrays" << endl;
 
-    double LT = ;
     double LT1 = 18.7355;
     double M1 = 0.917;
     double errM1 = 0.012;

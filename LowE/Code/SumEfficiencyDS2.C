@@ -3,39 +3,39 @@
   #include "TMath.h"
   {
 	
-    TFile *f1 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch582.root");
+    TFile *f1 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch582.root");
     TGraphAsymmErrors *geff1 = (TGraphAsymmErrors*)f1->Get("Graph");
-    TFile *f2 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch580.root");
+    TFile *f2 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch580.root");
     TGraphAsymmErrors *geff2 = (TGraphAsymmErrors*)f2->Get("Graph");
-    TFile *f3 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch578.root");
+    TFile *f3 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch578.root");
     TGraphAsymmErrors *geff3 = (TGraphAsymmErrors*)f3->Get("Graph");
-    //TFile *f4 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch692.root");
+    //TFile *f4 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch692.root");
     //TGraphAsymmErrors *geff4 = (TGraphAsymmErrors*)f4->Get("Graph");
-    TFile *f5 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch648.root");
+    TFile *f5 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch648.root");
     TGraphAsymmErrors *geff5 = (TGraphAsymmErrors*)f5->Get("Graph");
-    TFile *f6 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch640.root");
+    TFile *f6 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch640.root");
     TGraphAsymmErrors *geff6 = (TGraphAsymmErrors*)f6->Get("Graph");
-    TFile *f7 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch610.root");
+    TFile *f7 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch610.root");
     TGraphAsymmErrors *geff7 = (TGraphAsymmErrors*)f7->Get("Graph");
-    TFile *f8 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch608.root");
+    TFile *f8 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch608.root");
     TGraphAsymmErrors *geff8 = (TGraphAsymmErrors*)f8->Get("Graph");
-    TFile *f9 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch664.root");
+    TFile *f9 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch664.root");
     TGraphAsymmErrors *geff9 = (TGraphAsymmErrors*)f9->Get("Graph");
-    TFile *f10 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch672.root");
+    TFile *f10 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch672.root");
     TGraphAsymmErrors *geff10 = (TGraphAsymmErrors*)f10->Get("Graph");
-    TFile *f11 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch632.root");
+    TFile *f11 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch632.root");
     TGraphAsymmErrors *geff11 = (TGraphAsymmErrors*)f11->Get("Graph");
-    TFile *f12 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch626.root");
+    TFile *f12 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch626.root");
     TGraphAsymmErrors *geff12 = (TGraphAsymmErrors*)f12->Get("Graph");
-    TFile *f13 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch690.root");
+    TFile *f13 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch690.root");
     TGraphAsymmErrors *geff13 = (TGraphAsymmErrors*)f13->Get("Graph");
-    //TFile *f14 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch600.root");
+    //TFile *f14 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch600.root");
     //TGraphAsymmErrors *geff14 = (TGraphAsymmErrors*)f14->Get("Graph");
-    TFile *f15 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch598.root");
+    TFile *f15 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch598.root");
     TGraphAsymmErrors *geff15 = (TGraphAsymmErrors*)f15->Get("Graph");
-    //TFile *f16 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch594.root");
+    //TFile *f16 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch594.root");
     //TGraphAsymmErrors *geff16 = (TGraphAsymmErrors*)f16->Get("Graph");
-    TFile *f17 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS1Ch592.root");
+    TFile *f17 = new TFile("~/LowE/Data/IndivEfficiencies/ClopperErrorDS2Ch592.root");
     TGraphAsymmErrors *geff17 = (TGraphAsymmErrors*)f17->Get("Graph");
       
     cout << "Loading data files" << endl;

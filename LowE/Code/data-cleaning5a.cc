@@ -41,6 +41,7 @@ void FinalEnrichedSpectrum();
 void ToEAllCuts();
 void DetectorSelection();
 void EvsRunGood();
+void EvsRunGood2();
 void TestWFCuts();
 void TuneWFCuts1();
 void TuneWFCuts2();
@@ -71,13 +72,14 @@ int main()
   //TuneToECut2();
   //NatToEFinal();
   //EnrToEFinal();
-  FinalNaturalSpectrum();
-  FinalEnrichedSpectrum();
+  //FinalNaturalSpectrum();
+  //FinalEnrichedSpectrum();
   //ToEAllCuts();
   //DetectorSelection();
   //EvsRunGood();
+  //EvsRunGood2();
   //TestWFCuts();
-  //TuneWFCuts1();              //  For tuning waveform (ToE & trapETailMin) cuts.
+  TuneWFCuts1();              //  For tuning waveform (ToE & trapETailMin) cuts.
   //TuneWFCuts2();
   //TETMCutStudy2D();          // 1. Makes 2D plots for TETM cut study and saves to output file.
   //TETMCutStudy1D();          // 2. Makes 1D plots for TETM cut study and saves to output file.
@@ -106,7 +108,8 @@ char EwindowCut6Mod[] = "(trapENFCal>4.9 && trapENFCal<9.9)";
 char enrCut[] = "isEnr";
 char natCut[] = "isNat";
 char basicCut[] = "(gain==0 && mH==1 && isGood && !muVeto && !isLNFill1 && !isLNFill2 && P!=0 && D!=0)";
-char tetmCut[] = "(((channel==632 || channel==1168 || channel==1298) && trapETailMin<0.0) || ((channel==598 || channel==614 || channel==648 || channel==660 || channel==662 || channel==678 || channel==1172) && trapETailMin<0.2) || ((channel==608 || channel==626 || channel==674 || channel==690 || channel==1124) && trapETailMin<0.3) || ((channel==584 || channel==610 || channel==640 || channel==1170 || channel==1208) && trapETailMin<0.4) || ((channel==658 || channel==694 || channel==1106 || channel==1174 || channel==1232 || channel==1232 || channel==1302) && trapETailMin<0.5) || ((channel==1120 || channel==1176 || channel==1204 || channel==1330 || channel==1332) && trapETailMin<0.6) || (channel==688 && trapETailMin<0.7) || ((channel==592 || channel==624 || channel==680 || channel==692 || channel==1128) && trapETailMin<1.0) || (channel==628 && trapETailMin<1.5))";
+char isGood[] = "isGood";
+char tetmCut[] = "(((channel==632 || channel==1168 || channel==1298) && trapETailMin<0.0) || ((channel==598 || channel==614 || channel==648 || channel==660 || channel==662 || channel==678 || channel==1172) && trapETailMin<0.2) || ((channel==608 || channel==626 || channel==674 || channel==690 || channel==1124) && trapETailMin<0.3) || ((channel==584 || channel==610 || channel==640 || channel==1170 || channel==1208) && trapETailMin<0.4) || ((channel==658 || channel==694 || channel==1106 || channel==1174 || channel==1232 || channel==1236 || channel==1302) && trapETailMin<0.5) || ((channel==1120 || channel==1176 || channel==1204 || channel==1330 || channel==1332) && trapETailMin<0.6) || (channel==688 && trapETailMin<0.7) || ((channel==592 || channel==624 || channel==680 || channel==692 || channel==1128) && trapETailMin<1.0) || (channel==628 && trapETailMin<1.5))";
 char tetmOldCut[] = "(trapETailMin < 0.0)";
 char tetmKrisCut[] = "(trapETailMin < 0.0)";
 char oldLEtoe[] = "((channel != 660 && channel != 672 && kvorrT/trapENFCal < 2.1 && kvorrT/trapENFCal > 1.1) || ((channel == 660 || channel == 672) && kvorrT/trapENFCal < 2.0 && kvorrT/trapENFCal > 0.8))";
@@ -122,7 +125,7 @@ char HERunCut[] = "(run!=18627 && run!=18706 && run!=18752 && !(run>=18803 && ru
 //char OldestRunDetCut[] = "!(channel==660 && run>=20755 && run<=20756) && !(channel==678 && run>=20762 && run<=20795) && !(channel==678 && run>=20797 && run<=20838) && !(channel==678 && run>=20840 && run<=20882) && !(channel==678 && run>=20884 && run<=20972) && !(channel==678 && run>=20929 && run<=20953) && !(channel==678 && run>=20955 && run<=20957) && !(channel==678 && run>=20964 && run<=21012) && !(channel==678 && run>=21014 && run<=21058) && !(channel==678 && run>=21060 && run<=21104) && !(channel==678 && run>=21106 && run<=21136) && !(channel==678 && run>=21158 && run<=21167) && !(channel==660 && run>=21169 && run<=21178) && !(channel==1236 && run>=21169 && run<=21178) && !(channel==1332 && run>=21169 && run<=21178)";
 //char OldRunDetCut[] = "!(channel==660 && run>=20755 && run<=20756) && !(channel==678 && run>=20762 && run<=20795) && !(channel==678 && run>=20797 && run<=20838) && !(channel==678 && run>=20840 && run<=20882) && !(channel==678 && run>=20884 && run<=20972) && !(channel==678 && run>=20929 && run<=20953) && !(channel==678 && run>=20955 && run<=20957) && !(channel==678 && run>=20964 && run<=21012) && !(channel==678 && run>=21014 && run<=21058) && !(channel==678 && run>=21060 && run<=21104) && !(channel==678 && run>=21106 && run<=21136) && !(channel==678 && run>=21158 && run<=21167) && !(channel==660 && run>=21169 && run<=21178) && !(channel==1236 && run>=21169 && run<=21178) && !(channel==1332 && run>=21169 && run<=21178) && !(channel==692 && run>=20755 && run<=21380)";
 char RunDetCut9kThresh[] = "(!(channel==692 && run>=20483 && run<=20487) && !(channel==692 && run>=20611 && run<=20628))";
-char RunDetCut5kThresh[] = "(!(channel==1332 && run>=19708 && run<=19722) && !((channel==584 || channel==610 || channel==614 || channel==648 || channel==658 || channel==660 || channel==692 || channel==1172 || channel==1332) && run>=20218 && run<=21453) && !(channel==692 && run>=21767 && run<=21769) && !(channel==692 && run==20489) && !(channel==692 && run>=21568 && run<=21612) && !(channel==692 && run>=21763 && run<=21781) && !(run==692 && run>=20218 && run<=21453))";
+char RunDetCut5kThresh[] = "(!(channel==1332 && run>=19707 && run<=19722) && !((channel==584 || channel==610 || channel==614 || channel==648 || channel==658 || channel==660 || channel==662 || channel==692 || channel==1172 || channel==1332) && run>=20218 && run<=21453) && !(channel==692 && run>=21763 && run<=21781) && !(channel==692 && run>=21568 && run<=21612) && !(channel==662 && run==20489))";
 char cut660[] = "(channel!=660)";
 char cutTwoChan[] = "!(channel==660 && channel==672)";
 char TETMg1[] = "(trapETailMin > 1.0)";
@@ -131,12 +134,10 @@ char TETMg0[] = "(trapETailMin > 0.0)";
 char TETMl0[] = "(trapETailMin < 0.0)";
 char TETMg2_9[] = "(trapETailMin > -2.9)";
 char TETMl2_9[] = "(trapETailMin < -2.9)";
-char chan584[] = "(channel==584)";
-char chan1106[] = "(channel==1106)";
 char runCut[] = "((run>=18754 && run<=18756) || (run>=19243 && run<=19246) || (run>=19255 && run<=19257) || (run>=20067 && run<=20069) || (run>=20809 && run<=20811) || (run>=21825 && run<=21827) || (run>=22287 && run<=22289) || (run>=22298 && run<=22300))";
 char LEcutoff[] = "(trapENFCal>=9)";
 char ComptonEvents[] = "(mH==2 && sumEH>237.28 && sumEH<239.46)";
-char ComptonManual[] = "(mH==2 && (trapENFCal[0] + trapENFCal[1])>237.28 && (trapENFCal[0] + trapENFCal[1])<239.46)";
+char ComptonManual[] = "(mH==2 && (trapENFCal[0] + trapENFCal[1])>236.69 && (trapENFCal[0] + trapENFCal[1])<240.13)";
 char Mult2Events[] = "mH==2";
 char detC1P7D4[] = "(C==1 && P==7 && D==4)";
 char chan662[] = "channel==662";
@@ -144,51 +145,79 @@ char chan660[] = "channel==660";
 char chan658[] = "channel==658";
 char chan692[] = "channel==692";
 char chan648[] = "channel==648";
+char chan640[] = "channel==640";
+char chan610[] = "channel==610";
+char chan608[] = "channel==608";
+char chan584[] = "channel==584";
+char chan624[] = "channel==624";
+char chan628[] = "channel==628";
+char chan688[] = "channel==688";
+char chan694[] = "channel==694";
+char chan614[] = "channel==614";
+char chan598[] = "channel==598";
+char chan592[] = "channel==592";
+char chan632[] = "channel==632";
+char chan626[] = "channel==626";
+char chan690[] = "channel==690";
+char chan680[] = "channel==680";
+char chan678[] = "channel==678";
+char chan674[] = "channel==674";
+char chan672[] = "channel==672";
+char chan1124[] = "channel==1124";
+char chan1204[] = "channel==1204";
+char chan1174[] = "channel==1174";
+char chan1128[] = "channel==1128";
+char chan1106[] = "channel==1106";
+char chan1176[] = "channel==1176";
+char chan1172[] = "channel==1172";
+char chan1170[] = "channel==1170";
+char chan1208[] = "channel==1208";
+char chan1120[] = "channel==1120";
+char chan1330[] = "channel==1330";
+char chan1332[] = "channel==1332";
+char chan1302[] = "channel==1302";
+char chan1298[] = "channel==1298";
+char chan1236[] = "channel==1236";
+char chan1232[] = "channel==1232";
 
 void CutEfficiency1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan662.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS5achan678_ToE.root";
     
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
   cout << "Data files added" <<  endl;
+
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);  //Overwrite the hardcoded root formula length limit to be 2000 char long
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan678);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan678);
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan662);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan662);
-    
-  TH1D *Pass = new TH1D("Pass", "Pass", 25, 0, 100);
+  TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
   Pass->GetYaxis()->SetTitle("cts");
   skimTree->Project("Pass", "trapENFCal", cut1);
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 25, 0, 100);
+  TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
   Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
   Tot->GetYaxis()->SetTitle("cts");
   skimTree->Project("Tot", "trapENFCal", cut2);
   Tot->Write();
   cout << "Writing histogram Tot" <<  endl;
     
-  TH1D *Eff = (TH1D*)Pass->Clone("Eff");
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  Eff->Divide(Tot);
-  Eff->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //Eff->Divide(Tot);
+  //Eff->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   cout << "done" <<  endl;
     
@@ -197,48 +226,42 @@ void CutEfficiency1()
 
 void CutEfficiency2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan660.root";
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS5achan672_isGood.root";
     
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
   cout << "Data files added" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan660);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan660);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s && %s",isGood,HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan672);
+  sprintf(cut2,"%s && %s && %s && %s",isGood,HEDetCut,ComptonManual,chan672);
     
-  TH1D *Pass = new TH1D("Pass", "Pass", 25, 0, 100);
+  TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
   Pass->GetYaxis()->SetTitle("cts");
   skimTree->Project("Pass", "trapENFCal", cut1);
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 25, 0, 100);
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  skimTree->Project("Tot", "trapENFCal", cut2);
-  Tot->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //skimTree->Project("Tot", "trapENFCal", cut2);
+  //Tot->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
-  TH1D *Eff = (TH1D*)Pass->Clone("Eff");
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  Eff->Divide(Tot);
-  Eff->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //Eff->Divide(Tot);
+  //Eff->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   cout << "done" <<  endl;
     
@@ -247,48 +270,42 @@ void CutEfficiency2()
 
 void CutEfficiency3()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan658.root";
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS5achan1236.root";
     
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
   cout << "Data files added" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan658);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan658);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1236);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1236);
     
-  TH1D *Pass = new TH1D("Pass", "Pass", 25, 0, 100);
+  TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
   Pass->GetYaxis()->SetTitle("cts");
   skimTree->Project("Pass", "trapENFCal", cut1);
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 25, 0, 100);
+  TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
   Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
   Tot->GetYaxis()->SetTitle("cts");
   skimTree->Project("Tot", "trapENFCal", cut2);
   Tot->Write();
   cout << "Writing histogram Tot" <<  endl;
     
-  TH1D *Eff = (TH1D*)Pass->Clone("Eff");
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  Eff->Divide(Tot);
-  Eff->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //Eff->Divide(Tot);
+  //Eff->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   cout << "done" <<  endl;
     
@@ -297,48 +314,42 @@ void CutEfficiency3()
 
 void CutEfficiency4()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan692.root";
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS5achan1302_isGood.root";
     
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
   cout << "Data files added" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan692);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan692);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s && %s",isGood,HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1302);
+  sprintf(cut2,"%s && %s && %s && %s",isGood,HEDetCut,ComptonManual,chan1302);
     
-  TH1D *Pass = new TH1D("Pass", "Pass", 25, 0, 100);
+  TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
   Pass->GetYaxis()->SetTitle("cts");
   skimTree->Project("Pass", "trapENFCal", cut1);
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 25, 0, 100);
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  skimTree->Project("Tot", "trapENFCal", cut2);
-  Tot->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //skimTree->Project("Tot", "trapENFCal", cut2);
+  //Tot->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
-  TH1D *Eff = (TH1D*)Pass->Clone("Eff");
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  Eff->Divide(Tot);
-  Eff->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //Eff->Divide(Tot);
+  //Eff->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   cout << "done" <<  endl;
     
@@ -347,48 +358,42 @@ void CutEfficiency4()
 
 void CutEfficiency5()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan648.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS5achan1302.root";
 
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
   cout << "Data files added" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan648);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan648);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1302);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1302);
     
-  TH1D *Pass = new TH1D("Pass", "Pass", 25, 0, 100);
+  TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
   Pass->GetYaxis()->SetTitle("cts");
   skimTree->Project("Pass", "trapENFCal", cut1);
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 25, 0, 100);
+  TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
   Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
   Tot->GetYaxis()->SetTitle("cts");
   skimTree->Project("Tot", "trapENFCal", cut2);
   Tot->Write();
   cout << "Writing histogram Tot" <<  endl;
     
-  TH1D *Eff = (TH1D*)Pass->Clone("Eff");
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  Eff->Divide(Tot);
-  Eff->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //Eff->Divide(Tot);
+  //Eff->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   cout << "done" <<  endl;
     
@@ -424,7 +429,7 @@ void Baseline()
 
 void ComptonSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/SumSpectrumDS5a.root";
+  string outFile = "/global/u1/j/jrager/LowE/DS5aComptonSpect1302_ToE.root";
         
   UInt_t runNumb;
   std::string dataFile;
@@ -432,28 +437,28 @@ void ComptonSpectrum()
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
                
-  //TChain *skimTree = new TChain("skimTree");
-  //skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aBG/*.root");
-  //cout << "Adding data files" <<  endl;
-
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
-  cout << "Data files added" <<  endl;
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
+  cout << "Adding data files" <<  endl;
+
+  //TChain *skimTree = new TChain("skimTree");
+  //for (runNumb = 18713; runNumb <= 22392; runNumb++) {
+    //char buffer[50];
+    //int n;
+    //n = sprintf(buffer,"%d",runNumb);
+    //dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
+    //skimTree->Add(dataFile.c_str());
+    //std::cout << "Adding run # "  << runNumb << std::endl;
+  //}
+  //cout << "Data files added" <<  endl;
 
   //sprintf(cut1,"%s",ComptonEvents);
-  sprintf(cut1,"%s && %s && %s",Mult2Events,HEDetCut,HERunCut);
+  sprintf(cut1,"%s && %s && %s",ComptonManual,chan1302,ToE_EDependent);
         
   TH1D *Basic = new TH1D("Basic", "Basic", 12000, 0, 3000);
-  Basic->GetXaxis()->SetTitle("sumEH (keV)");
+  Basic->GetXaxis()->SetTitle("energy (keV)");
   Basic->GetYaxis()->SetTitle("cts");
-  skimTree->Project("Basic", "sumEH", cut1);
+  skimTree->Project("Basic", "trapENFCal", cut1);
   Basic->Write();
   cout << "Writing histogram Basic" <<  endl;
         
@@ -701,7 +706,7 @@ void DebuggingSpectrum()
 
 void FinalCombinedSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Enr&NatSeparate5a_EDepToE.root";
+  string outFile = "/global/u1/j/jrager/LowE/Enr&NatSeparate5a_allCuts.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -709,12 +714,13 @@ void FinalCombinedSpectrum()
   TChain *skimTree = new TChain("skimTree");
   skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aBG/*.root");
   cout << "Adding data files" <<  endl;
-
+  
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
   //sprintf(cut1,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEtoe,HEDetCut,natCut,RunDetCutNew);
-  sprintf(cut2,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,RunDetCut5kThresh,natCut);
+  sprintf(cut2,"%s && %s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,HERunCut,ToE_EDependent,RunDetCut5kThresh,natCut);
   //sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,tetmCut,toeOldCut,HEDetCut,natCut);
   //sprintf(cut4,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEtoe,HEDetCut,enrCut,RunDetCutNew);
-  sprintf(cut5,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,RunDetCut5kThresh,enrCut);
+  sprintf(cut5,"%s && %s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,HERunCut,ToE_EDependent,RunDetCut5kThresh,enrCut);
   //sprintf(cut6,"%s && %s && %s && %s && %s",basicCut,tetmCut,toeOldCut,HEDetCut,enrCut);
 
   //TH1D *natHE = new TH1D("natHE", "natHE", 12000, 0, 3000);
@@ -818,7 +824,7 @@ void FinalEnrichedSpectrum()
   cout << "Creating outpout file" <<  endl;
 
   TChain *skimTree = new TChain("skimTree");
-  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aBG/skimDS5_1_low.root");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aBG/*.root");
   cout << "Adding data files" <<  endl;
 
   ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
@@ -965,7 +971,7 @@ void ToEAllCuts()
 
 void DetectorSelection()
 {
-  string outFile = "/global/u1/j/jrager/LowE/DetSelectBlindDS5a_wRunDetCut_2ndIt.root";
+  string outFile = "/global/u1/j/jrager/LowE/DS5aDetSelect_5kThresh_correctedCuts.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -985,7 +991,7 @@ void DetectorSelection()
   //}
   //cout << "Data files added" <<  endl;
 
-  sprintf(cut1,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,ToE5k,HEDetCut,EwindowCut5,RunDetCut5kThresh);
+  sprintf(cut1,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,ToE_EDependent,HEDetCut,HERunCut,EwindowCut5);
 
   TH1F *det = new TH1F("det", "det", 1440, 0, 1440);
   det->GetXaxis()->SetTitle("detector channel");
@@ -1009,7 +1015,7 @@ void DetectorSelection()
 
 void EvsRunGood()
 {
-  string outFile = "/global/u1/j/jrager/LowE/RunSelectDS5a_wRunDetCut_2ndIt.root";
+  string outFile = "/global/u1/j/jrager/LowE/RunSelectDS5a_5kThresh_allCuts.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -1018,9 +1024,10 @@ void EvsRunGood()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aBG/*.root");
   cout << "Adding data files" <<  endl;
 
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000); // manually overwrite root's hardcoded limit on formula length
   //sprintf(cut0,"%s && %s",HEDetCut,EwindowCut5);
-  //sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,EwindowCut5);
-  sprintf(cut2,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,ToE5k,HEDetCut,EwindowCut5,RunDetCut5kThresh);
+  //sprintf(cut1,"%s && %s && %s && %s && %s",basicCut,HEDetCut,HERunCut,EwindowCut5,chan672);
+  sprintf(cut2,"%s && %s && %s && %s && %s && %s && %s",basicCut,tetmCut,ToE_EDependent,HEDetCut,HERunCut,RunDetCut5kThresh,EwindowCut5);
   //sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,tetmKrisCut,LEtoe,HEDetCut,EwindowCut5);
     
   //TH2F *EVrun = new TH2F("EVrun","EVrun", 3769, 18623, 22392, 2000, 0, 500);
@@ -1215,30 +1222,30 @@ void TuneToECut2()
 
 void TuneWFCuts1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneWFCutsDS5a_detC1P7D4_Compton.root";
+  string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS5a_Compton.root";
 
-  UInt_t runNumb;
-  std::string dataFile;
+  //UInt_t runNumb;
+  //std::string dataFile;
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
 
-  TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
-  cout << "Data files added" <<  endl;
-
   //TChain *skimTree = new TChain("skimTree");
-  //skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
-  //cout << "Adding data files" <<  endl;
+  //for (runNumb = 18713; runNumb <= 22392; runNumb++) {
+    //char buffer[50];
+    //int n;
+    //n = sprintf(buffer,"%d",runNumb);
+    //dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
+    //skimTree->Add(dataFile.c_str());
+    //std::cout << "Adding run # "  << runNumb << std::endl;
+  //}
+  //cout << "Data files added" <<  endl;
 
-  //sprintf(theCut,"%s && %s && %s",ComptonEvents,HEDetCut,detC1P7D4);
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
+  cout << "Adding data files" <<  endl;
+
+  sprintf(theCut,"%s && %s && %s",ComptonManual,HEDetCut,HERunCut);
 
   TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
   ToE->GetYaxis()->SetTitle("T/E (arb)");
@@ -1248,13 +1255,13 @@ void TuneWFCuts1()
   ToE->Write();
   cout << "Writing histogram ToE" <<  endl;
 
-  TH2F *tetmVEnergy = new TH2F("tetmVEnergy", "tetmVEnergy", 1000, 0, 100, 300, -20, 10);
-  tetmVEnergy->GetYaxis()->SetTitle("trapETailMin");
-  tetmVEnergy->GetXaxis()->SetTitle("trapENFCal (keV)");
-  skimTree->Project("tetmVEnergy","trapETailMin:trapENFCal",theCut);
-  tetmVEnergy->SetOption("colz");
-  tetmVEnergy->Write();
-  cout << "Writing histogram tetmVEnergy" <<  endl;
+  //TH2F *tetmVEnergy = new TH2F("tetmVEnergy", "tetmVEnergy", 1000, 0, 100, 300, -20, 10);
+  //tetmVEnergy->GetYaxis()->SetTitle("trapETailMin");
+  //tetmVEnergy->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //skimTree->Project("tetmVEnergy","trapETailMin:trapENFCal",theCut);
+  //tetmVEnergy->SetOption("colz");
+  //tetmVEnergy->Write();
+  //cout << "Writing histogram tetmVEnergy" <<  endl;
 
   cout << "done" <<  endl;
 
@@ -1263,7 +1270,7 @@ void TuneWFCuts1()
 
 void TuneWFCuts2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneWFCutsDS5a_chan660.root";
+  string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS5a_1302_cal.root";
     
   UInt_t runNumb;
   std::string dataFile;
@@ -1271,22 +1278,22 @@ void TuneWFCuts2()
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
-  //TChain *skimTree = new TChain("skimTree");
-  //skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
-  //cout << "Adding data files" <<  endl;
-    
   TChain *skimTree = new TChain("skimTree");
-  for (runNumb = 18713; runNumb <= 22392; runNumb++) {
-    char buffer[50];
-    int n;
-    n = sprintf(buffer,"%d",runNumb);
-    dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
-    skimTree->Add(dataFile.c_str());
-    std::cout << "Adding run # "  << runNumb << std::endl;
-  }
-  cout << "Data files added" <<  endl;
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/jrager/Skim/DS5aCal/*.root");
+  cout << "Adding data files" <<  endl;
+    
+  //TChain *skimTree = new TChain("skimTree");
+  //for (runNumb = 18713; runNumb <= 22392; runNumb++) {
+    //char buffer[50];
+    //int n;
+    //n = sprintf(buffer,"%d",runNumb);
+    //dataFile = std::string("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS5_run") + buffer + "_low.root";
+    //skimTree->Add(dataFile.c_str());
+    //std::cout << "Adding run # "  << runNumb << std::endl;
+  //}
+  //cout << "Data files added" <<  endl;
 
-  //sprintf(theCut,"%s && %s && %s && %s",basicCut,HEDetCut,chan660,tetmCut);
+  sprintf(theCut,"%s && %s && %s",basicCut,HEDetCut,chan1302);
     
   TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
   ToE->GetYaxis()->SetTitle("T/E (arb)");

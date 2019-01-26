@@ -9,15 +9,15 @@
 #include <math.h>
 {
     // Input files
-    TFile *f1 = new TFile("/global/homes/j/jrager/LowE/AnalSpect/AnalysisSpectDS1Enr_1kBinn.root");
+    TFile *f1 = new TFile("/global/homes/j/jrager/LowE/AnalSpect/AnalysisSpectDS1Enr.root");
     TH1F *spect= (TH1F*)f1->Get("spect");
     TFile *f2 = new TFile("/global/homes/j/jrager/LowE/Data/CombinedEfficiencies/ClopperErrorDS1Enr.root");
     TGraph *teff = (TGraph*)f2->Get("Graph");
     
-    string outFile = "/global/homes/j/jrager/LowE/Data/EffCorrectedSpectra/DS1ScaledSpectEnr_TGraph.root";
-    TFile *f3 = new TFile(outFile.c_str(),"recreate");
-    cout << "Creating outpout file" <<  endl;
-    f3->cd();
+    //string outFile = "/global/homes/j/jrager/LowE/Data/EffCorrectedSpectra/DS1ScaledSpectEnr_TGraph.root";
+    //TFile *f3 = new TFile(outFile.c_str(),"recreate");
+    //cout << "Creating outpout file" <<  endl;
+    //f3->cd();
     
     double deff[100] = {};
     double effErrhi[100] = {};
@@ -36,8 +36,8 @@
         rawCts[i] = spect->GetBinContent(i);
         poissonErr[i] = sqrt(spect->GetBinContent(i));
         deff[i] = teff->Eval(i);
-        effErrhi[i] = 0;
-        effErrlow[i] = 0;
+	effErrhi[i] = 0;
+	effErrlow[i] = 0;
         x[i] = (i);
         xerr[i] = 0;
         if(i<5)
@@ -177,9 +177,9 @@
     geff->SetTitle("DS1 Efficiency Corrected Spectrum, Enriched Detectors");
     geff->GetXaxis()->SetTitle("trapENFCal (keV)");
     geff->GetYaxis()->SetTitle("cts/kg/d/keV");
-    //geff->Draw("AP");
-    geff->Write();
-    f3->Close();
+    geff->Draw("AP");
+    //geff->Write();
+    //f3->Close();
                       
     cout << "Done" << endl;
 }

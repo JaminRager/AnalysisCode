@@ -76,12 +76,12 @@ int main()
   //NatToEFinal();
   //EnrToEFinal();
   //FinalNaturalSpectrum();
-  FinalEnrichedSpectrum();
+  //FinalEnrichedSpectrum();
   //ToEAllCuts();
   //DetectorSelection();
   //RunSelection();
   //TestWFCuts();              // Test the effects of TETM cut on ToE and ToE cut on TETM.
-  //TuneWFCuts1();              //  For tuning the WF cuts.
+  TuneWFCuts1();              //  For tuning the WF cuts.
   //TuneWFCuts2();
   //TuneWFCuts3();
   //TETMCutStudy2D();          //  Makes 2D plots for TETM cut study and saves to output file.
@@ -112,7 +112,7 @@ char natCut[] = "isNat";
 char basicCut[] = "gain==0 && mH==1 && isGood && !muVeto && !isLNFill1 && !isLNFill2 && P!=0 && D!=0";
 char basicCutCompton[] = "gain==0 && isGood && !muVeto && !isLNFill1 && !isLNFill2 && P!=0 && D!=0";
 //char wfdcCut[] = "!wfDCBits";
-char tetmCut[] = "(((channel==582 || channel==632) && trapETailMin<0.3) || ((channel==580 || channel==598 || channel==600 || channel==608 || channel==610 || channel==648 || channel==664 || channel==692) && trapETailMin<0.4) || ((channel==640 || channel==672) && trapETailMin<0.5) || ((channel==578 || channel==594 || channel==626 || channel==690) && trapETailMin<0.6))";
+char tetmCut[] = "(((channel==582 || channel==632) && trapETailMin<0.3) || ((channel==580 ||channel==592 || channel==598 || channel==600 || channel==608 || channel==610 || channel==648 || channel==664 || channel==692) && trapETailMin<0.4) || ((channel==640 || channel==672) && trapETailMin<0.5) || ((channel==578 || channel==594 || channel==626 || channel==690) && trapETailMin<0.6))";
 char tetmOldCut[] = "trapETailMin < 0.5";
 char tetmKrisCut[] = "trapETailMin < 0";
 char oldLEtoe[] = "((channel != 664 && channel != 580 && kvorrT/trapENFCal < 2.1 && kvorrT/trapENFCal > 1.1) || (channel == 580 && kvorrT/trapENFCal < 1.5 && kvorrT/trapENFCal > 0.8) || (channel == 664 && kvorrT/trapENFCal < 2 && kvorrT/trapENFCal > 1))";
@@ -208,7 +208,7 @@ void CompareSumEParam()
 
 void CutEfficiency1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan640.root";
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS1chan592_TETM.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -219,8 +219,9 @@ void CutEfficiency1()
   cout << "Adding data files" <<  endl;
 
   //sprintf(cut1,"%s",ComptonEvents);
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan640);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan640);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan592);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan592);
+  sprintf(cut3,"%s && %s && %s && %s",HEDetCut,ComptonManual,chan592,tetmCut);
 
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -250,7 +251,7 @@ void CutEfficiency1()
 
 void CutEfficiency2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan610.root";
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS1chan592.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -261,8 +262,8 @@ void CutEfficiency2()
   cout << "Adding data files" <<  endl;
 
   //sprintf(cut1,"%s",ComptonEvents);
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan610);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan610);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan592);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan592);
 
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -292,7 +293,7 @@ void CutEfficiency2()
 
 void CutEfficiency3()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan608.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan690.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -301,8 +302,8 @@ void CutEfficiency3()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
   cout << "Adding data files" <<  endl;
 
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan608);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan608);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan690);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan690);
 
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -332,7 +333,7 @@ void CutEfficiency3()
 
 void CutEfficiency4()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan664.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan600.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -341,8 +342,8 @@ void CutEfficiency4()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan664);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan664);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan600);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan600);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -372,7 +373,7 @@ void CutEfficiency4()
 
 void CutEfficiency5()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan672.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS1chan598.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -381,8 +382,8 @@ void CutEfficiency5()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan672);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan672);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan598);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan598);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -412,7 +413,7 @@ void CutEfficiency5()
 
 void ComptonSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/ComptonSpectrumDS1_Manual.root";
+  string outFile = "/global/u1/j/jrager/LowE/ComptonSpectDS1Ch580.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -421,7 +422,7 @@ void ComptonSpectrum()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
   cout << "Adding data files" <<  endl;
 
-  sprintf(cut1,"%s && %s",ComptonManual,HEDetCut);
+  sprintf(cut1,"%s && %s",ComptonManual,chan580);
   sprintf(cut2,"%s",HEDetCut);
 
   TH1D *Basic = new TH1D("Basic", "Basic", 12000, 0, 3000);
@@ -517,7 +518,7 @@ void SpectraNoCuts()
 
 void FinalCombinedSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/CombinedDS1_Newest.root";
+  string outFile = "/global/u1/j/jrager/LowE/DS1EnrSpecCh580.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -527,9 +528,9 @@ void FinalCombinedSpectrum()
   cout << "Adding data files" <<  endl;
 
   //sprintf(cut1,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEtoe,HEDetCut,RunDetCut,natCut);
-  sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,natCut);
+  //sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,natCut);
   //sprintf(cut4,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEtoe,HEDetCut,RunDetCut,enrCut);
-  sprintf(cut5,"%s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,enrCut);
+  sprintf(cut5,"%s && %s && %s && %s && %s && %s",basicCut,tetmCut,HEDetCut,ToE_EDependent,enrCut,chan580);
 
   //TH1D *natHE = new TH1D("natHE", "natHE", 12000, 0, 3000);
   //natHE->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -538,12 +539,12 @@ void FinalCombinedSpectrum()
   //natHE->Write();
   //cout << "Writing histogram natHE" <<  endl;
 
-  TH1D *natLE = new TH1D("natLE", "natLE", 180, 5, 50);
-  natLE->GetXaxis()->SetTitle("trapENFCal (keV)");
-  natLE->GetYaxis()->SetTitle("cts");
-  skimTree->Project("natLE", "trapENFCal", cut2);
-  natLE->Write();
-  cout << "Writing histogram natLE" <<  endl;
+  //TH1D *natLE = new TH1D("natLE", "natLE", 180, 5, 50);
+  //natLE->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //natLE->GetYaxis()->SetTitle("cts");
+  //skimTree->Project("natLE", "trapENFCal", cut2);
+  //natLE->Write();
+  //cout << "Writing histogram natLE" <<  endl;
 
   //TH1D *enrHE = new TH1D("enrHE", "enrHE", 12000, 0, 3000);
   //enrHE->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -552,7 +553,7 @@ void FinalCombinedSpectrum()
   //enrHE->Write();
   //cout << "Writing histogram enrHE" <<  endl;
 
-  TH1D *enrLE = new TH1D("enrLE", "enrLE", 180, 5, 50);
+  TH1D *enrLE = new TH1D("enrLE", "enrLE", 3000, 0, 3000);
   enrLE->GetXaxis()->SetTitle("trapENFCal (keV)");
   enrLE->GetYaxis()->SetTitle("cts");
   skimTree->Project("enrLE", "trapENFCal", cut5);
@@ -662,7 +663,7 @@ void FinalNaturalSpectrum()
 
 void FinalEnrichedSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/AnalysisSpectDS1Enr.root";
+  string outFile = "/global/u1/j/jrager/LowE/AnalysisSpectDS1Enr_0.25kBinn.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -986,7 +987,7 @@ void TuneToECut3()
 
 void TuneWFCuts1()
 {
-    string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS1_C1P7D4_Compton.root";
+    string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS1_Compton.root";
 
     TFile *f = new TFile(outFile.c_str(),"RECREATE");
     cout << "Creating outpout file" <<  endl;
@@ -995,7 +996,7 @@ void TuneWFCuts1()
     skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
     cout << "Adding data files" <<  endl;
 
-    //sprintf(theCut,"%s && %s && %s",ComptonEvents,HEDetCut,detC1P7D4);
+    sprintf(theCut,"%s && %s",ComptonManual,HEDetCut);
 
     TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
     ToE->GetYaxis()->SetTitle("T/E (arb)");
@@ -1050,16 +1051,16 @@ void TuneWFCuts2()
 
 void TuneWFCuts3()
 {
-  string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS1_chan580_Compton.root";
+  string outFile = "/global/u1/j/jrager/LowE/BkgToEDistDS1cutTwoChan.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
 
   TChain *skimTree = new TChain("skimTree");
-  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS1*.root");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS1*.root");
   cout << "Adding data files" <<  endl;
 
-  //sprintf(theCut,"%s && %s && %s",ComptonEvents,HEDetCut,chan580);
+  sprintf(theCut,"%s && %s && %s && %s",basicCut,tetmCut,HEDetCut,cutTwoChan);
 
   TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
   ToE->GetYaxis()->SetTitle("T/E (arb)");
@@ -1068,11 +1069,11 @@ void TuneWFCuts3()
   ToE->SetOption("colz");
   ToE->Write();
 
-  TH1F *htrapETailMin = new TH1F("htrapETailMin","htrapETailMin", 150, -5, 10);
-  htrapETailMin->GetXaxis()->SetTitle("trapETailMin");
-  skimTree->Project("htrapETailMin","trapETailMin",theCut);
-  htrapETailMin->Write();
-  cout << "Writing histogram htrapETailMin" <<  endl;
+  //TH1F *htrapETailMin = new TH1F("htrapETailMin","htrapETailMin", 150, -5, 10);
+  //htrapETailMin->GetXaxis()->SetTitle("trapETailMin");
+  //skimTree->Project("htrapETailMin","trapETailMin",theCut);
+  //htrapETailMin->Write();
+  //cout << "Writing histogram htrapETailMin" <<  endl;
 
   cout << "done" <<  endl;
 

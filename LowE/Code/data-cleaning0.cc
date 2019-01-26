@@ -35,7 +35,9 @@ void NatToEFinal();
 void EnrToEFinal();
 void DetectorSelection();
 void RunSelection();
-void TuneToECut();
+void TuneToECut1();
+void TuneToECut2();
+void TuneToECut3();
 void TuneWFCuts();
 void TETMCutStudy2D();
 void TETMCutStudy1D();
@@ -43,10 +45,10 @@ void RunsAndDets();
 
 int main()
 {
-  TETM1D();
+  //TETM1D();
   //TETMvsDetChan();
   //TETMvsRun();
-  //TETMvsEnergy();
+  TETMvsEnergy();
   //ToEDebuggingTETMg0();
   //ToEDebuggingTETMg2l0();
   //ToEDebuggingTETMl2();
@@ -63,7 +65,9 @@ int main()
   //EnrToEFinal();
   //DetectorSelection();
   //RunSelection();
-  //TuneToECut();
+  //TuneToECut1();
+  //TuneToECut2();
+  //TuneToECut3();
   //TuneWFCuts();
   //TETMCutStudy2D();          // 1. Makes 2D plots for TETM cut study and saves to output file.
   //TETMCutStudy1D();          // 2. Makes 1D plots for TETM cut study and saves to output file.
@@ -78,9 +82,10 @@ char cut2[10000];
 char cut1[100000];
 char cut0[10000];
 char theCut[10000];
-char EwindowCut1[] = "trapENFCal>9.9 && trapENFCal<10.1";
-char EwindowCut2[] = "trapENFCal>19.9 && trapENFCal<20.1";
-char EwindowCut3[] = "trapENFCal<0.2";
+char EwindowCut1[] = "trapENFCal>4.9 && trapENFCal<5.1";
+char EwindowCut2[] = "trapENFCal>8.9 && trapENFCal<9.1";
+char EwindowCut3[] = "trapENFCal>19.9 && trapENFCal<20.1";
+char EwindowCut4[] = "trapENFCal<0.2";
 char enrCut[] = "isEnr";
 char natCut[] = "isNat";
 char tetmCut[] = "trapETailMin < 0";
@@ -88,7 +93,8 @@ char toeCut[] = "(((channel==576 || channel==592 || channel==594 || channel==600
 char HEtoe[] = "((channel==608 && kvorrT/trapENFCal<1.69 && kvorrT/trapENFCal>1.45) || ((channel==576 || channel==592 || channel==594 || channel==600 || channel==674) && kvorrT/trapENFCal<1.57 && kvorrT/trapENFCal>1.33) || ((channel==598 || channel==610 || channel==624 || channel==626 || channel==640 || channel==642 || channel==644 || channel==646 || channel==662 || channel==664 || channel==688 || channel==690 || channel==692 || channel==696) && kvorrT/trapENFCal<1.48 && kvorrT/trapENFCal>1.2))";
 char toeOldCut[] = "kvorrT/trapENFCal>1.1 && kvorrT/trapENFCal<2.1";
 char basicCut[] = "gain==0 && mH==1 && isGood && !muVeto && !isLNFill1 && !isLNFill2 && P!=0 && D!=0";
-char HEDetCut[] = "channel!=584 && channel!=680 && channel!=676 && channel!=616 && channel!=614 && channel!=656 && channel!=628 && channel!=632 && channel!=630 && !(run>=5888 && run<=5890) && !(run>=5894 && run<=5902) && run!=6775";
+char HEDetCut[] = "channel!=584 && channel!=680 && channel!=676 && channel!=616 && channel!=614 && channel!=656 && channel!=628 && channel!=632 && channel!=630";
+char LERunCut[] = "run!=2610 && run!=3341 && run!=3523 && run!=3524 && run!=3529 && run!=3530 && run!=4057 && run!=4125 && run!=4473 && run!=4554 && run!=5248 && run!=5249 && !(run>=5888 && run<=5890) && !(run>=5894 && run<=5902) && run!=6775";
 char RunDetCut[] = "!(channel==690 && (run==3523 || run==3524 || run==3530))";
 char chanCut1[] = "channel==608";
 char chanCut2[] = "(channel==576 || channel==592 || channel==594 || channel==600 || channel==674)"; 
@@ -183,16 +189,16 @@ void TETMvsRun()
 
 void TETMvsEnergy()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TETMvsEnergy_ToE_DS0_662.root";
+  string outFile = "/global/u1/j/jrager/LowE/TETMvsEnergyDS0bkg.root";
         
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
         
   TChain *skimTree = new TChain("skimTree");
-  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS0*.root");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS0*.root");
   cout << "Adding data files" <<  endl;
         
-  sprintf(cut1,"%s && %s && %s",basicCut,toeCut,chan662);
+  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,LERunCut);
         
   TH2F *tetmVEnergy = new TH2F("tetmVEnergy", "tetmVEnergy", 1000, 0, 100, 300, -20, 10);
   tetmVEnergy->GetYaxis()->SetTitle("trapETailMin");
@@ -759,7 +765,89 @@ void RunSelection()
   f->Close();
 }
 
-void TuneToECut()
+void TuneToECut1()
+{
+  string outFile = "/global/u1/j/jrager/LowE/TuneToECutDS0_topBand.root";
+    
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+    
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS0*.root");
+  cout << "Adding data files" <<  endl;
+    
+  sprintf(cut1,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,chanCut1);
+  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,chanCut1);
+  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut3,chanCut1);
+    
+  TH1F *at5k = new TH1F("at5k", "at5k", 400, 0, 10);
+  at5k->GetYaxis()->SetTitle("counts");
+  at5k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at5k","kvorrT/trapENFCal",cut1);
+  at5k->Write();
+  cout << "Writing histogram at5k" <<  endl;
+    
+  TH1F *at9k = new TH1F("at9k", "at9k", 400, 0, 10);
+  at9k->GetYaxis()->SetTitle("counts");
+  at9k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at9k","kvorrT/trapENFCal",cut2);
+  at9k->Write();
+  cout << "Writing histogram at9k" <<  endl;
+    
+  TH1F *at20k = new TH1F("at20k", "at20k", 400, 0, 10);
+  at20k->GetYaxis()->SetTitle("counts");
+  at20k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at20k","kvorrT/trapENFCal",cut3);
+  at20k->Write();
+  cout << "Writing histogram at20k" <<  endl;
+    
+  cout << "done" <<  endl;
+    
+  f->Close();
+}
+
+void TuneToECut2()
+{
+  string outFile = "/global/u1/j/jrager/LowE/TuneToECutDS0_middleBand.root";
+    
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+    
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS0*.root");
+  cout << "Adding data files" <<  endl;
+    
+  sprintf(cut1,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,chanCut2);
+  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,chanCut2);
+  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut3,chanCut2);
+    
+  TH1F *at5k = new TH1F("at5k", "at5k", 400, 0, 10);
+  at5k->GetYaxis()->SetTitle("counts");
+  at5k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at5k","kvorrT/trapENFCal",cut1);
+  at5k->Write();
+  cout << "Writing histogram at5k" <<  endl;
+    
+  TH1F *at9k = new TH1F("at9k", "at9k", 400, 0, 10);
+  at9k->GetYaxis()->SetTitle("counts");
+  at9k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at9k","kvorrT/trapENFCal",cut2);
+  at9k->Write();
+  cout << "Writing histogram at9k" <<  endl;
+    
+  TH1F *at20k = new TH1F("at20k", "at20k", 400, 0, 10);
+  at20k->GetYaxis()->SetTitle("counts");
+  at20k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at20k","kvorrT/trapENFCal",cut3);
+  at20k->Write();
+  cout << "Writing histogram at20k" <<  endl;
+    
+  cout << "done" <<  endl;
+    
+  f->Close();
+}
+
+void TuneToECut3()
 {
   string outFile = "/global/u1/j/jrager/LowE/TuneToECutDS0_bottomBand.root";
 
@@ -767,23 +855,31 @@ void TuneToECut()
   cout << "Creating outpout file" <<  endl;
 
   TChain *skimTree = new TChain("skimTree");
-  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal-skim/skimDS0*.root");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS0*.root");
   cout << "Adding data files" <<  endl;
 
   sprintf(cut1,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,chanCut3);
   sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,chanCut3);
+  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut3,chanCut3);
 
-  TH1F *at10k = new TH1F("at10k", "at10k", 400, 0, 10);
-  at10k->GetYaxis()->SetTitle("counts");
-  at10k->GetXaxis()->SetTitle("T/E (arb)");
-  skimTree->Project("at10k","kvorrT/trapENFCal",cut1);
-  at10k->Write();
-  cout << "Writing histogram at10k" <<  endl;
+  TH1F *at5k = new TH1F("at5k", "at5k", 400, 0, 10);
+  at5k->GetYaxis()->SetTitle("counts");
+  at5k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at5k","kvorrT/trapENFCal",cut1);
+  at5k->Write();
+  cout << "Writing histogram at5k" <<  endl;
+
+  TH1F *at9k = new TH1F("at9k", "at9k", 400, 0, 10);
+  at9k->GetYaxis()->SetTitle("counts");
+  at9k->GetXaxis()->SetTitle("T/E (arb)");
+  skimTree->Project("at9k","kvorrT/trapENFCal",cut2);
+  at9k->Write();
+  cout << "Writing histogram at9k" <<  endl;
 
   TH1F *at20k = new TH1F("at20k", "at20k", 400, 0, 10);
   at20k->GetYaxis()->SetTitle("counts");
   at20k->GetXaxis()->SetTitle("T/E (arb)");
-  skimTree->Project("at20k","kvorrT/trapENFCal",cut2);
+  skimTree->Project("at20k","kvorrT/trapENFCal",cut3);
   at20k->Write();
   cout << "Writing histogram at20k" <<  endl;
 

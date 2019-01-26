@@ -1,0 +1,16 @@
+sourcing .bashrc.ext
+Hey Jamin, it's finding this file
+Hey Jamin, it's finding this file
+/global/homes/j/jrager/LowE/Code/SumEParamCompare2
+std::string things initialized.
+Added skimfiles and detectors for DS-3
+Output will be written to file /global/homes/j/jrager/LowE/SumEOverManualVRun3.root
+Output file initialized.
+Set branchaddresses.
+Error in <TChain::LoadTree>: Cannot find tree with name skimTree in file /global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS3_run17441_low.root
+Error in <TChain::LoadTree>: Cannot find tree with name skimTree in file /global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS3_run18344_low.root
+16168435 events to be processed
+End event loop.
+cd to output file.
+Write to output file.
+Output file closed.

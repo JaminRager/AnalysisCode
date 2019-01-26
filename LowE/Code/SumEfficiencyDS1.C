@@ -233,7 +233,7 @@
     f17->Close();
     cout << "Data files closed" << endl;
 
-    string outFile = "~/LowE/Data/CombinedEfficiencies/ClopperErrorDS1Combined.root";
+    string outFile = "~/LowE/Data/CombinedEfficiencies/ClopperErrorDS1Enr.root";
     TFile *f0 = new TFile(outFile.c_str(),"recreate");
     cout << "Creating outpout file" <<  endl;
     f0->cd();

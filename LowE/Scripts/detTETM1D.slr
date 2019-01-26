@@ -3,8 +3,8 @@
 #--SBATCH -t 4:00:00  --ntasks=1
 #SBATCH --job-name=mjd-data_clean
 #SBATCH --account=majorana
-#SBATCH --output=/global/homes/j/jrager/LowE/Logs/data_clean1.sh.o%j                                                             
-#SBATCH --error=/global/homes/j/jrager/LowE/Logs/data_clean1.sh.o%j                                                             
+#SBATCH --output=/global/homes/j/jrager/LowE/Logs/detTETM1D1.sh.o%j                                                             
+#SBATCH --error=/global/homes/j/jrager/LowE/Logs/detTETM1D.sh.o%j                                                             
 #SBATCH -p realtime --image=custom:pdsf-chos-sl64:v4
 #
 

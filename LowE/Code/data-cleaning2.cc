@@ -49,10 +49,10 @@ int main()
 {
   //CompareSumEParam();
   //ComptonSpectrum();
-  //CutEfficiency1();
-  //CutEfficiency2();
-  //CutEfficiency3();
-  //CutEfficiency4();
+  CutEfficiency1();
+  CutEfficiency2();
+  CutEfficiency3();
+  CutEfficiency4();
   //CutEfficiency5();
   //Baseline();
   //BlindRunSelect();
@@ -64,7 +64,7 @@ int main()
   //NatToEFinal();
   //EnrToEFinal();
   //FinalNaturalSpectrum();
-  FinalEnrichedSpectrum();
+  //FinalEnrichedSpectrum();
   //ToEAllCuts();
   //DetectorSelection();
   //EvsRunGood();
@@ -136,7 +136,6 @@ char chan690[] = "channel==690";
 char chan600[] = "channel==600";
 char chan598[] = "channel==598";
 char chan592[] = "channel==592";
-char chan594[] = "channel==594";
 
 void CompareSumEParam()
 {
@@ -192,7 +191,7 @@ void ComptonSpectrum()
 
 void CutEfficiency1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan582.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan600.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -201,8 +200,8 @@ void CutEfficiency1()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS2*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan582);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan582);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan600);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan600);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -235,7 +234,7 @@ void CutEfficiency1()
 
 void CutEfficiency2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS2chan580.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan598.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -244,8 +243,8 @@ void CutEfficiency2()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS2*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan580);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan580);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan598);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan598);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -278,7 +277,7 @@ void CutEfficiency2()
 
 void CutEfficiency3()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan578.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan592.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -287,8 +286,8 @@ void CutEfficiency3()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS2*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan578);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan578);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan592);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan592);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -318,7 +317,7 @@ void CutEfficiency3()
 
 void CutEfficiency4()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan692.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan594.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -327,8 +326,8 @@ void CutEfficiency4()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS2*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan692);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan692);
+  //sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan594);
+  //sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan594);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -358,7 +357,7 @@ void CutEfficiency4()
 
 void CutEfficiency5()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan648.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan690.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -367,8 +366,8 @@ void CutEfficiency5()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS2*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan648);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan648);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan690);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan690);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");

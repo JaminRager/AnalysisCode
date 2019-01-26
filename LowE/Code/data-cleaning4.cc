@@ -17,6 +17,10 @@
 
 using namespace std;
 
+void ToEvsRun();
+void TETMvsRun();
+void TETMvsEnergy();
+void Blob();
 void CutEfficiency1();
 void CutEfficiency2();
 void CutEfficiency3();
@@ -51,6 +55,10 @@ void RunsAndDets();
 
 int main()
 {
+  //ToEvsRun();
+  //TETMvsRun();
+  //TETMvsEnergy();
+  //Blob();
   //CutEfficiency1();
   //CutEfficiency2();
   //CutEfficiency3();
@@ -69,10 +77,10 @@ int main()
   //NatToEFinal();
   //EnrToEFinal();
   //ToEComp();
-  FinalEnrichedSpectrum();
+  //FinalEnrichedSpectrum();
   //ToEAllCuts();
-  //DetectorSelection();
-  //EvsRunGood();
+  DetectorSelection();
+  EvsRunGood();
   //TestWFCuts();
   //TuneWFCuts1();                //  For tuning waveform (ToE & trapETailMin) cuts.
   //TuneWFCuts2();
@@ -118,7 +126,7 @@ char toeWideCut[] = "kvorrT/trapENFCal>0.8 && kvorrT/trapENFCal<2.1";
 char LEtoe[] = "((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal<1.7 && kvorrT/trapENFCal>1.05) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal<1.6 && kvorrT/trapENFCal>1.0) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal<1.4 && kvorrT/trapENFCal>0.95) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal<1.3 && kvorrT/trapENFCal>0.8) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal<1.2 && kvorrT/trapENFCal>0.75) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal<1.7 && kvorrT/trapENFCal>1.1) || (run>=60001914 && (channel==1106 || channel==1170 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal<1.65 && kvorrT/trapENFCal>1.1))";
 char HEtoe[] = "((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal<1.6 && kvorrT/trapENFCal>1.15) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal<1.45 && kvorrT/trapENFCal>1.1) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal<1.3 && kvorrT/trapENFCal>1.0) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal<1.2 && kvorrT/trapENFCal>0.9) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal<1.1 && kvorrT/trapENFCal>0.8) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal<1.65 && kvorrT/trapENFCal>1.25) || (run>=60001914 && (channel==1106 || channel==1170 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal<1.6 && kvorrT/trapENFCal>1.15))";
 char ToE5k[] = "((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal>0.91 && kvorrT/trapENFCal<1.81) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal>0.87 && kvorrT/trapENFCal<1.71) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>0.84 && kvorrT/trapENFCal<1.50) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal>0.68 && kvorrT/trapENFCal<1.40) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.63 && kvorrT/trapENFCal<1.29) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal>1.01 && kvorrT/trapENFCal>1.85) || (run>=60001914 && (channel==1106 || channel==1170 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal>0.83 && kvorrT/trapENFCal<1.85))";
-char ToE_EDependent[] = "((trapENFCal<9 && ((run<=60001868 && channel==1106 && channel==1144 && channel==1236 && channel==1332 && kvorrT/trapENFCal>0.91 && kvorrT/trapENFCal<1.81) || (run<=60001868 && channel==1174 && channel==1330 && kvorrT/trapENFCal>0.87 && kvorrT/trapENFCal<1.71) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>0.84 && kvorrT/trapENFCal<1.50) || (run<=60001868 && channel==1136 && channel==1170 && channel==1172 && channel==1176 && channel==1204 && kvorrT/trapENFCal>0.68 && kvorrT/trapENFCal<1.40) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.63 && kvorrT/trapENFCal<1.29) || (run>=60001914 && channel==1136 && channel==1144 && channel==1172 && channel==1232 && kvorrT/trapENFCal>1.01 && kvorrT/trapENFCal<1.85) || (run>=60001914 && channel==1106 && channel==1107 && channel==1174 && channel==1176 && channel==1204 && channel==1236 && channel==1298 && channel==1330 && channel==1332 && kvorrT/trapENFCal>0.83 && kvorrT/trapENFCal<1.85))) || (trapENFCal>=9 && trapENFCal<20 && ((run<=60001868 && channel==1106 && channel==1144 && channel==1236 && channel==1332 && kvorrT/trapENFCal>1.06 && kvorrT/trapENFCal<1.66) || (run<=60001868 && channel==1174 && channel==1330 && kvorrT/trapENFCal>0.99 && kvorrT/trapENFCal<1.53) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>0.93 && kvorrT/trapENFCal<1.35) || (run<=60001868 && channel==1136 && channel==1170 && channel==1172 && channel==1176 && channel==1204 && kvorrT/trapENFCal>0.78 && kvorrT/trapENFCal<1.26) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.74 && kvorrT/trapENFCal<1.16) || (run>=60001914 && channel==1136 && channel==1144 && channel==1172 && channel==1232 && kvorrT/trapENFCal>1.14 && kvorrT/trapENFCal<1.74) || (run>=60001914 && channel==1106 && channel==1107 && channel==1174 && channel==1176 && channel==1204 && channel==1236 && channel==1298 && channel==1330 && channel==1332 && kvorrT/trapENFCal>1.01 && kvorrT/trapENFCal<1.67))) || (trapENFCal>=20 && ((run<=60001868 && channel==1106 && channel==1144 && channel==1236 && channel==1332 && kvorrT/trapENFCal>1.18 && kvorrT/trapENFCal<1.54) || (run<=60001868 && channel==1174 && channel==1330 && kvorrT/trapENFCal>1.09 && kvorrT/trapENFCal<1.39) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>1.00 && kvorrT/trapENFCal<1.24) || (run<=60001868 && channel==1136 && channel==1170 && channel==1172 && channel==1176 && channel==1204 && kvorrT/trapENFCal>0.88 && kvorrT/trapENFCal<1.18) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.82 && kvorrT/trapENFCal<1.06) || (run>=60001914 && channel==1136 && channel==1144 && channel==1172 && channel==1232 && kvorrT/trapENFCal>1.21 && kvorrT/trapENFCal<1.69) || (run>=60001914 && channel==1106 && channel==1107 && channel==1174 && channel==1176 && channel==1204 && channel==1236 && channel==1298 && channel==1330 && channel==1332 && kvorrT/trapENFCal>1.14 && kvorrT/trapENFCal<1.56))))";
+char ToE_EDependent[] = "((trapENFCal<9 && ((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal>0.91 && kvorrT/trapENFCal<1.81) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal>0.87 && kvorrT/trapENFCal<1.71) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>0.84 && kvorrT/trapENFCal<1.50) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal>0.68 && kvorrT/trapENFCal<1.40) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.63 && kvorrT/trapENFCal<1.29) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal>1.01 && kvorrT/trapENFCal<1.85) || (run>=60001914 && (channel==1106 || channel==1107 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal>0.83 && kvorrT/trapENFCal<1.85))) || (trapENFCal>=9 && trapENFCal<20 && ((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal>1.06 && kvorrT/trapENFCal<1.66) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal>0.99 && kvorrT/trapENFCal<1.53) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>0.93 && kvorrT/trapENFCal<1.35) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal>0.78 && kvorrT/trapENFCal<1.26) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.74 && kvorrT/trapENFCal<1.16) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal>1.14 && kvorrT/trapENFCal<1.74) || (run>=60001914 && (channel==1106 || channel==1107 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal>1.01 && kvorrT/trapENFCal<1.67))) || (trapENFCal>=20 && ((run<=60001868 && (channel==1106 || channel==1144 || channel==1236 || channel==1332) && kvorrT/trapENFCal>1.18 && kvorrT/trapENFCal<1.54) || (run<=60001868 && (channel==1174 || channel==1330) && kvorrT/trapENFCal>1.09 && kvorrT/trapENFCal<1.39) || (run<=60001868 && channel==1232 && kvorrT/trapENFCal>1.00 && kvorrT/trapENFCal<1.24) || (run<=60001868 && (channel==1136 || channel==1170 || channel==1172 || channel==1176 || channel==1204) && kvorrT/trapENFCal>0.88 && kvorrT/trapENFCal<1.18) || (run<=60001868 && channel==1298 && kvorrT/trapENFCal>0.82 && kvorrT/trapENFCal<1.06) || (run>=60001914 && (channel==1136 || channel==1144 || channel==1172 || channel==1232) && kvorrT/trapENFCal>1.21 && kvorrT/trapENFCal<1.69) || (run>=60001914 && (channel==1106 || channel==1107 || channel==1174 || channel==1176 || channel==1204 || channel==1236 || channel==1298 || channel==1330 || channel==1332) && kvorrT/trapENFCal>1.14 && kvorrT/trapENFCal<1.56))))";
 //char advCut[] = "avse>-1 && dcr90<0 && kvorrT/trapENFCal>0.6 && kvorrT/trapENFCal<2";
 //char noisyRunsCut[] = "run!=20643 && run!=20639 && run!=20635 && !(run>20611 && run<20627) && !(run>20876 && run<20878) && run!=20910 && !(run>20955 && run<20957) && !(run>20964 && run<20966) && !(run>21133 && run<21136) && !(run>21157 && run<21165) && !(run>21778 && run<21781) && !(run>21768 && run<21776) && !(run>20955 && run<20957) && run!=22954 && run!=22952";
 //char noisyDetCut[] = "channel!=614 && channel!=678 && channel!=692 && channel!=1172 && channel!=1232 && channel!=1303 && channel!=1332";
@@ -150,10 +158,22 @@ char chan1174[] = "channel==1174";
 char chan1144[] = "channel==1144";
 char chan1106[] = "channel==1106";
 char chan1176[] = "channel==1176";
+char chan1172[] = "channel==1172";
+char chan1170[] = "channel==1170";
+char chan1136[] = "channel==1136";
+char chan1330[] = "channel==1330";
+char chan1332[] = "channel==1332";
+char chan1296[] = "channel==1296";
+char chan1298[] = "channel==1298";
+char chan1236[] = "channel==1236";
+char chan1232[] = "channel==1232";
+char blob[] = "((channel==1106 || channel==1144 || channel==1236 || channel==1332) && trapENFCal>37 && trapENFCal<38 && kvorrT/trapENFCal>3.45 && kvorrT/trapENFCal<3.65)";
+char runG1[] = "(run<=60001868)";
+char runG2[] = "(run>=60001914)";
 
-void CutEfficiency1()
+void ToEvsRun()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1204.root";
+  string outFile = "/global/u1/j/jrager/LowE/ToEvsRunDS4_1296_cal.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -162,8 +182,113 @@ void CutEfficiency1()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s",HEDetCut,ComptonManual,tetmCut,chan1204);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1204);
+  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,chan1296);
+    
+  TH2F *ToEVrun = new TH2F("ToEVrun","ToEVrun", 1845, 60000550, 60002395, 400, 0, 10);
+  ToEVrun->GetYaxis()->SetTitle("trapETailMin");
+  ToEVrun->GetXaxis()->SetTitle("run");
+  skimTree->Project("ToEVrun","trapETailMin/trapENFCal:run",cut1);
+  ToEVrun->SetOption("colz");
+  ToEVrun->Write();
+  cout << "Writing histogram ToEVrun" <<  endl;
+    
+  cout << "done" <<  endl;
+    
+  f->Close();
+}
+
+void TETMvsRun()
+{
+  string outFile = "/global/u1/j/jrager/LowE/Data/TETMvsRunDS4_1296.root";
+    
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+    
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS4*.root");
+  cout << "Adding data files" <<  endl;
+    
+  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,chan1296);
+    
+  TH2F *tetmVrun = new TH2F("tetmVrun","tetmVrun", 1845, 60000550, 60002395, 300, -20, 10);
+  tetmVrun->GetYaxis()->SetTitle("trapETailMin");
+  tetmVrun->GetXaxis()->SetTitle("run");
+  skimTree->Project("tetmVrun","trapETailMin:run",cut1);
+  tetmVrun->SetOption("colz");
+  tetmVrun->Write();
+  cout << "Writing histogram tetmVrun" <<  endl;
+    
+  cout << "done" <<  endl;
+    
+  f->Close();
+}
+
+void TETMvsEnergy()
+{
+  string outFile = "/global/u1/j/jrager/LowE/Data/TETMvsEnergyDS4_1296_cal.root";
+    
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+    
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
+  cout << "Adding data files" <<  endl;
+    
+  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,chan1296);
+    
+  TH2F *tetmVEnergy = new TH2F("tetmVEnergy", "tetmVEnergy", 1000, 0, 100, 300, -20, 10);
+  tetmVEnergy->GetYaxis()->SetTitle("trapETailMin");
+  tetmVEnergy->GetXaxis()->SetTitle("trapENFCal (keV)");
+  skimTree->Project("tetmVEnergy","trapETailMin:trapENFCal",cut1);
+  tetmVEnergy->SetOption("colz");
+  tetmVEnergy->Write();
+  cout << "Writing histogram tetmVEnergy" <<  endl;
+    
+  cout << "done" <<  endl;
+    
+  f->Close();
+}
+
+void Blob()
+{
+  string outFile = "/global/u1/j/jrager/LowE/DS4runG1detG1Blob.root";
+
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
+  cout << "Adding data files" <<  endl;
+
+  sprintf(cut1,"%s",blob);
+
+  TH1D *Blob = new TH1D("Blob", "Blob", 1318, 60000550, 60001868);
+  Blob->GetXaxis()->SetTitle("run");
+  Blob->GetYaxis()->SetTitle("cts");
+  skimTree->Project("Blob", "run", cut1);
+  Blob->Write();
+  cout << "Writing histogram Blob" <<  endl;
+
+  cout << "done" <<  endl;
+
+  f->Close();
+
+}
+
+void CutEfficiency1()
+{
+  string outFile = "/global/u1/j/jrager/LowE/EfficiencyDS4chan1296_ToE.root";
+    
+  TFile *f = new TFile(outFile.c_str(),"RECREATE");
+  cout << "Creating outpout file" <<  endl;
+    
+  TChain *skimTree = new TChain("skimTree");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
+  cout << "Adding data files" <<  endl;
+
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000); // manually overwrite root's hardcoded limit on formula length
+  sprintf(cut1,"%s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,chan1296);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1296);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -172,12 +297,12 @@ void CutEfficiency1()
   Pass->Write();
   cout << "Writing histogram Pass" <<  endl;
     
-  TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
-  Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
-  Tot->GetYaxis()->SetTitle("cts");
-  skimTree->Project("Tot", "trapENFCal", cut2);
-  Tot->Write();
-  cout << "Writing histogram Tot" <<  endl;
+  //TH1D *Tot = new TH1D("Tot", "Tot", 20, 0, 100);
+  //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
+  //Tot->GetYaxis()->SetTitle("cts");
+  //skimTree->Project("Tot", "trapENFCal", cut2);
+  //Tot->Write();
+  //cout << "Writing histogram Tot" <<  endl;
     
   //TH1D *Eff = (TH1D*)Pass->Clone("Eff");
   //Tot->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -193,7 +318,7 @@ void CutEfficiency1()
 
 void CutEfficiency2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1174.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS4chan1296.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -202,8 +327,9 @@ void CutEfficiency2()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1174);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1174);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1296);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1296);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -233,7 +359,7 @@ void CutEfficiency2()
 
 void CutEfficiency3()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1144.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS4chan1298.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -242,8 +368,9 @@ void CutEfficiency3()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1144);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1144);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1298);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1298);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -273,7 +400,7 @@ void CutEfficiency3()
 
 void CutEfficiency4()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1106.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1236.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -282,8 +409,9 @@ void CutEfficiency4()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1106);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1106);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1236);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1236);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -313,7 +441,7 @@ void CutEfficiency4()
 
 void CutEfficiency5()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1176.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/EfficiencyDS2chan1232.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -322,8 +450,9 @@ void CutEfficiency5()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1176);
-  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1176);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(cut1,"%s && %s && %s && %s && %s",HEDetCut,ComptonManual,ToE_EDependent,tetmCut,chan1232);
+  sprintf(cut2,"%s && %s && %s",HEDetCut,ComptonManual,chan1232);
     
   TH1D *Pass = new TH1D("Pass", "Pass", 20, 0, 100);
   Pass->GetXaxis()->SetTitle("trapENFCal (keV)");
@@ -379,22 +508,24 @@ void CompareSumEParam()
 
 void ComptonSpectrum()
 {
-  string outFile = "/global/u1/j/jrager/LowE/SumSpectrumDS4.root";
+  string outFile = "/global/u1/j/jrager/LowE/DS4BkgSpectBasic1296.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
     
   TChain *skimTree = new TChain("skimTree");
-  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
+  skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS4*.root");
+  //skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s",ComptonEvents,HEDetCut);
-  sprintf(cut2,"%s",HEDetCut);
+  //sprintf(cut1,"%s && %s",ComptonEvents,HEDetCut);
+  //sprintf(cut2,"%s",HEDetCut);
+  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,chan1296);
 
   TH1D *Basic = new TH1D("Basic", "Basic", 12000, 0, 3000);
   Basic->GetXaxis()->SetTitle("sumEH (keV)");
   Basic->GetYaxis()->SetTitle("cts");
-  skimTree->Project("Basic", "sumEH", cut2);
+  skimTree->Project("Basic", "sumEH", cut1);
   Basic->Write();
   cout << "Writing histogram Basic" <<  endl;
     
@@ -748,7 +879,7 @@ void ToEAllCuts()
 
 void DetectorSelection()
 {
-  string outFile = "/global/u1/j/jrager/LowE/DetSelectDS4_5kThresh.root";
+  string outFile = "/global/u1/j/jrager/LowE/DetSelectDS4_5kThresh_correctedCuts.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -757,7 +888,8 @@ void DetectorSelection()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
 
-  sprintf(theCut,"%s && %s && %s && %s && %s",basicCut,tetmCut,ToE5k,HEDetCut,EwindowCut4);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  sprintf(theCut,"%s && %s && %s && %s && %s",basicCut,tetmCut,ToE_EDependent,HEDetCut,EwindowCut4);
 
   TH1F *det = new TH1F("det", "det", 800, 550, 1350);
   det->GetXaxis()->SetTitle("detector channel");
@@ -781,7 +913,7 @@ void DetectorSelection()
 
 void EvsRunGood()
 {
-  string outFile = "/global/u1/j/jrager/LowE/RunSelectDS4_5kThresh.root";
+  string outFile = "/global/u1/j/jrager/LowE/RunSelectDS4_5kThresh_correctedCuts.root";
 
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -790,26 +922,27 @@ void EvsRunGood()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/bkg/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
 
-  sprintf(cut0,"%s && %s",HEDetCut,EwindowCut4);
-  sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,EwindowCut4);
-  sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,tetmCut,ToE5k,HEDetCut,EwindowCut4);
-  sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,tetmOldCut,LEtoe,HEDetCut,EwindowCut4);
+  ROOT::v5::TFormula::SetMaxima(2000, 2000, 2000);
+  //sprintf(cut0,"%s && %s",HEDetCut,EwindowCut4);
+  //sprintf(cut1,"%s && %s && %s",basicCut,HEDetCut,chan1296);
+  sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,tetmCut,ToE_EDependent,HEDetCut,EwindowCut4);
+  //sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,tetmOldCut,LEtoe,HEDetCut,EwindowCut4);
     
-  TH2F *EVrun = new TH2F("EVrun","EVrun", 1845, 60000550, 60002395, 2000, 0, 500);
-  EVrun->GetYaxis()->SetTitle("trapENFCal (keV)");
-  EVrun->GetXaxis()->SetTitle("run");
-  skimTree->Project("EVrun","trapENFCal:run");
-  EVrun->SetOption("colz");
-  EVrun->Write();
-  cout << "Writing histogram EVrun" <<  endl;
+  //TH2F *EVrun = new TH2F("EVrun","EVrun", 1845, 60000550, 60002395, 2000, 0, 500);
+  //EVrun->GetYaxis()->SetTitle("trapENFCal (keV)");
+  //EVrun->GetXaxis()->SetTitle("run");
+  //skimTree->Project("EVrun","trapENFCal:run");
+  //EVrun->SetOption("colz");
+  //EVrun->Write();
+  //cout << "Writing histogram EVrun" <<  endl;
 
-  TH2F *EVrunBasic = new TH2F("EVrunBasic","EVrunBasic", 1845, 60000550, 60002395, 2000, 0, 500);
-  EVrunBasic->GetYaxis()->SetTitle("trapENFCal (keV)");
-  EVrunBasic->GetXaxis()->SetTitle("run");
-  skimTree->Project("EVrunBasic","trapENFCal:run",cut1);
-  EVrunBasic->SetOption("colz");
-  EVrunBasic->Write();
-  cout << "Writing histogram EVrunBasic" <<  endl;
+  //TH2F *EVrunBasic = new TH2F("EVrunBasic","EVrunBasic", 1845, 60000550, 60002395, 2000, 0, 500);
+  //EVrunBasic->GetYaxis()->SetTitle("trapENFCal (keV)");
+  //EVrunBasic->GetXaxis()->SetTitle("run");
+  //skimTree->Project("EVrunBasic","trapENFCal:run",cut1);
+  //EVrunBasic->SetOption("colz");
+  //EVrunBasic->Write();
+  //cout << "Writing histogram EVrunBasic" <<  endl;
 
   TH2F *EVrunAdv = new TH2F("EVrunAdv","EVrunAdv", 1845, 60000550, 60002395, 2000, 0, 500);
   EVrunAdv->GetYaxis()->SetTitle("trapENFCal (keV)");
@@ -819,13 +952,13 @@ void EvsRunGood()
   EVrunAdv->Write();
   cout << "Writing histogram EVrunAdv" <<  endl;
 
-  TH2F *EVrunOld = new TH2F("EVrunOld","EVrunOld", 1845, 60000550, 60002395, 2000, 0, 500);
-  EVrunOld->GetYaxis()->SetTitle("trapENFCal (keV)");
-  EVrunOld->GetXaxis()->SetTitle("run");
-  skimTree->Project("EVrunOld","trapENFCal:run",cut3);
-  EVrunOld->SetOption("colz");
-  EVrunOld->Write();
-  cout << "Writing histogram EVrunOld" <<  endl;
+  //TH2F *EVrunOld = new TH2F("EVrunOld","EVrunOld", 1845, 60000550, 60002395, 2000, 0, 500);
+  //EVrunOld->GetYaxis()->SetTitle("trapENFCal (keV)");
+  //EVrunOld->GetXaxis()->SetTitle("run");
+  //skimTree->Project("EVrunOld","trapENFCal:run",cut3);
+  //EVrunOld->SetOption("colz");
+  //EVrunOld->Write();
+  //cout << "Writing histogram EVrunOld" <<  endl;
 
   cout << "done" <<  endl;
 
@@ -868,7 +1001,7 @@ void TestWFCuts()
 
 void TuneToECut1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneToECutDS4_runG1detG2.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/TuneToECutDS4_1296_G1.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -877,9 +1010,9 @@ void TuneToECut1()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  sprintf(cut1,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,runG1detG2);
-  sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,runG1detG2);
-  sprintf(cut3,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut5,runG1detG2);
+  sprintf(cut1,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,chan1296,runG1);
+  sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,chan1296,runG1);
+  sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut5,chan1296,runG1);
 
   TH1F *at5k = new TH1F("at5k", "at5k", 400, 0, 10);
   at5k->GetYaxis()->SetTitle("counts");
@@ -909,7 +1042,7 @@ void TuneToECut1()
 
 void TuneToECut2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneToECutDS4_runG2detG2.root";
+  string outFile = "/global/u1/j/jrager/LowE/Data/TuneToECutDS4_1296_G2.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -918,9 +1051,9 @@ void TuneToECut2()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  //sprintf(cut1,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,runG2detG2);
-  //sprintf(cut2,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,runG2detG2);
-  //sprintf(cut3,"%s && %s && %s && %s",basicCut,HEDetCut,EwindowCut5,runG2detG2);
+  sprintf(cut1,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut1,chan1296,runG2);
+  sprintf(cut2,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut2,chan1296,runG2);
+  sprintf(cut3,"%s && %s && %s && %s && %s",basicCut,HEDetCut,EwindowCut5,chan1296,runG2);
 
   TH1F *at5k = new TH1F("at5k", "at5k", 400, 0, 10);
   at5k->GetYaxis()->SetTitle("counts");
@@ -1073,7 +1206,7 @@ void TuneToECut5()
 
 void TuneWFCuts1()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneWFCutsDS4_C1P7D4_Compton.root";
+  string outFile = "/global/u1/j/jrager/LowE/TuneWFCutsDS4_1296_cal.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -1082,7 +1215,7 @@ void TuneWFCuts1()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  //sprintf(theCut,"%s && %s && %s",ComptonEvents,HEDetCut,detC1P7D4);
+  sprintf(theCut,"%s && %s && %s",basicCut,HEDetCut,chan1296);
     
   TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
   ToE->GetYaxis()->SetTitle("T/E (arb)");
@@ -1105,7 +1238,7 @@ void TuneWFCuts1()
 
 void TuneWFCuts2()
 {
-  string outFile = "/global/u1/j/jrager/LowE/Data/TuneWFCutsDS4_runG1detG2_Compton.root";
+  string outFile = "/global/u1/j/jrager/LowE/DS4TETMvsE_1296.root";
     
   TFile *f = new TFile(outFile.c_str(),"RECREATE");
   cout << "Creating outpout file" <<  endl;
@@ -1114,7 +1247,7 @@ void TuneWFCuts2()
   skimTree->Add("/global/projecta/projectdirs/majorana/users/wisecg/cal/skim/skimDS4*.root");
   cout << "Adding data files" <<  endl;
     
-  //sprintf(theCut,"%s && %s && %s",ComptonEvents,HEDetCut,runG1detG2);
+  sprintf(theCut,"%s && %s && %s",basicCut,HEDetCut,chan1296);
     
   TH2F *ToE = new TH2F("ToE", "ToE", 1000, 0, 100, 400, 0, 10);
   ToE->GetYaxis()->SetTitle("T/E (arb)");
@@ -1124,7 +1257,7 @@ void TuneWFCuts2()
   ToE->Write();
   cout << "Writing histogram ToE" <<  endl;
     
-  TH1F *htrapETailMin = new TH1F("htrapETailMin","htrapETailMin", 150, -5, 10);
+  TH1F *htrapETailMin = new TH1F("htrapETailMin","htrapETailMin", 150, -10, 5);
   htrapETailMin->GetXaxis()->SetTitle("trapETailMin");
   skimTree->Project("htrapETailMin","trapETailMin",theCut);
   htrapETailMin->Write();

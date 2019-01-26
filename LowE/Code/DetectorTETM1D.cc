@@ -278,7 +278,7 @@ int main()
     }
     
     // Output File. Added dataset name to file name.
-    outFileName = "/global/homes/j/jrager/LowE/Data/DetectorTETM1D_" + DSets + ".root";
+    outFileName = "/global/homes/j/jrager/LowE/DetectorTETM1D_" + DSets + ".root";
     std::cout << "Output will be written to file " << outFileName << std::endl;
     std::cout << "Output file initialized." << std::endl;
 

@@ -38,17 +38,21 @@ int main(int argc, char *argv[])
 
   // Path to data file.  
   std::string dataPath("/global/homes/j/jrager/LowE/Data/PassFailPlots/");
+  std::cout << "data path" << dataPath << std::endl;
 
   // File where output will be saved
   std::string outFile; 
 
   // Directory where file will be saved.  
-  std::string savePath("/global/homes/j/jrager/LowE/Data/IndivEffeciencies/");
+  std::string savePath("/global/homes/j/jrager/LowE/Data/IndivEfficiencies/");
+  std::cout << "save path" << savePath << std::endl;
 
-  dataFile = dataPath + "EfficiencyDS1chan" + std::string(argv[1]) + ".root";
+  dataFile = dataPath + "EfficiencyDS4chan" + std::string(argv[1]) + ".root";
+  std::cout << "data file" << dataFile << std::endl;
   TFile f1(dataFile.c_str());
   //TFile *f1 = new TFile("/global/homes/j/jrager/LowE/Data/EfficiencyDS1chan582.root");
-  outFile = savePath + "ClopperErrorDS1Ch" + std::string(argv[1]) + ".root";
+  outFile = savePath + "ClopperErrorDS4Ch" + std::string(argv[1]) + ".root";
+  std::cout << "output path" << outFile << std::endl;
   TFile f2(outFile.c_str(), "RECREATE");
   f2.cd();
 

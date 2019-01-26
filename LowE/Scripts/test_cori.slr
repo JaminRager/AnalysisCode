@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#--SBATCH -t 4:00:00  --ntasks=1
+#SBATCH --job-name=djt-cori
+#SBATCH --account=majorana
+#SBATCH --output=/global/homes/j/jrager/LowE/Logs/test_cori.sh.o%j                                                           
+#SBATCH --error=/global/homes/j/jrager/LowE/Logs/test_cori.sh.o%j                                                            
+#SBATCH -p shared --image=docker:registry.services.nersc.gov/dave/lcrmjd:latest -C haswell
+#
+
+#---------------------------------------------------------------------------------------------------------------
+shifter  --volume=/global/project:/project  /bin/bash  /global/homes/j/jrager/LowE/Scripts/test_cori.sh

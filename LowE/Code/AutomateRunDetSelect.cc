@@ -46,8 +46,8 @@ int main()
     for (Int_t i=7; i<1565; i++)
       {
         double ctsRun = h1->Integral(i,i);
-	run.push_back(ctsRun);
-	//cout << "i " << i << " ctsRun " << ctsRun << endl;
+        run.push_back(ctsRun);
+	    //cout << "i " << i << " ctsRun " << ctsRun << endl;
       }
 
     double sumR = std::accumulate(run.begin(), run.end(), 0.0);
@@ -73,23 +73,45 @@ int main()
     //seems to be skipping this part of the program. maybe if I try looping over vectors run and chan instead?
     //would have to change ranges on loops to go through entier range of run and channel in data files
     //DS5b: i=0; i<1565
-    for (Int_t k=7; k<1565; k++)
+    //for (Int_t k=7; k<1565; k++)
+      //{
+        //Int_t r = k+22393;
+        //double ctsRun = run[k];
+        //double zRun = (ctsRun - meanR)/stdevR;
+        //if (zRun>=3)
+          //{
+            //for (Int_t l=584; l<1331; l++)
+              //{
+                //double ctsDet = chan[l];
+                //double zDet = (ctsDet - meanC)/stdevC;
+                //if (zDet>=3)
+                  //{
+                      //cout << "run: " << r << " zRun: " << zRun << " channel: " << l << " zDet: " << zDet << endl;
+                  //}
+              //}
+          //}
+      //}
+    
+    int r = 22400;
+    int c = 584;
+    // loop over runs
+    for (std::vector<int>::iterator it = run.begin() ; it != run.end(); ++it)
       {
-        Int_t r = k+22393;
-        double ctsRun = run[k];
-        double zRun = (ctsRun - meanR)/stdevR;
+        double zRun = ((*it) - meanR)/stdevR;
         if (zRun>=3)
-	  {
-            for (Int_t l=584; l<1331; l++)
-	      {
-                double ctsDet = chan[l];
-                double zDet = (ctsDet - meanC)/stdevC;
+          {
+            // loop over channels
+            for (std::vector<int>::iterator iter = chan.begin() ; iter != chan.end(); ++iter)
+              {
+                double zDet = ((*iter) - meanC)/stdevC;
                 if (zDet>=3)
-		  {
-		    cout << "run: " << r << " zRun: " << zRun << " channel: " << l << " zDet: " << zDet << endl;
-		  }
-	      }
-	  }
+                  {
+                      cout << "run: " << r << " zRun: " << zRun << " channel: " << l << " zDet: " << zDet << endl;
+                  }
+                ++c;
+              }
+          }
+        ++r;
       }
     
 

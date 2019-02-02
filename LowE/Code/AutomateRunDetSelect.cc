@@ -25,7 +25,16 @@
 
 using namespace std;
 
+void Method1();
+void Method2();
+
 int main()
+{
+    //Method1();
+    Method2();
+}
+
+void Method1()
 {
     // Load input files
     string inFile1 = "~/LowE/Data/BlindRunSelectDS5b_5kThresh.root";
@@ -116,6 +125,52 @@ int main()
     
 
     cout << "done" <<  endl;
+}
 
-    return 0;
+void Method2()
+{
+    // Load input files
+    string inFile1 = "~/LowE/AnalysisPlots/latest/DetectorSelection/DetSelectDS5b_5kThresh.root";
+    TFile *f1 = new TFile(inFile2.c_str());
+    
+    // Load TH2's
+    TH2F *h1 = (TH2F*)f1->Get("detVrun");
+    
+    // Initialize vectors
+    std::vector<double> ctsTally;
+    
+    // Caluclate Total number of bins in histogram including underflow and overflow bins
+    Int_t numberofbins = h1->GetSize();
+    
+    // have to do binx, biny and convert these into global bin number
+        //two nested for loops
+    // just use offset method to get x,y coordinates of binx, biny
+    for(int i=1; i<=numberofbins; i++) {
+        Int_t cts = h1->GetBinContent(i);
+        if (cts != 0) {
+            ctsTally.push_back(cts);
+        }
+    }
+    
+    double sum = std::accumulate(ctsTally.begin(), ctsTally.end(), 0.0);
+    double mean = sum / ctsTally.size();
+    double sq_sum = std::inner_product(ctsTally.begin(), ctsTally.end(), ctsTally.begin(), 0.0);
+    double stdev = std::sqrt(sq_sum / ctsTally.size() - mean * mean);
+    cout << "sum " << sum << " mean " << mean << " sq_sum " << sq_sumR << " stdev " << stdevR << endl;
+    
+    //for(int i=0; i<=(numberofbins - 1); i++) {
+        //Int_t cts = h1->GetBinContent(i);
+        //if (cts != 0) {
+            //double z = (cts - mean)/stdev;
+            //if (zRun>=3)
+            //{
+                //double run = h->GetXaxis()->GetBinCenter(i); //need to double check that this line works
+                //double channel = h->GetYaxis()->GetBinCenter(i); //need to double check that this line works
+                //cout << "run: " << run << " z score: " << z << " channel: " << channel << endl;
+            //}
+        //}
+    //}
+    
+    
+    
 }

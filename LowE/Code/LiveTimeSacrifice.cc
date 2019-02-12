@@ -37,7 +37,7 @@ int main()
 {
     // Input file
     TChain *chain = new TChain("dsTree");
-    chain->Add("~/lat/data/ds_5B_livetime.root");
+    chain->Add("~/lat/data/ds_6_livetime.root");
     cout << "Adding data files" <<  endl;
     
     // Identify and assign memory to TTree variables of interest.
@@ -62,7 +62,8 @@ int main()
         // For each entry, loop through detector channels
         for(UInt_t nhit = 0; nhit < (*channel).size(); nhit++) {
 
-	  if ((run==22954 || run==22952 || run==22946 || run==22937) && (*channel)[nhit]==692) {
+	  //if ((run>=25704 && run <=43625) && (*channel)[nhit]==674) {
+	  if ((run>=36029 && run<=36047) && (*channel)[nhit]==674) {  
 	      c = (*channel)[nhit];
 	      l = (*livetime)[nhit];
 	      lt.push_back((*livetime)[nhit]);

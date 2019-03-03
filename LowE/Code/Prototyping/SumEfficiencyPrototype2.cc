@@ -39,7 +39,7 @@ int main()
 {
 
 // Info file
-string info_file = "det_info_proto.txt";
+string info_file = "det_info_lowE.txt";
 cout << "det_info file loaded" << endl;
 
 // maps of detector mass, detector livetime, detector efficiency TFile, detector efficiency TGraph
@@ -71,7 +71,7 @@ while (infile >> idx >> ds >> cpd >> chan >> serial_num >> mass >> mass_unc >> l
     det_lt[idx] = lt;
     n = sprintf(buffer1,"%i",ds);
     m = sprintf(buffer2,"%i",chan);
-    path = "~/LowE/Data/IndivEfficiencies/ClopperErrorDS" + n + "Ch" + m +".root"
+    path = std::string("~/LowE/Data/IndivEfficiencies/ClopperErrorDS") + buffer1 + "Ch" + buffer2 + ".root";
     f[idx] = new TFile(path.c_str());
     geff[idx] = (TGraphAsymmErrors*)f[idx]->Get("Graph");
 }
@@ -112,9 +112,9 @@ cout << "arrays initialized" << endl;
 
 for(int i = 0; i < 20; i++){
     for(int j = 0; j < 15; j++){
-        eff[j][i] = geff[j+1]->Eval(i*5);
+        eff[j][i] = geff[j]->Eval(i*5);
 	cout << "eff[j][i], " << j << ", " << i << ", " << eff[j][i] << endl;
-        effSum[i] = effSum[i] + (eff[j][i] * det_mass[j+1] * det_lt[j+1]);
+        effSum[i] = effSum[i] + (eff[j][i] * det_mass[j] * det_lt[j]);
 	//cout << "det_mass[j]" << det_mass[j] << endl;
 	//cout << "det_lt[j]" << det_lt[j] << endl;
 	//cout << "effSum[j]" << effSum[j] << endl;
@@ -126,9 +126,8 @@ for(int i = 0; i < 20; i++){
 }
 cout << "Loop through data points and map indices" << endl;
 
-
-f1->Close();
-f2->Close();
+//f1->Close();
+//f2->Close();
 cout << "Data files closed" << endl;
 
 string outFile = "~/LowE/Code/Prototyping/CombinedEffPrototype3.root";

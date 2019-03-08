@@ -107,22 +107,22 @@ cout << "arrays initialized" << endl;
 for(int i = 0; i < 20; i++){
     for(int j = 0; j < 7; j++){
         eff12[j][i] = geff[j]->Eval(i*5);
-        errHi12[j][i] = geff[j]->GetErrorYhigh(i*5);
-        errLow12[j][i] = geff[j]->GetErrorYlow(i*5);
-        cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff[j][i]  << " " << errHi[j][i] << " " << errLow[j][i] << endl;
-        effSum12[i] = effSum[i] + (eff[j][i]*det_mass[j]*det_lt[j]);
-        errSumHi12[i] = errSumHi[i] + ((errHi[j][i]*det_mass[j]*det_lt[j])*(errHi[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
-        errSumLow12[i] = errSumLow[i] + ((errLow[j][i]*det_mass[j]*det_lt[j])*(errLow[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+        errHi12[j][i] = geff[j]->GetErrorYhigh(i);
+        errLow12[j][i] = geff[j]->GetErrorYlow(i);
+        cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff12[j][i]  << " " << errHi12[j][i] << " " << errLow12[j][i] << " det_mass[j], " << det_mass[j] << endl;
+        effSum12[i] = effSum12[i] + (eff12[j][i]*det_mass[j]*det_lt[j]);
+        errSumHi12[i] = errSumHi12[i] + ((errHi12[j][i]*det_mass[j]*det_lt[j])*(errHi12[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff12[j][i]*det_lt[j])*(det_mass_err[j]*eff12[j][i]*det_lt[j]));
+        errSumLow12[i] = errSumLow12[i] + ((errLow12[j][i]*det_mass[j]*det_lt[j])*(errLow12[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff12[j][i]*det_lt[j])*(det_mass_err[j]*eff12[j][i]*det_lt[j]));
 	
     }
-    for(int j = 0; j < 8; j++){
-        eff34[j][i] = geff[j+7]->Eval(i*5);
-        errHi34[j][i] = geff[j+7]->GetErrorYhigh(i*5);
-        errLow34[j][i] = geff[j+7]->GetErrorYlow(i*5);
-        cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff[j][i]  << " " << errHi[j][i] << " " << errLow[j][i] << endl;
-        effSum12[i] = effSum[i] + (eff[j][i]*det_mass[j]*det_lt[j]);
-        errSumHi12[i] = errSumHi[i] + ((errHi[j][i]*det_mass[j]*det_lt[j])*(errHi[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
-        errSumLow12[i] = errSumLow[i] + ((errLow[j][i]*det_mass[j]*det_lt[j])*(errLow[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+    for(int j = 7; j < 15; j++){
+        eff34[j-7][i] = geff[j]->Eval(i*5);
+        errHi34[j-7][i] = geff[j]->GetErrorYhigh(i);
+        errLow34[j-7][i] = geff[j]->GetErrorYlow(i);
+        cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff34[j-7][i]  << " " << errHi34[j-7][i] << " " << errLow34[j-7][i] << " det_mass[j], " << det_mass[j] << endl;
+        effSum34[i] = effSum34[i] + (eff34[j-7][i]*det_mass[j]*det_lt[j]);
+        errSumHi34[i] = errSumHi34[i] + ((errHi34[j-7][i]*det_mass[j]*det_lt[j])*(errHi34[j-7][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff34[j-7][i]*det_lt[j])*(det_mass_err[j]*eff34[j-7][i]*det_lt[j]));
+        errSumLow34[i] = errSumLow34[i] + ((errLow34[j-7][i]*det_mass[j]*det_lt[j])*(errLow34[j-7][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff34[j-7][i]*det_lt[j])*(det_mass_err[j]*eff34[j-7][i]*det_lt[j]));
         
     }
     effSumTot[i] = effSum12[i] + effSum34[i];
@@ -134,7 +134,7 @@ for(int i = 0; i < 20; i++){
 }
 cout << "Loop through data points and map indices" << endl;
 
-string outFile = "~/LowE/Code/Prototyping/Prototype2.root";
+string outFile = "~/LowE/Code/Prototyping/Prototype4.root";
 TFile *f0 = new TFile(outFile.c_str(),"recreate");
 cout << "Creating outpout file" <<  endl;
 f0->cd();

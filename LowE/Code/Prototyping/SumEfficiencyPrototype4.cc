@@ -77,36 +77,57 @@ while (infile >> idx >> ds >> cpd >> chan >> serial_num >> mass >> mass_err >> l
 cout << "mass, livetime, TFile, and TGraph maps filled" << endl;
 
 // chop these up into smaller arrays!
-double eff1[14][20] = {{}};
-double errHi1[14][20] = {{}};
-double errLow1[14][20] = {{}};
-double effSum[20] = {};
-double errSumHi[20] = {};
-double errSumLow[20] = {};
+double eff12[29][20] = {{}};
+double eff34[22][20] = {{}};
+//double eff5b[38][20] = {{}};
+//double eff5c[34][20] = {{}};
+//double eff6[35][20] = {{}};
+double errHi12[7][20] = {{}};
+double errHi34[8][20] = {{}};
+//double errHi12[29][20] = {{}};
+//double errHi34[22][20] = {{}};
+//double errHi5b[38][20] = {{}};
+//double errHi5c[34][20] = {{}};
+//double errHi6[35][20] = {{}};
+double errLow12[29][20] = {{}};
+double errLow34[22][20] = {{}};
+double effSum12[20] = {};
+double effSum34[20] = {};
+double errSumHi12[20] = {};
+double errSumHi34[20] = {};
+double errSumLow12[20] = {};
+double errSumLow34[20] = {};
+double effSumTot[20] = {};
 double errSumHiSqrt[20] = {};
 double errSumLowSqrt[20] = {};
 double x[20] = {};
 double xerr[20] = {};
 cout << "arrays initialized" << endl;
 
-double a = 0;
-double b = 0;
-double c = 0;
-cout << "initialized placeholders" << endl;
-
 for(int i = 0; i < 20; i++){
-    for(int j = 0; j < 14; j++){
-        eff[j][i] = geff[j]->Eval(i*5);
-	errHi[j][i] = geff[j]->GetErrorYhigh(i);
-	errLow[j][i] = geff[j]->GetErrorYlow(i);
+    for(int j = 0; j < 7; j++){
+        eff12[j][i] = geff[j]->Eval(i*5);
+        errHi12[j][i] = geff[j]->GetErrorYhigh(i*5);
+        errLow12[j][i] = geff[j]->GetErrorYlow(i*5);
         cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff[j][i]  << " " << errHi[j][i] << " " << errLow[j][i] << endl;
-        effSum[i] = effSum[i] + (eff[j][i]*det_mass[j]*det_lt[j]);
-        errSumHi[i] = errSumHi[i] + ((errHi[j][i]*det_mass[j]*det_lt[j])*(errHi[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
-        errSumLow[i] = errSumLow[i] + ((errLow[j][i]*det_mass[j]*det_lt[j])*(errLow[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+        effSum12[i] = effSum[i] + (eff[j][i]*det_mass[j]*det_lt[j]);
+        errSumHi12[i] = errSumHi[i] + ((errHi[j][i]*det_mass[j]*det_lt[j])*(errHi[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+        errSumLow12[i] = errSumLow[i] + ((errLow[j][i]*det_mass[j]*det_lt[j])*(errLow[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
 	
     }
-    errSumHiSqrt[i] = sqrt(errSumHi[i]);
-    errSumLowSqrt[i] = sqrt(errSumLow[i]);
+    for(int j = 0; j < 8; j++){
+        eff34[j][i] = geff[j+7]->Eval(i*5);
+        errHi34[j][i] = geff[j+7]->GetErrorYhigh(i*5);
+        errLow34[j][i] = geff[j+7]->GetErrorYlow(i*5);
+        cout << "eff[j][i], errHi[j][i], errLow[j][i], " << j << ", " << i << ", " << eff[j][i]  << " " << errHi[j][i] << " " << errLow[j][i] << endl;
+        effSum12[i] = effSum[i] + (eff[j][i]*det_mass[j]*det_lt[j]);
+        errSumHi12[i] = errSumHi[i] + ((errHi[j][i]*det_mass[j]*det_lt[j])*(errHi[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+        errSumLow12[i] = errSumLow[i] + ((errLow[j][i]*det_mass[j]*det_lt[j])*(errLow[j][i]*det_mass[j]*det_lt[j])) + ((det_mass_err[j]*eff[j][i]*det_lt[j])*(det_mass_err[j]*eff[j][i]*det_lt[j]));
+        
+    }
+    effSumTot[i] = effSum12[i] + effSum34[i];
+    errSumHiSqrt[i] = sqrt(errSumHi12[i] + errSumHi34[i]);
+    errSumLowSqrt[i] = sqrt(errSumLow12[i] + errSumLow34[i]);
     x[i] = i*5;
     cout << "x[i]" << x[i] << endl;
     xerr[i] = 0;
@@ -119,7 +140,7 @@ cout << "Creating outpout file" <<  endl;
 f0->cd();
 
 cout << "Creating new TGraph" << endl;
-TGraphAsymmErrors *geffSum = new TGraphAsymmErrors(20, x, effSum, xerr, xerr, errSumLowSqrt, errSumHiSqrt);
+TGraphAsymmErrors *geffSum = new TGraphAsymmErrors(20, x, effSumTot, xerr, xerr, errSumLowSqrt, errSumHiSqrt);
 geffSum->SetMarkerStyle(21);
 geffSum->SetMarkerColor(kRed);
 geffSum->SetTitle("DS1 efficiency weighted exposure");

@@ -110,7 +110,7 @@ char toeKrisCut[] = "kvorrT/trapENFCal>1.1 && kvorrT/trapENFCal<2.1";
 char HEDetCut[] = "channel!=664 && channel!=665 && channel!=642 && channel!=643 && channel!=616 && channel!=617 && channel!=600 && channel!=601 && channel!=696 && channel!=697 && channel!=630 && channel!=631 && channel!=1126 && channel!=1127 && channel!=1110 && channel!=1111 && channel!=1108 && channel!=1109 && channel!=1122 && channel!=1123 && channel!=1202 && channel!=1203 && channel!=1206 && channel!=1207 && channel!=1168 && channel!=1169 && channel!=1304 && channel!=1305 && channel!=1296 && channel!=1297 && channel!=1328 && channel!=1329 && channel!=1234 && channel!=1235 && channel!=1268 && channel!=1269 && channel!=1238 && channel!=1239";
 char HERunCut[] = "run!=22645 && !(run>=22782 && run<=22784) && !(run>=22787 && run<=22805) && !(run>=22810 && run<=22811) && run!=22997 && run!=23434 && run!=23929";
 //char RunDetCut[] = "!(channel==692 && run>=22937 && run<=22954) && !((channel==1172 || channel==1302) && run>=23939 && run<=23957) && !(channel==1302 && run>=23725 && run<=23881)";
-char RunDetCut[] = "!(channel==692 && run==22937 && run==22946 && run==22952 && run==22954)";
+char RunDetCut[] = "!(channel==692 && (run==22937 || run==22946 || run==22952 || run==22954))";
 char twoChan[] = "(channel==660 || channel==1302)";
 char cutTwoChan[] = "!(channel==660 || channel==1302 || channel==628)";
 char ComptonEvents[] = "mH==2 && sumEH>237.28 && sumEH<239.46";

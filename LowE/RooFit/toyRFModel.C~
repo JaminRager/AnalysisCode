@@ -229,7 +229,7 @@
   RooExtendPdf etritium("etritium","etritium",tritium,ntritium);
   RooAddPdf model("model","model",RooArgList(epeak2,etritium));
   RooPlot* xframe = x.frame();
-  model.fitTo(data,Range(5,20.));
+  model.fitTo(data,Range(9.9,20.));
   data.plotOn(xframe);
   model.plotOn(xframe);
   xframe->Draw();

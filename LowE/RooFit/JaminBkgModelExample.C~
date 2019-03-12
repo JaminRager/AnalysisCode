@@ -13,7 +13,7 @@ double JaminBkgModelExample(double BDMMean = 15., bool bBDMFit = true)
   hh->GetXaxis()->SetRangeUser(5, 10000);
   RooRealVar x("x","x",0.,2000.);
   // Set the range where you want to fit here so the plots are prettier
-  x.setRange(6.,200.);
+  x.setRange(5.,200.);
   RooDataHist data("data","dataset with enrHE",x, Import(*hh));
 
   // Load cosmogenic peaks -- I have saved them into histograms here

@@ -1,0 +1,16 @@
+
+---KVbosonic README---
+
+Created: 2017 Jan 4
+
+This directory includes the the pyROOT script used to compute the bosonic DM limits.
+Additionally, the root file dependencies are also available.
+To run the script, you will need to change the change the file paths in the code to match your local file path
+If you ask nicely, I'll change the code so that it can run from this directory in GAT
+\t using the $GATDIR environmental variable.
+
+-Kris
+Email: krisvorren@unc.edu, krisvorren@gmail.com
+---END---
+
+

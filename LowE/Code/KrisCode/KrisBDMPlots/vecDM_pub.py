@@ -205,6 +205,14 @@ vecLim.SetLineColor(ROOT.kBlack)
 vecLim.SetMarkerStyle(0)
 vecLim.SetLineWidth(3)
 
+#MJD Recent
+#unbinn = read_datathief("Vec_MJDbinned.txt")
+unbinn = read_datathief("Vec_MJD.txt")
+unbinn.SetName("unbinn")
+unbinn.SetLineColor(ROOT.kRed)
+unbinn.SetMarkerStyle(0)
+unbinn.SetLineWidth(2)
+
 if band:
     mjdProj.Draw("same F")
 else:
@@ -220,6 +228,7 @@ xmass.Draw("L same")
 xenon.Draw("L same")
 edelLim.Draw("L same")
 #xenonMe.Draw("same")
+unbinn.Draw("L same")
 
 legs = []
 if not zoom:

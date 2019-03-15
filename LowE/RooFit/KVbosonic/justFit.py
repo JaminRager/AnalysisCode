@@ -173,7 +173,6 @@ inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
 ##inFileName = "m1DiagnosticTree4Aug2016.root"
 ##inFileName = "DS0EnrSpectrum_Scaled_OrigCuts.root"
 inFileName = "AnalysisSpectrumDS1_6.root"
-##inFileName ="DS0EnrSpectrum_Unscaled.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 ##dataTree = inFile.Get("diagTree").Clone()
 ##enrSpec = inFile.Get("spect").Clone()
@@ -217,21 +216,21 @@ tritSpec.SetDirectory(0)
 tritFile.Close()
 
 #Background Peak Histograms#
-##bkgFileName = "GausCosmoPDFs_Jamin.root"
-##bkgFile = ROOT.TFile(inFileDir + bkgFileName)
-##FeSpec = bkgFile.Get("hFe55").Clone()
-##ZnSpec = bkgFile.Get("hZn65").Clone()
-##GeSpec = bkgFile.Get("hGe68").Clone()
-##PbSpec = bkgFile.Get("hPb210").Clone()
-##FeSpec.SetBins(500, 0., 100.)
-##ZnSpec.SetBins(500, 0., 100.)
-##GeSpec.SetBins(500, 0., 100.)
-##PbSpec.SetBins(500, 0., 100.)
-##FeSpec.SetDirectory(0)
-##ZnSpec.SetDirectory(0)
-##GeSpec.SetDirectory(0)
-##PbSpec.SetDirectory(0)
-##bkgFile.Close()
+bkgFileName = "GausCosmoPDFs_Jamin.root"
+bkgFile = ROOT.TFile(inFileDir + bkgFileName)
+FeSpec = bkgFile.Get("hFe55").Clone()
+ZnSpec = bkgFile.Get("hZn65").Clone()
+GeSpec = bkgFile.Get("hGe68").Clone()
+PbSpec = bkgFile.Get("hPb210").Clone()
+FeSpec.SetBins(500, 0., 100.)
+ZnSpec.SetBins(500, 0., 100.)
+GeSpec.SetBins(500, 0., 100.)
+PbSpec.SetBins(500, 0., 100.)
+FeSpec.SetDirectory(0)
+ZnSpec.SetDirectory(0)
+GeSpec.SetDirectory(0)
+PbSpec.SetDirectory(0)
+bkgFile.Close()
 
 #----------DATA SETUP---------------
 ## python lists
@@ -242,7 +241,7 @@ vecList = []
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
 ##lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
-lowEnRange = [8.9] #UNCOMMENT ABOVE LINE for 5 - 20 keV
+lowEnRange = [7.0] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
 for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
@@ -251,7 +250,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
     #try: #python no garbage collecty, so keep doing this until we run out of memory. I know, I know...
         energyList.append(enVal)
         enLowBound = 5.0 #Jason wants BG to cover entire 5 - 100 keV range
-        enUpBound = 100.0
+        enUpBound = 20.0
             
         #----read criterion from tree
         ## the energy parameter
@@ -268,7 +267,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##data = ROOT.RooDataSet("data", "data", dataTree, ROOT.RooArgSet(calE, enr))
         data = ROOT.RooDataHist("data", "data", l, enrSpec)
 
-        print "NOW WE TRY TO FIT SOMETHING"
+        ###print "NOW WE TRY TO FIT SOMETHING"
 
         #---------Signal Peak-----------
         ## define nuisance parameters and energy variable
@@ -278,7 +277,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         mAList = ROOT.RooArgList(alpha, envalRoo, E0)
         mA = ROOT.RooFormulaVar("mA", "envalRoo + alpha*(envalRoo - 95.0) + E0", mAList)
         #mA = ROOT.RooRealVar("mA", "mA", enVal)
-        print "SIGNAL MODEL NUISANCE MARAMETERS"
+        ###print "SIGNAL MODEL NUISANCE MARAMETERS"
 
         #INIT RESOLUTION BASED ON RES CURVE
         #resList = ROOT.RooArgList(mA)
@@ -287,12 +286,12 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ## define nuisance parameters and energy variable
         resValInit = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(enVal))
         res = ROOT.RooRealVar("res", "Resolution, Sigma(E)", resValInit + 0.0000002, 0.001, 2.0, "keV")
-        print "RESOLUTION CURVE"
+        ###print "RESOLUTION CURVE"
 
         #INIT eff
         ## where cut efficiency gets applied
         eff = ROOT.RooRealVar("eff", "T/E Efficiency", etaFunc(enVal)+.000001, 0.9, 1.0)
-        print "EFFICIENCY CURVE"
+        ###print "EFFICIENCY CURVE"
 
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
         peakYieldInit = ROOT.RooRealVar("peakYieldInit", "yield signal peak", 0.5, 0.0, 50000.)
@@ -300,135 +299,109 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         peakYield = peakYieldInit
         if enVal < 20: #Only worry about eff for less than 20 keV, 1 otherwise
             peakYield = ROOT.RooFormulaVar("peakYield", "eff*peakYieldInit", peakYieldList)
-        print "GAUSSIAN FOR DARK MATTER SIGNAL"
+        ###print "GAUSSIAN FOR DARK MATTER SIGNAL"
 
         #---------Linear background--------
-        m = ROOT.RooRealVar("m", "background slope", 0.00002, -1.0, 1.0)
+        m = ROOT.RooRealVar("m", "background slope", 0.00002, -0.1, 0.1)
         mList = ROOT.RooArgList(m)
         background = ROOT.RooPolynomial("background", "Linear background function", trapENFCal, mList)
-        bkgdYield = ROOT.RooRealVar("bkgdYield", "yield of background", 4400.0, 0.0, 100000.)
-        print "LINEAR BACKGROUND"
+        bkgdYield = ROOT.RooRealVar("bkgdYield", "yield of background", 1500.0, 0.0, 50000.)
+        ###print "LINEAR BACKGROUND"
 
         #---------10.3 keV cosmogenic peak------
-        ##energy10p3 = ROOT.RooRealVar("energy10p3", "True Energy of 10.36 keV peak", 10.36, "keV")
-        ##kLineList = ROOT.RooArgList(alpha, energy10p3, E0)
-        ##cent10p3 = ROOT.RooFormulaVar("cent10p3", "energy10p3 + alpha*(energy10p3 - 95.0) + E0", kLineList)
-        ##sig10p3val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(10.36))
+        energy10p3 = ROOT.RooRealVar("energy10p3", "True Energy of 10.36 keV peak", 10.36, "keV")
+        kLineList = ROOT.RooArgList(alpha, energy10p3, E0)
+        cent10p3 = ROOT.RooFormulaVar("cent10p3", "energy10p3 + alpha*(energy10p3 - 95.0) + E0", kLineList)
+        sig10p3val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(10.36))
         #sig10p3List = ROOT.RooArgList(cent10p3)
         #sig10p3 = ROOT.RooFormulaVar("sig10p3", "TMath::Sqrt(0.00000004*cent10p3*cent10p3 + 0.0004*cent10p3*cent10p3 + .01*cent10p3*cent10p3)", sig10p3List)
-        ##sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.36 keV peak", sig10p3val, sig10p3val - 0.04, sig10p3val + 0.04)
-        cent10p3 = ROOT.RooRealVar("cent6p5", "True Energy of 6.4 keV peak", 10.3, 9.5, 11.0)
-        sig10p3 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", 0.15, 0.0, 0.5)
+        sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.36 keV peak", sig10p3val, sig10p3val - 0.04, sig10p3val + 0.04)
         geGauss = ROOT.RooGaussian("geGauss", "Gaussian for 10.36 keV peak", trapENFCal, cent10p3, sig10p3)
-        geGaussYield = ROOT.RooRealVar("geGaussYield", "Yield of 10.3 keV peak", 400.0, 0.0, 100000.)
-        print "10.3 COSMOGENIC PEAK"
+        geGaussYield = ROOT.RooRealVar("geGaussYield", "Yield of 10.3 keV peak", 50.0, 0.0, 50000.)
+        ###print "10.3 COSMOGENIC PEAK"
 
         #---------Pb210 47keV line manual-------
-        ##energy47 = ROOT.RooRealVar("energy47", "True Energy of 47 keV peak", 47.0, "keV")
-        ##Pb210LineList = ROOT.RooArgList(alpha, energy47, E0)
-        ##cent47 = ROOT.RooFormulaVar("cent47", "energy47 + alpha*(energy47 - 95.0) + E0", Pb210LineList)
-        ##sig47val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(47))
-        ##sig47 = ROOT.RooRealVar("sig47", "Sigma of 47 keV peak", sig47val, sig47val - 0.04, sig47val + 0.04) ## need to check these error bars
-        cent47 = ROOT.RooRealVar("cent47", "True Energy of 47 keV peak", 47.0, 46.0, 48.0)
-        sig47 = ROOT.RooRealVar("sig47", "Sigma of 47 keV peak", 0.15, 0.0, 0.5)
+        energy47 = ROOT.RooRealVar("energy47", "True Energy of 47 keV peak", 47.0, "keV")
+        Pb210LineList = ROOT.RooArgList(alpha, energy47, E0)
+        cent47 = ROOT.RooFormulaVar("cent47", "energy47 + alpha*(energy47 - 95.0) + E0", Pb210LineList)
+        sig47val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(47))
+        sig47 = ROOT.RooRealVar("sig47", "Sigma of 47 keV peak", sig47val, sig47val - 0.04, sig47val + 0.04) ## need to check these error bars
         Pb210Gauss = ROOT.RooGaussian("Pb210Gauss", "Gaussian for 47 keV peak", trapENFCal, cent47, sig47)
-        Pb210GaussYield = ROOT.RooRealVar("Pb210GaussYield", "Yield of 47 keV peak", 50.0, 0.0, 10000.)
-        print "47keV Pb210 line"
+        Pb210GaussYield = ROOT.RooRealVar("Pb210GaussYield", "Yield of 47 keV peak", 30.0, 0.0, 5000.)
+        ###print "47keV Pb210 line"
 
         #---------18.15 mystery peak------
-        ##energy18p15 = ROOT.RooRealVar("energy18p15", "True Energy of 18.15 keV peak", 18.15, "keV")
-        ##mystLineList = ROOT.RooArgList(alpha, energy18p15, E0)
-        ##cent18p15 = ROOT.RooFormulaVar("cent18p15", "energy18p15 + alpha*(energy18p15 - 95.0) + E0", mystLineList)
-        ##sig18p15val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(18.15))
-        ##sig18p15 = ROOT.RooRealVar("sig18p15", "Sigma of 18.15 keV peak", sig18p15val, sig18p15val - 0.04, sig18p15val + 0.04) ## need to check these error bars
-        cent18p15 = ROOT.RooRealVar("cent18p15", "True Energy of 18.15 keV peak", 18.15, 17.15, 19.15) 
-        sig18p15 = ROOT.RooRealVar("si18p15", "Sigma of 18.15 keV peak", 0.15, 0.0, 0.5)
+        energy18p15 = ROOT.RooRealVar("energy18p15", "True Energy of 18.15 keV peak", 18.15, "keV")
+        mystLineList = ROOT.RooArgList(alpha, energy18p15, E0)
+        cent18p15 = ROOT.RooFormulaVar("cent18p15", "energy18p15 + alpha*(energy18p15 - 95.0) + E0", mystLineList)
+        sig18p15val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(18.15))
+        sig18p15 = ROOT.RooRealVar("sig18p15", "Sigma of 18.15 keV peak", sig18p15val, sig18p15val - 0.04, sig18p15val + 0.04) ## need to check these error bars
         mystGauss = ROOT.RooGaussian("mystGauss", "Gaussian for 18.15 keV peak", trapENFCal, cent18p15, sig18p15)
-        mystGaussYield = ROOT.RooRealVar("mystGaussYield", "Yield of 18.15 keV peak", 50.0, 0.0, 10000.)
-        print "18.15 MYSTERY PEAK"
-
-        #---------8.9 keV Zn65 cosmogenic peak------
-        ##energy8p9 = ROOT.RooRealVar("energy8p9", "True Energy of 8.9 keV peak", 8.9, "keV")
-        ##ZnLineList = ROOT.RooArgList(alpha, energy8p9, E0)
-        ##cent8p9 = ROOT.RooFormulaVar("cent8p9", "energy8p9 + alpha*(energy8p9 - 95.0) + E0", ZnLineList)
-        ##sig8p9val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(8.9))
-        ##sig8p9 = ROOT.RooRealVar("sig8p9", "Sigma of 8.9 keV peak", sig8p9val, sig8p9val - 0.04, sig8p9val + 0.04)
-        cent8p9 = ROOT.RooRealVar("cent8p9", "True Energy of 8.9 keV peak", 8.9, 8.0, 9.5)
-        sig8p9 = ROOT.RooRealVar("sig8p9", "Sigma of 8.9 keV peak", 0.15, 0.0, 0.5)
-        ZnGauss = ROOT.RooGaussian("ZnGauss", "Gaussian for 8.9 keV peak", trapENFCal, cent8p9, sig8p9)
-        ZnGaussYield = ROOT.RooRealVar("ZnGaussYield", "Yield of 8.9 keV peak", 200.0, 0.0, 100000.)
-        print "8.9 COSMOGENIC PEAK"
-
-        #---------6.5 keV Fe55 cosmogenic peak------
-        ##energy6p5 = ROOT.RooRealVar("energy6p8", "True Energy of 6.5 keV peak", 6.4, "keV")
-        ##FeLineList = ROOT.RooArgList(alpha, energy6p5, E0)
-        ##cent6p5 = ROOT.RooFormulaVar("cent6p5", "energy6p5 + alpha*(energy6p5 - 95.0) + E0", FeLineList)
-        ##sig6p5val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(6.5))
-        ##sig6p5 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", sig6p5val, sig6p5val - 1.0, sig6p5val + 1.0)
-        cent6p5 = ROOT.RooRealVar("cent6p5", "True Energy of 6.5 keV peak", 6.5, 6.0, 7.0)
-        sig6p5 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", 0.15, 0.0, 0.5)
-        FeGauss = ROOT.RooGaussian("FeGauss", "Gaussian for 6.5 keV peak", trapENFCal, cent6p5, sig6p5)
-        FeGaussYield = ROOT.RooRealVar("FeGaussYield", "Yield of 6.5 keV peak", 500.0, 0.0, 100000.)
-        print "6.5 COSMOGENIC PEAK"
+        mystGaussYield = ROOT.RooRealVar("mystGaussYield", "Yield of 18.15 keV peak", 30.0, 0.0, 5000.)
+        ###print "18.15 MYSTERY PEAK"
 
         #---------background peaks--------
-        ##FeList = ROOT.RooArgList(trapENFCal)
-        ##ZnList = ROOT.RooArgList(trapENFCal)
-        ##GeList = ROOT.RooArgList(trapENFCal)
-        ##PbList = ROOT.RooArgList(trapENFCal)
-        ##FeSet = ROOT.RooArgSet(trapENFCal)
-        ##ZnSet = ROOT.RooArgSet(trapENFCal)
-        ##GeSet = ROOT.RooArgSet(trapENFCal)
-        ##PbSet = ROOT.RooArgSet(trapENFCal)
-        ##FeRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", FeList, FeSpec)
-        ##ZnRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", ZnList, ZnSpec)
-        ##GeRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", GeList, GeSpec)
-        ##PbRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", PbList, PbSpec)
-        ##FePdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", FeSet, FeRooHist, 1)
-        ##ZnPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", ZnSet, ZnRooHist, 1)
-        ##GePdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", GeSet, GeRooHist, 1)
-        ##PbPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", PbSet, PbRooHist, 1)
-        ##FeYield = ROOT.RooRealVar("FeYield", "Yield of Fe55", 0.0005, 0.0, 5000.)
-        ##ZnYield = ROOT.RooRealVar("ZnYield", "Yield of Zn65", 0.0002, 0.0, 5000.)
-        ##GeYield = ROOT.RooRealVar("GeYield", "Yield of Ge55", 300.0, 0.0, 5000.)
-        ##PbYield = ROOT.RooRealVar("PbYield", "Yield of Pb210", 30.0, 0.0, 5000.)
-        ##print "background peaks"
+        FeList = ROOT.RooArgList(trapENFCal)
+        ZnList = ROOT.RooArgList(trapENFCal)
+        GeList = ROOT.RooArgList(trapENFCal)
+        PbList = ROOT.RooArgList(trapENFCal)
+        FeSet = ROOT.RooArgSet(trapENFCal)
+        ZnSet = ROOT.RooArgSet(trapENFCal)
+        GeSet = ROOT.RooArgSet(trapENFCal)
+        PbSet = ROOT.RooArgSet(trapENFCal)
+        FeRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", FeList, FeSpec)
+        ZnRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", ZnList, ZnSpec)
+        GeRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", GeList, GeSpec)
+        PbRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", PbList, PbSpec)
+        FePdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", FeSet, FeRooHist, 1)
+        ZnPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", ZnSet, ZnRooHist, 1)
+        GePdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", GeSet, GeRooHist, 1)
+        PbPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", PbSet, PbRooHist, 1)
+        FeYield = ROOT.RooRealVar("FeYield", "Yield of Fe55", 3.0, 0.0, 5000.)
+        ZnYield = ROOT.RooRealVar("ZnYield", "Yield of Zn65", 10.0, 0.0, 5000.)
+        GeYield = ROOT.RooRealVar("GeYield", "Yield of Ge55", 50.0, 0.0, 5000.)
+        PbYield = ROOT.RooRealVar("PbYield", "Yield of Pb210", 300.0, 0.0, 5000.)
+        ###print "background peaks"
 
         #--------Tritium background----------
         tritList = ROOT.RooArgList(trapENFCal)
         tritSet = ROOT.RooArgSet(trapENFCal)
         tritRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", tritList, tritSpec)
         tritPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", tritSet, tritRooHist, 1) #1 means linear interpolation
-        tritYield = ROOT.RooRealVar("tritYield", "Yield of tritium", 8500, 0.0, 100000.)
-        print "TRITIUM PARAMETERS"
+        tritYield = ROOT.RooRealVar("tritYield", "Yield of tritium", 9000.0, 0.0, 100000.)
+        ###print "TRITIUM PARAMETERS"
 
         #---------Signal Plus BG PDF = total Pdf--------
         ## Make the composite probability distribution function
         shapes = ROOT.RooArgList()
         shapes.add(background)
         shapes.add(peakGaus) #SWITCH COMMENT WITH BELOW FOR FASTER
-        shapes.add(geGauss)
-        shapes.add(ZnGauss)
-        shapes.add(FeGauss)
-        shapes.add(Pb210Gauss)
-        shapes.add(mystGauss) ##added by Jamin
+        ##shapes.add(geGauss)
+        ##shapes.add(Pb210Gauss)
+        ##shapes.add(mystGauss) ##added by Jamin
+        ##shapes.add(FePdf) ##added by Jamin
+        ##shapes.add(ZnPdf) ##added by Jamin
+        ##shapes.add(GePdf) ##added by Jamin
+        ##shapes.add(PbPdf) ##added by Jamin
         shapes.add(tritPdf)
 
         yields = ROOT.RooArgList()
         yields.add(bkgdYield)
         yields.add(peakYield)
-        yields.add(geGaussYield)
-        yields.add(ZnGaussYield)
-        yields.add(FeGaussYield)
-        yields.add(Pb210GaussYield)
-        yields.add(mystGaussYield)
+        ##yields.add(geGaussYield)
+        ##yields.add(Pb210GaussYield)
+        ##yields.add(mystGaussYield)
+        ##yields.add(FeYield) ##added by Jamin
+        ##yields.add(ZnYield) ##added by Jamin
+        ##yields.add(GeYield) ##added by Jamin
+        ##yields.add(PbYield) ##added by Jamin
         yields.add(tritYield)
 
         totalPdf = ROOT.RooAddPdf("totalPdf", "sum of signal and background PDF", shapes, yields)
-        print "COMPOSITE PDF"
+        ###print "COMPOSITE PDF"
 
         #----------Constraint/Penaltie Values------------
-        print "Start building constraints"
+        ###print "Start building constraints"
         mA.Print()
         ##if drawFlag:
             ##WaitForReturn()
@@ -436,22 +409,22 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         mean_alpha = ROOT.RooRealVar("mean_alpha", "Best Guess Alpha", -0.0014)
         mean_E0 = ROOT.RooRealVar("mean_E0", "Best Guess E0", -0.256)
         #sigma_mA = ROOT.RooRealVar("sigma_calE", "Uncertainty of Centroid", 0.28)
-        print "SIGNAL NUISANCE PARAMETERS CONSTRAINTS"
+        ###print "SIGNAL NUISANCE PARAMETERS CONSTRAINTS"
 
         ## I still don't understand this  stuff well
         mean_res = ROOT.RooRealVar("mean_res", "Res Value from function", resValInit)
         sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
         sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
-        print "RESOLUTION FUNCTION CONSTRAINTS"
+        ###print "RESOLUTION FUNCTION CONSTRAINTS"
 
         mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", eff.getVal())
         effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
         sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
-        print "EFFICIENCY CONSTRAINTS"
+        ###print "EFFICIENCY CONSTRAINTS"
 
         mean_exp = ROOT.RooRealVar("mean_exp", "Exp Val", 1./4608.0)
         sigma_exp = ROOT.RooRealVar("sigma_exp", "Exp. Unc", 0.000026)
-        print "EXPOSURE"
+        ###print "EXPOSURE"
 
         #mean_sig10p3 = ROOT.RooRealVar("mean_sig10p3", "Exp 10p3 val", sig10p3val)
         ## I need to figure out how to get these  values in the covariance matrix
@@ -462,7 +435,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                   0.0,            0.0,           (sigma_res.getVal())**2],# 0.0,#],
                   #0.0, 0.0, 0.0, 0.004*0.004],
                  dtype=numpy.float64)
-        print "HIGH ENERGY COVARIANCE MATRIX"
+        ###print "HIGH ENERGY COVARIANCE MATRIX"
         ## I'll want to delete this because my efficiency above 20keV isn't as good as Kris's
         ## Why is the covariance matrix below 20 keV bigger in dimension than the general one?
         if enVal < 20: #Only worry about eff at less than 20 keV
@@ -473,11 +446,11 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                         0.0,          0.0,             0.0,         (sigma_eff.getVal())**2],# 0.0,#],
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         dtype=numpy.float64)
-        print "LOW ENERGY COVARIANCE MATRIX"
+        ###print "LOW ENERGY COVARIANCE MATRIX"
         covMatrix = ROOT.TMatrixDSym(3,elArray)
         if enVal < 20:
                 covMatrix = ROOT.TMatrixDSym(4,elArray)
-        print "COVARIANCE MATRICES INITIALIZED"
+        ###print "COVARIANCE MATRICES INITIALIZED"
 
         #--------Constraint Pdf-------------
         ## The multivariate Gaussian that constrains all the floated nuissance parameters
@@ -494,7 +467,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         pdfList = ROOT.RooArgList(totalPdf, constrainGauss)
         ## RooProdPdf = a PDF made from a product of PDF's
         totalPdfConstrain = ROOT.RooProdPdf("total_cons", "Total Product Constraint Pdf", pdfList)
-        print "MULTIVARIATE GAUSSIAN CONSTRAINT"
+        ###print "MULTIVARIATE GAUSSIAN CONSTRAINT"
 
         #===============================
         #==========DO THE FIT===========
@@ -505,7 +478,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         if enVal < 20:
                 constrainSet = ROOT.RooArgSet(mA, res, eff)#, exp)
         r1 = totalPdfConstrain.fitTo(data, RF.Constrain(constrainSet), RF.Save())
-        print "MODEL FIT TO DATA"
+        ###print "MODEL FIT TO DATA"
 
         r1.Print("v")
         
@@ -517,15 +490,14 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #Draw on a plot
         xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
         bins = ROOT.RooBinning(enLowBound, enUpBound)
-        bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
+        bins.addUniform(int(enUpBound - enLowBound), enLowBound, enUpBound)
         data.plotOn(xframe, RF.Binning(bins))
-        print "DRAW ON PLOT"
+        ###print "DRAW ON PLOT"
 
         #Change THIS for COMPONENTS
         ## I don't understand the Chi squared stuff very well - need to brush up on this
         totalPdfConstrain.plotOn(xframe, RF.LineColor(ROOT.kRed))
         ##totalPdfConstrain.plotOn(xframe)
-
         if enVal <= 20:
                 chiSquared = xframe.chiSquare(0)#chiSquare(10)
         else:
@@ -537,12 +509,10 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #constrainPdf.plotOn(xframe, RF.LineColor(ROOT.kRed))
         #setWrapPeak = ROOT.RooArgSet(sigGaus)
         #constrainPdf.plotOn(xframe, RF.Components(setWrapPeak), RF.LineStyle(ROOT.kDotted))
-        
 
-        ##xframe.SetMinimum(0.001)
-        xframe.SetMinimum(1.0)
-        xframe.SetMaximum(10000)
-        print "set xframe limits"
+        xframe.SetMinimum(0.001)
+        xframe.SetMaximum(500)
+        ###print "set xframe limits"
 
         leg = ROOT.TPaveText(70, 80, 95, 90, "NB")
         leg.SetTextFont(133)
@@ -551,13 +521,12 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         leg.SetTextSize(22)
         leg.AddText("#chi^{2}/NDF = %.3f" %(chiSquared))
         xframe.addObject(leg)
-        print "canvas legend"
+        ###print "canvas legend"
 
         xframe.Draw()
-        print "draw xframe"
+        ###print "draw xframe"
         #ROOT.gPad.SetLogy()
         if drawFlag:
-            canvas.SetLogy()
             canvas.Update()
             #WaitForReturn()
 
@@ -578,64 +547,78 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         print peakFitRooVal.getVal()
         #WaitForReturn()
 
-        p_mu = 0
-        if peakFitVal >= 0:
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+        ###p_mu = 0
+        ###print "line alpha"
+        ###if peakFitVal >= 0:
+            ###print "line beta"
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2)
-            p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*@0,1.)",ROOT.RooArgList(pll_pkYield))
-        else:
-            shiftVal = pll_pkYield.asTF(ROOT.RooArgList(peakYield))(0.0)
-            strVal = str(shiftVal)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+            ###print "first line"
+            ###p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*@0,1.)",ROOT.RooArgList(pll_pkYield))
+            ###print "second line"
+        ###else:
+            ###shiftVal = pll_pkYield.asTF(ROOT.RooArgList(peakYield))(0.0)
+            ###print "third line"
+            ###strVal = str(shiftVal)
+            ###print "fourth line"
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
+            ###print "fifth line"
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
-            p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*(@0 - "+ strVal +"),1.)",ROOT.RooArgList(pll_pkYield))
+            ###print "sixth line"
+            ###p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*(@0 - "+ strVal +"),1.)",ROOT.RooArgList(pll_pkYield))
+        ###print "checkpoint 3"
 
-        xframe2.SetMinimum(0)
-        xframe2.SetMaximum(3)
+        ###xframe2.SetMinimum(0)
+        ###xframe2.SetMaximum(3)
+        ###print "checkpoint 4"
 
         #canvas.Update()
         #WaitForReturn()
 
         #p_mu.plotOn(xframe2,ROOT.RooFit.LineColor(ROOT.kGreen))
-        xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
-        xframe2.Draw()
+        ###xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
+        ###xframe2.Draw()
 
-        xframe2.Print("v")
+        ###xframe2.Print("v")
+        ###print "checkpoint 5"
 
         #plCurve = xframe2.getCurve("nll_totalPdf_data_Profile[peakYield]_Norm[peakYield]")
         #plCurve.SetName("plCurve")
 
 
-        ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
+        ###ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
+        ###print "checkpoint 6"
 
-        limit = 0
-        if peakFitVal > 0:
-            limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,50,0.1) #peakYield instead of zero
-        else:
-            limit = p_mu.findRoot(peakYieldInit, 1,50,0.1)
-        print "The limit in signal counts is: " + str(limit)
-        r1.Print("v")
+        ###limit = 0
+        ###if peakFitVal > 0:
+            ###limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,50,0.1) #peakYield instead of zero
+        ###else:
+            ###limit = p_mu.findRoot(peakYieldInit, 1,50,0.1)
+        ###print "The limit in signal counts is: " + str(limit)
         #print str(enVal) + " " + str(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(enVal) * 478)))
-        vectorDM = True
+        ###vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
+        ###alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
+        ###print "checkpoint 7"
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
-        vectorDM = False
+        ###vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
-        line = ROOT.TLine()
-        line.SetLineColor(ROOT.kGreen + 3)
-        line.DrawLine(limit, 0, limit, 3)
-        line.DrawLine(0, 1.355, 50, 1.355)
+        ###vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
+        ###print "checkpoint 8"
+        ###line = ROOT.TLine()
+        ###line.SetLineColor(ROOT.kGreen + 3)
+        ###line.DrawLine(limit, 0, limit, 3)
+        ###line.DrawLine(0, 1.355, 50, 1.355)
+        ###print "checkpoint 9"
 
-        print "ENERGY " + str(mA.getVal()) + " DONE!!"
+        ###print "ENERGY " + str(mA.getVal()) + " DONE!!"
 
-        if drawFlag:
-            canvas.Update()
+        ###if drawFlag:
+            ###canvas.Update()
             #WaitForReturn()
 
         trapENFCal.IsA().Destructor(trapENFCal)
@@ -660,27 +643,37 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         mList.IsA().Destructor(mList)
         background.IsA().Destructor(background)
         bkgdYield.IsA().Destructor(bkgdYield)
-        cent10p3.IsA().Destructor(cent10p3)
+        ##cent10p3.IsA().Destructor(cent10p3)
+        ##sig10p3.IsA().Destructor(sig10p3)
         cent18p15.IsA().Destructor(cent18p15)
-        cent8p9.IsA().Destructor(cent8p9)
-        cent6p5.IsA().Destructor(cent6p5)
-        sig10p3.IsA().Destructor(sig10p3)
         sig18p15.IsA().Destructor(sig18p15)
-        sig8p9.IsA().Destructor(sig8p9)
-        sig6p5.IsA().Destructor(sig6p5)
-        geGauss.IsA().Destructor(geGauss)
-        mystGauss.IsA().Destructor(mystGauss)
-        ZnGauss.IsA().Destructor(ZnGauss)
-        FeGauss.IsA().Destructor(FeGauss)
-        geGaussYield.IsA().Destructor(geGaussYield)
-        mystGaussYield.IsA().Destructor(mystGaussYield)
-        ZnGaussYield.IsA().Destructor(ZnGaussYield)
-        FeGaussYield.IsA().Destructor(FeGaussYield)
+        #geGauss.IsA().Destructor(geGauss)
+        #geGaussYield.IsA().Destructor(geGaussYield)
         tritList.IsA().Destructor(tritList)
+        FeList.IsA().Destructor(FeList)
+        ZnList.IsA().Destructor(ZnList)
+        GeList.IsA().Destructor(GeList)
+        PbList.IsA().Destructor(PbList)
         tritSet.IsA().Destructor(tritSet)
+        FeSet.IsA().Destructor(FeSet)
+        ZnSet.IsA().Destructor(ZnSet)
+        GeSet.IsA().Destructor(GeSet)
+        PbSet.IsA().Destructor(PbSet)
         tritRooHist.IsA().Destructor(tritRooHist)
+        FeRooHist.IsA().Destructor(FeRooHist)
+        ZnRooHist.IsA().Destructor(ZnRooHist)
+        GeRooHist.IsA().Destructor(GeRooHist)
+        PbRooHist.IsA().Destructor(PbRooHist)
         tritPdf.IsA().Destructor(tritPdf)
+        FePdf.IsA().Destructor(FePdf)
+        ZnPdf.IsA().Destructor(ZnPdf)
+        GePdf.IsA().Destructor(GePdf)
+        PbPdf.IsA().Destructor(PbPdf)
         tritYield.IsA().Destructor(tritYield)
+        FeYield.IsA().Destructor(FeYield)
+        ZnYield.IsA().Destructor(ZnYield)
+        GeYield.IsA().Destructor(GeYield)
+        PbYield.IsA().Destructor(PbYield)
         shapes.IsA().Destructor(shapes)
         yields.IsA().Destructor(yields)
         totalPdf.IsA().Destructor(totalPdf)
@@ -699,12 +692,12 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         totalPdfConstrain.IsA().Destructor(totalPdfConstrain)
         constrainSet.IsA().Destructor(constrainSet)
         r1.IsA().Destructor(r1)
-        xframe.IsA().Destructor(xframe)
+        ###xframe.IsA().Destructor(xframe)
         #leg.IsA().Destructor(leg)
         bins.IsA().Destructor(bins)
         setWrapPeak.IsA().Destructor(setWrapPeak)
         nll.IsA().Destructor(nll)
-        xframe2.IsA().Destructor(xframe2)
+        ###xframe2.IsA().Destructor(xframe2)
         pll_pkYield.IsA().Destructor(pll_pkYield)
         peakFitRooVal.IsA().Destructor(peakFitRooVal)
         #exp.IsA().Destructor(exp)
@@ -713,10 +706,10 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
     #except:
     #    break
 
-for i in xrange(len(alpList)):
-    print str(energyList[i]) + " " + str(alpList[i])
-    ##text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
+###for i in xrange(len(alpList)):
+    ##print str(energyList[i]) + " " + str(alpList[i])
+    ###text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
 
-for i in xrange(len(vecList)):
-    print str(energyList[i]) + " " + str(vecList[i])
-    ##text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")
+###for i in xrange(len(vecList)):
+    ##print str(energyList[i]) + " " + str(vecList[i])
+    ###text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")

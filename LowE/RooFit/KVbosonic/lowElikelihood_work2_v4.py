@@ -185,20 +185,20 @@ inFile.Close()
 ## Manually program in the resolution curve, easy enough
 #THE RESOLUTION CURVE
 ## I don't understand what this file is
-sigConfFileName = "sigConfHist19Oct16.root"
-sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
-sigConfHist = sigConfFile.Get("confHist").Clone()
-sigConfHist.SetDirectory(0)
-sigConfFile.Close()
+##sigConfFileName = "sigConfHist19Oct16.root"
+##sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
+##sigConfHist = sigConfFile.Get("confHist").Clone()
+##sigConfHist.SetDirectory(0)
+##sigConfFile.Close()
 
 ## the efficiency fit curve and bin by bin efficiency
 #THE T/E EFF CURVE
 #etaFileName = "toeEffCurves19Jul2016.root"
-etaFileName = "P5D2_12Sep16.root"
+etaFileName = "CombinedEfficiency.root"
 etaFile = ROOT.TFile(inFileDir + etaFileName)
-etaFunc = etaFile.Get("effFit").Clone()
-etaInterval = etaFile.Get("fInts").Clone()
-etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
+etaFunc = etaFile.Get("feff").Clone()
+##etaInterval = etaFile.Get("fInts").Clone()
+##etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
 etaFile.Close()
 
 #THE TRITIUM HISTOGRAM
@@ -263,7 +263,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         #INIT eff
         ## where cut efficiency gets applied
-        eff = ROOT.RooRealVar("eff", "T/E Efficiency", etaFunc(enVal)+.000001, 0.9, 1.0)
+        eff = ROOT.RooRealVar("eff", "T/E Efficiency", etaFunc(enVal), 3600, 4100)
         print "EFFICIENCY CURVE"
 
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
@@ -394,17 +394,17 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         ## I still don't understand this  stuff well
         mean_res = ROOT.RooRealVar("mean_res", "Res Value from function", resValInit)
-        sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
-        sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
-        print "RESOLUTION FUNCTION CONSTRAINTS"
+        ##sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
+        ##sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
+        ##print "RESOLUTION FUNCTION CONSTRAINTS"
 
         mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", eff.getVal())
-        effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
-        sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
+        ##effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
+        ##sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
         print "EFFICIENCY CONSTRAINTS"
 
-        mean_exp = ROOT.RooRealVar("mean_exp", "Exp Val", 1./4608.0)
-        sigma_exp = ROOT.RooRealVar("sigma_exp", "Exp. Unc", 0.000026)
+        ##mean_exp = ROOT.RooRealVar("mean_exp", "Exp Val", 1./4608.0)
+        ##sigma_exp = ROOT.RooRealVar("sigma_exp", "Exp. Unc", 0.000026)
         print "EXPOSURE"
 
         #mean_sig10p3 = ROOT.RooRealVar("mean_sig10p3", "Exp 10p3 val", sig10p3val)
@@ -428,8 +428,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         ##dtype=numpy.float64)
         lArray = numpy.array(
-                 [(sigma_res.getVal())**2,          0.0,
-                 0.0,          (sigma_eff.getVal())**2],
+                 [0.06985,     0.0,
+                 0.0,          32],
                  dtype=numpy.float64)
         print "LOW ENERGY COVARIANCE MATRIX"
         ##covMatrix = ROOT.TMatrixDSym(3,elArray)
@@ -584,12 +584,14 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
+        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
+        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
         vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
+        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
+        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
         line = ROOT.TLine()
         line.SetLineColor(ROOT.kGreen + 3)
         line.DrawLine(limit, 0, limit, 3)
@@ -650,9 +652,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #mean_mA.IsA().Destructor(mean_mA)
         #sigma_mA.IsA().Destructor(sigma_mA)
         mean_res.IsA().Destructor(mean_res)
-        sigma_res.IsA().Destructor(sigma_res)
+        ##sigma_res.IsA().Destructor(sigma_res)
         mean_eff.IsA().Destructor(mean_eff)
-        sigma_eff.IsA().Destructor(sigma_eff)
+        ##sigma_eff.IsA().Destructor(sigma_eff)
         #elArray.IsA().Destructor(elArray)
         covMatrix.IsA().Destructor(covMatrix)
         xVec.IsA().Destructor(xVec)
@@ -671,7 +673,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         pll_pkYield.IsA().Destructor(pll_pkYield)
         peakFitRooVal.IsA().Destructor(peakFitRooVal)
         #exp.IsA().Destructor(exp)
-        mean_exp.IsA().Destructor(mean_exp)
+        ##mean_exp.IsA().Destructor(mean_exp)
         sigma_exp.IsA().Destructor(sigma_exp)
     #except:
     #    break

@@ -20,7 +20,7 @@
 # 1/4/2017: Modified a bit for upload to GAT
 ##################################
 
-import sys, os, re, glob, ROOT, array, numpy
+import sys, os, re, glob, ROOT, array, numpy, math
 from ROOT import RooFit as RF
 from ROOT import gROOT
 from ROOT import gPad
@@ -40,11 +40,18 @@ ROOT.gROOT.Reset()
 
 vectorDM = False #Probably deprecated
 
+def GetEff(energy):
+    p0 = 3967.24
+    p1 = -5.248
+    p2 = 7.48109
+    eff = p0*math.erf((energy-p1)/p2)
+    return eff
+
 def GetSigma(energy):
     p0 = 0.381089865044
     p1 = 0.00205439631322
     p2 = 0.00070345548259
-    sig = TMath::Sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy)
+    sig = numpy.sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy)
     return sig
 
 def WaitForReturn():
@@ -194,12 +201,12 @@ inFile.Close()
 ## the efficiency fit curve and bin by bin efficiency
 #THE T/E EFF CURVE
 #etaFileName = "toeEffCurves19Jul2016.root"
-etaFileName = "CombinedEfficiency.root"
-etaFile = ROOT.TFile(inFileDir + etaFileName)
-etaFunc = etaFile.Get("feff").Clone()
+##etaFileName = "CombinedEfficiency.root"
+##etaFile = ROOT.TFile(inFileDir + etaFileName)
+##etaFunc = etaFile.Get("effFit").Clone()
 ##etaInterval = etaFile.Get("fInts").Clone()
 ##etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
-etaFile.Close()
+##etaFile.Close()
 
 #THE TRITIUM HISTOGRAM
 tritFileName = "TritSpec.root"
@@ -263,7 +270,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         #INIT eff
         ## where cut efficiency gets applied
-        eff = ROOT.RooRealVar("eff", "T/E Efficiency", etaFunc(enVal), 3600, 4100)
+        eff = ROOT.RooRealVar("eff", "T/E Efficiency", GetEff(enVal), 3600, 4100)
         print "EFFICIENCY CURVE"
 
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
@@ -427,7 +434,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                         ##0.0,          0.0,             0.0,         (sigma_eff.getVal())**2],# 0.0,#],
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         ##dtype=numpy.float64)
-        lArray = numpy.array(
+        elArray = numpy.array(
                  [0.06985,     0.0,
                  0.0,          32],
                  dtype=numpy.float64)

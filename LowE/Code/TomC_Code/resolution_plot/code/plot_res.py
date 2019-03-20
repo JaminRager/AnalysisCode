@@ -60,7 +60,8 @@ if __name__ == '__main__':
             res[i] += ds_exp[j] * resval[j][i] / sum(ds_exp)
             unc[i] += ds_exp[j] * pow(resunc[j][i], 2) / sum(ds_exp)
         unc[i] = pow(unc[i], 0.5)
-        print res[i], unc[i]
+        #print res[i], unc[i]
+        print "energy " + str(i) + " resolution " + str(res[i]) + " uncertainty " + str(unc[i])
     x = np.array(E, dtype=np.float64)
     y = np.array(res, dtype=np.float64)
     ux = np.array([2.0 for e in E], dtype=np.float64)

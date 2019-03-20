@@ -253,7 +253,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##envalRoo = ROOT.RooRealVar("envalRoo", "Real Energy", enVal)
         ##mAList = ROOT.RooArgList(alpha, envalRoo, E0)
         ##mA = ROOT.RooFormulaVar("mA", "envalRoo + alpha*(envalRoo - 95.0) + E0", mAList)
-        mA = ROOT.RooRealVar("envalRoo", "Real Energy", enVal)
+        mA = ROOT.RooRealVar("mA", "Real Energy", enVal)
         #mA = ROOT.RooRealVar("mA", "mA", enVal)
         print "SIGNAL MODEL NUISANCE MARAMETERS"
 
@@ -298,9 +298,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.36 keV peak", sig10p3val, sig10p3val - 0.04, sig10p3val + 0.04)
         cent10p3 = ROOT.RooRealVar("cent6p5", "True Energy of 10.3 keV peak", 10.3, 9.5, 11.0)
         sig10p3val = GetSigma(10.3)
-        sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.3 keV peak", sig10p3val, sig10p3val - 0.2, sig10p3val + 0.2)
+        sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.3 keV peak", sig10p3val, sig10p3val - 0.4, sig10p3val + 0.4)
         geGauss = ROOT.RooGaussian("geGauss", "Gaussian for 10.3 keV peak", trapENFCal, cent10p3, sig10p3)
-        geGaussYield = ROOT.RooRealVar("geGaussYield", "Yield of 10.3 keV peak", 400.0, 0.0, 100000.)
+        geGaussYield = ROOT.RooRealVar("geGaussYield", "Yield of 10.3 keV peak", 300.0, 0.0, 100000.)
         print "10.3 COSMOGENIC PEAK"
 
         #---------Pb210 47keV line manual-------
@@ -309,11 +309,11 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##cent47 = ROOT.RooFormulaVar("cent47", "energy47 + alpha*(energy47 - 95.0) + E0", Pb210LineList)
         ##sig47val = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(47))
         ##sig47 = ROOT.RooRealVar("sig47", "Sigma of 47 keV peak", sig47val, sig47val - 0.04, sig47val + 0.04) ## need to check these error bars
-        cent47 = ROOT.RooRealVar("cent47", "True Energy of 47 keV peak", 47.0, 46.0, 48.0)
+        cent47 = ROOT.RooRealVar("cent47", "True Energy of 47 keV peak", 46.5, 46.0, 47.0)
         sig47val = GetSigma(46.5)
-        sig47 = ROOT.RooRealVar("sig47", "Sigma of 46.5 keV peak", sig47val, sig47val - 0.2, sig47val + 0.2)
+        sig47 = ROOT.RooRealVar("sig47", "Sigma of 46.5 keV peak", sig47val, sig47val - 0.4, sig47val + 0.4)
         Pb210Gauss = ROOT.RooGaussian("Pb210Gauss", "Gaussian for 47 keV peak", trapENFCal, cent47, sig47)
-        Pb210GaussYield = ROOT.RooRealVar("Pb210GaussYield", "Yield of 47 keV peak", 50.0, 0.0, 10000.)
+        Pb210GaussYield = ROOT.RooRealVar("Pb210GaussYield", "Yield of 47 keV peak", 100.0, 0.0, 10000.)
         print "47keV Pb210 line"
 
         #---------18.15 mystery peak------
@@ -324,7 +324,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##sig18p15 = ROOT.RooRealVar("sig18p15", "Sigma of 18.15 keV peak", sig18p15val, sig18p15val - 0.04, sig18p15val + 0.04) ## need to check these error bars
         cent18p15 = ROOT.RooRealVar("cent18p15", "True Energy of 18.15 keV peak", 18.15, 17.15, 19.15) 
         sig18p15val = GetSigma(18.15)
-        sig18p15 = ROOT.RooRealVar("sig18p15", "Sigma of 18.15 keV peak", sig18p15val, sig18p15val - 1, sig18p15val + 1)
+        sig18p15 = ROOT.RooRealVar("sig18p15", "Sigma of 18.15 keV peak", sig18p15val, sig18p15val - 0.4, sig18p15val + 0.4)
         mystGauss = ROOT.RooGaussian("mystGauss", "Gaussian for 18.15 keV peak", trapENFCal, cent18p15, sig18p15)
         mystGaussYield = ROOT.RooRealVar("mystGaussYield", "Yield of 18.15 keV peak", 50.0, 0.0, 10000.)
         print "18.15 MYSTERY PEAK"
@@ -337,9 +337,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##sig8p9 = ROOT.RooRealVar("sig8p9", "Sigma of 8.9 keV peak", sig8p9val, sig8p9val - 0.04, sig8p9val + 0.04)
         cent8p9 = ROOT.RooRealVar("cent8p9", "True Energy of 8.9 keV peak", 8.9, 8.0, 9.5)
         sig8p9val = GetSigma(8.9)
-        sig8p9 = ROOT.RooRealVar("sig8p9", "Sigma of 8.9 keV peak", sig8p9val, sig8p9val - 0.2, sig8p9val + 0.2)
+        sig8p9 = ROOT.RooRealVar("sig8p9", "Sigma of 8.9 keV peak", sig8p9val, sig8p9val - 0.4, sig8p9val + 0.4)
         ZnGauss = ROOT.RooGaussian("ZnGauss", "Gaussian for 8.9 keV peak", trapENFCal, cent8p9, sig8p9)
-        ZnGaussYield = ROOT.RooRealVar("ZnGaussYield", "Yield of 8.9 keV peak", 200.0, 0.0, 100000.)
+        ZnGaussYield = ROOT.RooRealVar("ZnGaussYield", "Yield of 8.9 keV peak", 300.0, 0.0, 100000.)
         print "8.9 COSMOGENIC PEAK"
 
         #---------6.5 keV Fe55 cosmogenic peak------
@@ -350,9 +350,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##sig6p5 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", sig6p5val, sig6p5val - 1.0, sig6p5val + 1.0)
         cent6p5 = ROOT.RooRealVar("cent6p5", "True Energy of 6.5 keV peak", 6.5, 6.0, 7.0)
         sig6p5val = GetSigma(6.5)
-        sig6p5 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", sig6p5val, sig6p5val - 0.2, sig6p5val + 0.2)
+        sig6p5 = ROOT.RooRealVar("sig6p5", "Sigma of 6.5 keV peak", sig6p5val, sig6p5val - 0.4, sig6p5val + 0.4)
         FeGauss = ROOT.RooGaussian("FeGauss", "Gaussian for 6.5 keV peak", trapENFCal, cent6p5, sig6p5)
-        FeGaussYield = ROOT.RooRealVar("FeGaussYield", "Yield of 6.5 keV peak", 500.0, 0.0, 100000.)
+        FeGaussYield = ROOT.RooRealVar("FeGaussYield", "Yield of 6.5 keV peak", 600.0, 0.0, 100000.)
         print "6.5 COSMOGENIC PEAK"
 
         #--------Tritium background----------
@@ -360,7 +360,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         tritSet = ROOT.RooArgSet(trapENFCal)
         tritRooHist = ROOT.RooDataHist("trit", "Tritium Histogram", tritList, tritSpec)
         tritPdf = ROOT.RooHistPdf("tritPdf", "TritiumPdf", tritSet, tritRooHist, 1) #1 means linear interpolation
-        tritYield = ROOT.RooRealVar("tritYield", "Yield of tritium", 8500, 0.0, 100000.)
+        tritYield = ROOT.RooRealVar("tritYield", "Yield of tritium", 9000, 0.0, 100000.)
         print "TRITIUM PARAMETERS"
 
         #---------Signal Plus BG PDF = total Pdf--------
@@ -619,8 +619,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #eff10p3.IsA().Destructor(eff10p3)
         ##alpha.IsA().Destructor(alpha)
         ##E0.IsA().Destructor(E0)
-        envalRoo.IsA().Destructor(envalRoo)
-        mAList.IsA().Destructor(mAList)
+        ##envalRoo.IsA().Destructor(envalRoo)
+        ##mAList.IsA().Destructor(mAList)
         ##mean_alpha.IsA().Destructor(mean_alpha)
         ##mean_E0.IsA().Destructor(mean_E0)
         peakGaus.IsA().Destructor(peakGaus)

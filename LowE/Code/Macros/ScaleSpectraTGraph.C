@@ -7,6 +7,8 @@
 //
 
 #include <math.h>
+
+void ScaleSpectraTGraph()
 {
     // Input files
     TFile *f1 = new TFile("/global/homes/j/jrager/LowE/Data/AnalSpect/AnalysisSpectrumDS1_6.root");
@@ -160,8 +162,10 @@
         effErrhi[i] = teff->GetErrorYhigh(19);
         effErrlow[i] = teff->GetErrorYlow(19);
 	}
-        
-        finalCts[i] = spect->GetBinContent(i)/(deff[i]);
+
+	double p0 = 3967.24; double p1=-5.248; double p2=7.48109;
+        //finalCts[i] = spect->GetBinContent(i)/(deff[i]);
+	finalCts[i] = spect->GetBinContent(i)/(p0*TMath::Erf(((i/5)-p1)/p2));
         finalErrhi[i] = finalCts[i]*sqrt((1/rawCts[i]) + (effErrhi[i]/deff[i])*(effErrhi[i]/deff[i]));
         finalErrlow[i] = finalCts[i]*sqrt((1/rawCts[i]) + (effErrlow[i]/deff[i])*(effErrlow[i]/deff[i]));
         
@@ -183,4 +187,13 @@
     //f3->Close();
                       
     cout << "Done" << endl;
+}
+
+double GetEff(double x)
+{
+  // double sig = std::sqrt(std::pow(sig0,2) + eps * F * energy);
+  double p0 = 3967.24; double p1=-5.248; double p2=7.48109;
+  double sig = p0*TMath::Erf((x-p1)/p2);
+
+  return sig;
 }

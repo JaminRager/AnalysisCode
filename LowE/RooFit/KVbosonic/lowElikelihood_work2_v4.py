@@ -276,7 +276,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
         peakYieldInit = ROOT.RooRealVar("peakYieldInit", "yield signal peak", 0.5, 0.0, 50000.)
         peakYieldList = ROOT.RooArgList(eff, peakYieldInit)
-        peakYield = peakYieldInit
+        ##peakYield = peakYieldInit
+        peakYield = ROOT.RooFormulaVar("peakYield", "eff*peakYieldInit", peakYieldList)
         ##if enVal < 20: #Only worry about eff for less than 20 keV, 1 otherwise
             ##peakYield = ROOT.RooFormulaVar("peakYield", "eff*peakYieldInit", peakYieldList)
         print "GAUSSIAN FOR DARK MATTER SIGNAL"

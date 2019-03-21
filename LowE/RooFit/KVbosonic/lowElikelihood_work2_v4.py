@@ -41,9 +41,9 @@ ROOT.gROOT.Reset()
 vectorDM = False #Probably deprecated
 
 def GetEff(energy):
-    p0 = 3967.24
-    p1 = -5.248
-    p2 = 7.48109
+    p0 = 0.860909
+    p1 = -5.24796
+    p2 = 7.48103
     eff = p0*math.erf((energy-p1)/p2)
     return eff
 
@@ -51,7 +51,7 @@ def GetSigma(energy):
     p0 = 0.381089865044
     p1 = 0.00205439631322
     p2 = 0.00070345548259
-    sig = numpy.sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy)
+    sig = (numpy.sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy))/2.355
     return sig
 
 def WaitForReturn():
@@ -296,7 +296,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #sig10p3List = ROOT.RooArgList(cent10p3)
         #sig10p3 = ROOT.RooFormulaVar("sig10p3", "TMath::Sqrt(0.00000004*cent10p3*cent10p3 + 0.0004*cent10p3*cent10p3 + .01*cent10p3*cent10p3)", sig10p3List)
         ##sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.36 keV peak", sig10p3val, sig10p3val - 0.04, sig10p3val + 0.04)
-        cent10p3 = ROOT.RooRealVar("cent6p5", "True Energy of 10.3 keV peak", 10.3, 9.5, 11.0)
+        cent10p3 = ROOT.RooRealVar("cent10p3", "True Energy of 10.3 keV peak", 10.3, 9.5, 11.0)
         sig10p3val = GetSigma(10.3)
         sig10p3 = ROOT.RooRealVar("sig10p3", "Sigma of 10.3 keV peak", sig10p3val, sig10p3val - 0.4, sig10p3val + 0.4)
         geGauss = ROOT.RooGaussian("geGauss", "Gaussian for 10.3 keV peak", trapENFCal, cent10p3, sig10p3)
@@ -591,14 +591,14 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
+        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
+        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
         vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
+        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
+        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
         line = ROOT.TLine()
         line.SetLineColor(ROOT.kGreen + 3)
         line.DrawLine(limit, 0, limit, 3)

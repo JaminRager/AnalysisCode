@@ -175,11 +175,11 @@ massDict = {"P1D1":0.5099, "P1D2":0.9788, "P1D3":0.8113, "P1D4":0.9679,
             } #Active Mass
 
 #---------CANVAS SETUP---------
-canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
+###canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
 
 ##--------OUTPUT FILE----------
-##text_file1 = open("ALP_Allbinned20_93.txt", "w")
-##text_file2 = open("Vec_Allbinned20_93.txt", "w")
+text_file1 = open("ALP_Allbinned5_20.txt", "w")
+text_file2 = open("Vec_Allbinned5_20.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
@@ -224,8 +224,8 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-##lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
-lowEnRange = [5.8] #UNCOMMENT ABOVE LINE for 5 - 20 keV
+lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+##lowEnRange = [5.8] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
 for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
@@ -495,25 +495,25 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
             ##WaitForReturn()
 
         #Draw on a plot
-        xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
-        bins = ROOT.RooBinning(enLowBound, enUpBound)
-        bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
-        data.plotOn(xframe, RF.Binning(bins))
-        print "DRAW ON PLOT"
+        ###xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
+        ###bins = ROOT.RooBinning(enLowBound, enUpBound)
+        ###bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
+        ###data.plotOn(xframe, RF.Binning(bins))
+        ###print "DRAW ON PLOT"
 
         #Change THIS for COMPONENTS
         ## I don't understand the Chi squared stuff very well - need to brush up on this
-        totalPdfConstrain.plotOn(xframe, RF.LineColor(ROOT.kRed))
+        ###totalPdfConstrain.plotOn(xframe, RF.LineColor(ROOT.kRed))
         ##totalPdfConstrain.plotOn(xframe)
 
         ## I don't understand this part
-        if enVal <= 20:
-                chiSquared = xframe.chiSquare(0)#chiSquare(10)
-        else:
-                chiSquared = xframe.chiSquare(9)
-        print "The chi-squared / ndf =" + str(chiSquared)
+        ###if enVal <= 20:
+                ###chiSquared = xframe.chiSquare(0)#chiSquare(10)
+        ###else:
+                ###chiSquared = xframe.chiSquare(9)
+        ###print "The chi-squared / ndf =" + str(chiSquared)
         setWrapPeak = ROOT.RooArgSet(peakGaus)
-        totalPdfConstrain.plotOn(xframe, RF.Components(setWrapPeak), RF.LineStyle(ROOT.kDotted))
+        ###totalPdfConstrain.plotOn(xframe, RF.Components(setWrapPeak), RF.LineStyle(ROOT.kDotted))
         ##totalPdfConstrain.plotOn(xframe)
         #constrainPdf.plotOn(xframe, RF.LineColor(ROOT.kRed))
         #setWrapPeak = ROOT.RooArgSet(sigGaus)
@@ -521,25 +521,25 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         
 
         ##xframe.SetMinimum(0.001)
-        xframe.SetMinimum(1.0)
-        xframe.SetMaximum(10000)
-        print "set xframe limits"
+        ###xframe.SetMinimum(1.0)
+        ###xframe.SetMaximum(10000)
+        ###print "set xframe limits"
 
-        leg = ROOT.TPaveText(70, 80, 95, 90, "NB")
-        leg.SetTextFont(133)
-        leg.SetFillColor(0)
-        leg.SetBorderSize(1)
-        leg.SetTextSize(22)
-        leg.AddText("#chi^{2}/NDF = %.3f" %(chiSquared))
-        xframe.addObject(leg)
-        print "canvas legend"
+        ###leg = ROOT.TPaveText(70, 80, 95, 90, "NB")
+        ###leg.SetTextFont(133)
+        ###leg.SetFillColor(0)
+        ###leg.SetBorderSize(1)
+        ###leg.SetTextSize(22)
+        ###leg.AddText("#chi^{2}/NDF = %.3f" %(chiSquared))
+        ###xframe.addObject(leg)
+        ###print "canvas legend"
 
-        xframe.Draw()
-        print "draw xframe"
+        ###xframe.Draw()
+        ###print "draw xframe"
         #ROOT.gPad.SetLogy()
-        if drawFlag:
-            canvas.SetLogy()
-            canvas.Update()
+        ###if drawFlag:
+            ###canvas.SetLogy()
+            ###canvas.Update()
             #WaitForReturn()
 
 
@@ -548,7 +548,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         nll = totalPdfConstrain.createNLL(data, RF.NumCPU(4))
         ROOT.RooMinuit(nll).migrad()
 
-        xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(50), ROOT.RooFit.Range(0., 50.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
+        ###xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(50), ROOT.RooFit.Range(0., 50.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
         #nll.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
 
         pll_pkYield = nll.createProfile(ROOT.RooArgSet(peakYieldInit))
@@ -561,35 +561,35 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         p_mu = 0
         if peakFitVal >= 0:
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2)
             p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*@0,1.)",ROOT.RooArgList(pll_pkYield))
         else:
             shiftVal = pll_pkYield.asTF(ROOT.RooArgList(peakYield))(0.0)
             strVal = str(shiftVal)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
             ##pll_pkYield.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
             p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*(@0 - "+ strVal +"),1.)",ROOT.RooArgList(pll_pkYield))
 
-        xframe2.SetMinimum(0)
-        xframe2.SetMaximum(3)
+        ###xframe2.SetMinimum(0)
+        ###xframe2.SetMaximum(3)
 
         #canvas.Update()
         #WaitForReturn()
 
         #p_mu.plotOn(xframe2,ROOT.RooFit.LineColor(ROOT.kGreen))
-        xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
-        xframe2.Draw()
+        ###xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
+        ###xframe2.Draw()
 
-        xframe2.Print("v")
+        ###xframe2.Print("v")
 
         #plCurve = xframe2.getCurve("nll_totalPdf_data_Profile[peakYield]_Norm[peakYield]")
         #plCurve.SetName("plCurve")
 
 
-        ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
+        ###ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
 
         limit = 0
         if peakFitVal > 0:
@@ -610,15 +610,15 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
         vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
-        line = ROOT.TLine()
-        line.SetLineColor(ROOT.kGreen + 3)
-        line.DrawLine(limit, 0, limit, 3)
-        line.DrawLine(0, 1.355, 50, 1.355)
+        ###line = ROOT.TLine()
+        ###line.SetLineColor(ROOT.kGreen + 3)
+        ###line.DrawLine(limit, 0, limit, 3)
+        ###line.DrawLine(0, 1.355, 50, 1.355)
 
         print "ENERGY " + str(mA.getVal()) + " DONE!!"
 
-        if drawFlag:
-            canvas.Update()
+        ###if drawFlag:
+            ###canvas.Update()
             #WaitForReturn()
 
         trapENFCal.IsA().Destructor(trapENFCal)
@@ -682,12 +682,12 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         totalPdfConstrain.IsA().Destructor(totalPdfConstrain)
         constrainSet.IsA().Destructor(constrainSet)
         r1.IsA().Destructor(r1)
-        xframe.IsA().Destructor(xframe)
+        ###xframe.IsA().Destructor(xframe)
         #leg.IsA().Destructor(leg)
         bins.IsA().Destructor(bins)
         setWrapPeak.IsA().Destructor(setWrapPeak)
         nll.IsA().Destructor(nll)
-        xframe2.IsA().Destructor(xframe2)
+        ###xframe2.IsA().Destructor(xframe2)
         pll_pkYield.IsA().Destructor(pll_pkYield)
         peakFitRooVal.IsA().Destructor(peakFitRooVal)
         #exp.IsA().Destructor(exp)
@@ -697,9 +697,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
     #    break
 
 for i in xrange(len(alpList)):
-    print str(energyList[i]) + " " + str(alpList[i])
-    ##text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
+    ##print str(energyList[i]) + " " + str(alpList[i])
+    text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
 
 for i in xrange(len(vecList)):
-    print str(energyList[i]) + " " + str(vecList[i])
-    ##text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")
+    ##print str(energyList[i]) + " " + str(vecList[i])
+    text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")

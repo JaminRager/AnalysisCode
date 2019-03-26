@@ -51,7 +51,7 @@ def GetSigma(energy):
     p0 = 0.381089865044
     p1 = 0.00205439631322
     p2 = 0.00070345548259
-    sig = (numpy.sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy))/2.355
+    sig = (numpy.sqrt(p0*p0 + p1*energy + p2*p2*energy*energy))/2.355
     return sig
 
 def WaitForReturn():
@@ -125,8 +125,10 @@ def AxioElectric(En): #This function computes the axio-electric cross section
     ## not sure what this stuff does, check the physics formulas in Kris's dissertation, chapter 6
     if vectorDM:
         return peVal #*(72.63 /75.23)#/ 72.64 #Formulas in papers are structured differently
+        print "vectorDM peVal " + str(peVal)
     else:
         return peVal/.001*3*En*En/(16*numpy.pi*1.0/137*511*511)*(1-0.01/3) * 1000 * (72.63 / 75.23)
+        print "alpDM peVal " + str(peVal)
 
 def SigErrProp(en, func, mat): #To estimate the uncertainty in the sigma values (**DEPRECATED**)
     errProp = 0
@@ -178,12 +180,13 @@ massDict = {"P1D1":0.5099, "P1D2":0.9788, "P1D3":0.8113, "P1D4":0.9679,
 canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
 
 ##--------OUTPUT FILE----------
-##text_file1 = open("ALP_Allbinned20_93.txt", "w")
-##text_file2 = open("Vec_Allbinned20_93.txt", "w")
+text_file1 = open("ALP_Allbinned20_93.txt", "w")
+text_file2 = open("Vec_Allbinned20_93.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-inFileName = "AnalysisSpectrumDS1_6.root"
+##inFileName = "AnalysisSpectrumDS1_6.root"
+inFileName = "BkgSpectComb_0p25.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)
@@ -192,11 +195,11 @@ inFile.Close()
 ## Manually program in the resolution curve, easy enough
 #THE RESOLUTION CURVE
 ## I don't understand what this file is
-##sigConfFileName = "sigConfHist19Oct16.root"
-##sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
-##sigConfHist = sigConfFile.Get("confHist").Clone()
-##sigConfHist.SetDirectory(0)
-##sigConfFile.Close()
+sigConfFileName = "sigConfHist19Oct16.root"
+sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
+sigConfHist = sigConfFile.Get("confHist").Clone()
+sigConfHist.SetDirectory(0)
+sigConfFile.Close()
 
 ## the efficiency fit curve and bin by bin efficiency
 #THE T/E EFF CURVE
@@ -207,6 +210,12 @@ inFile.Close()
 ##etaInterval = etaFile.Get("fInts").Clone()
 ##etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
 ##etaFile.Close()
+etaFileName = "P5D2_12Sep16.root"
+etaFile = ROOT.TFile(inFileDir + etaFileName)
+etaFunc = etaFile.Get("effFit").Clone()
+etaInterval = etaFile.Get("fInts").Clone()
+etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
+etaFile.Close()
 
 #THE TRITIUM HISTOGRAM
 tritFileName = "TritSpec.root"
@@ -224,8 +233,8 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-##lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
-lowEnRange = [5.8] #UNCOMMENT ABOVE LINE for 5 - 20 keV
+##lowEnRange = [x / 4.0 for x in range(int(5.0*4), 20*4+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+lowEnRange = [5.25] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
 for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
@@ -270,7 +279,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         #INIT eff
         ## where cut efficiency gets applied
-        eff = ROOT.RooRealVar("eff", "T/E Efficiency", GetEff(enVal), 0.8, 1.0)
+        effValInit = GetEff(enVal)
+        eff = ROOT.RooRealVar("eff", "T/E Efficiency", effValInit, 0.8, 1.0)
         print "EFFICIENCY CURVE"
 
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
@@ -381,9 +391,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         shapes.add(ZnGauss)
         shapes.add(FeGauss)
         shapes.add(Pb210Gauss)
-        shapes.add(mystGauss) ##added by Jamin
+        ##shapes.add(mystGauss) ##added by Jamin
         shapes.add(tritPdf)
-        shapes.add(CrGauss)
+        ##shapes.add(CrGauss)
 
         yields = ROOT.RooArgList()
         yields.add(bkgdYield)
@@ -392,9 +402,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         yields.add(ZnGaussYield)
         yields.add(FeGaussYield)
         yields.add(Pb210GaussYield)
-        yields.add(mystGaussYield)
+        ##yields.add(mystGaussYield)
         yields.add(tritYield)
-        yields.add(CrGaussYield)
+        ##yields.add(CrGaussYield)
 
         totalPdf = ROOT.RooAddPdf("totalPdf", "sum of signal and background PDF", shapes, yields)
         print "COMPOSITE PDF"
@@ -412,13 +422,13 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         ## I still don't understand this  stuff well
         mean_res = ROOT.RooRealVar("mean_res", "Res Value from function", resValInit)
-        ##sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
-        ##sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
-        ##print "RESOLUTION FUNCTION CONSTRAINTS"
+        sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
+        sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
+        print "RESOLUTION FUNCTION CONSTRAINTS"
 
-        mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", eff.getVal())
-        ##effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
-        ##sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
+        mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", effValInit)
+        effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
+        sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
         print "EFFICIENCY CONSTRAINTS"
 
         ##mean_exp = ROOT.RooRealVar("mean_exp", "Exp Val", 1./4608.0)
@@ -445,9 +455,17 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                         ##0.0,          0.0,             0.0,         (sigma_eff.getVal())**2],# 0.0,#],
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         ##dtype=numpy.float64)
+        ##elArray = numpy.array(
+                 ##[0.06985,     0.0,
+                 ##0.0,          0.007],
+                 ##dtype=numpy.float64)
+        ##elArray = numpy.array(
+                 ##[0.005,     0.0,
+                 ##0.0,          0.00005],
+                 ##dtype=numpy.float64)
         elArray = numpy.array(
-                 [0.06985,     0.0,
-                 0.0,          0.007],
+                 [(sigma_res.getVal())**2,     0.0,
+                 0.0,                          (sigma_eff.getVal())**2],
                  dtype=numpy.float64)
         print "LOW ENERGY COVARIANCE MATRIX"
         ##covMatrix = ROOT.TMatrixDSym(3,elArray)
@@ -497,7 +515,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #Draw on a plot
         xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
         bins = ROOT.RooBinning(enLowBound, enUpBound)
-        bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
+        ##bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
+        bins.addUniform((int(enUpBound - enLowBound)*4), enLowBound, enUpBound)
         data.plotOn(xframe, RF.Binning(bins))
         print "DRAW ON PLOT"
 
@@ -615,7 +634,25 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         line.DrawLine(limit, 0, limit, 3)
         line.DrawLine(0, 1.355, 50, 1.355)
 
-        print "ENERGY " + str(mA.getVal()) + " DONE!!"
+        print "mA " + str(mA.getVal()) + " DONE!!"
+        print "enVal " + str(enVal)
+        print "signal counts " + str(peakYield.getVal())
+        print "Tritium counts " + str(tritYield.getVal())
+        print "res function " + str(resValInit)
+        print "resolution " + str(res.getVal())
+        print "mean resolution " + str(mean_res.getVal())
+        print "resolution error " + str(sigma_res.getVal())
+        print "eff function " + str(effValInit)
+        print "efficiency " + str(eff.getVal())
+        print "mean efficiency " + str(sigma_eff.getVal())
+        print "efficiency error " + str(sigma_res.getVal())
+        print "AxioElectric(mA.getVal()) " + str(AxioElectric(mA.getVal()))
+        print "limit " + str(limit)
+        print "peakYieldInit " + str(peakYieldInit.getVal())
+        print "peakFitVal " + str(peakFitVal)
+        ##print "peakFitRooVal " + str(peakFitRooVal.getVal())
+        print "p_mu " + str(p_mu.getVal())
+        ##print "pll_pkYield " + str(pll_pkYield.getVal())
 
         if drawFlag:
             canvas.Update()

@@ -3,7 +3,7 @@
 import sys, os, re, glob, ROOT, array
 import numpy as np
 
-ds0_scale_min = 6.2
+ds0_scale_min = 6.4
 #ds0_scale_max = 10.7
 ds0_scale_max = 9.1
 
@@ -12,13 +12,6 @@ ROOT.gStyle.SetLabelFont(132, "XYZ")
 ROOT.gStyle.SetTitleFont(132, "XYZ")
 ROOT.gStyle.SetLineWidth(2)
 ROOT.gROOT.ForceStyle()
-
-#def read_CSV(fname):
-#    csv = np.genfromtxt (fname, delimiter=",")
-#    x = csv[:,0]
-#    y = csv[:,2]
-#    x, y =(list(z) for z in zip(*sorted(zip(x, y), key=lambda pair: pair[0])))
-#    return ROOT.TGraph(len(x), np.array(x), np.array(y))
 
 def read_CSV(fname):
     csv = np.genfromtxt (fname, delimiter=",")
@@ -129,31 +122,37 @@ for i in xrange(2, len(xDMlist)-2):
     yDMsmooth.append(sum(yDMlist[i-2:i+3])/5)
 yDMsmooth.append((yDMlist[-3]+yDMlist[-2]+yDMlist[-1])/3)
 yDMsmooth.append((yDMlist[-2]+yDMlist[-1])/2)
-xMJDProj = np.array(xDMlist)
-yMJDProj = np.array(yDMsmooth) - np.log10(ds0_scale_min)
+xMJDProj0 = np.array(xDMlist)
+yMJDProj0 = np.array(yDMsmooth) - np.log10(ds0_scale_min)
+xMJDProj1 = np.array(xDMlist)
+yMJDProj1 = np.array(yDMsmooth) - np.log10(ds0_scale_max)
 for i in xrange(len(xDMlist)):
-    xMJDProj = np.append(xMJDProj, [xDMlist[-(i+1)]])
-    yMJDProj = np.append(yMJDProj, [yDMsmooth[-(i+1)] - np.log10(ds0_scale_max)])
-xMJDProj = np.append(xMJDProj, [xMJDProj[0]])
-yMJDProj = np.append(yMJDProj, [yMJDProj[0]])
+    xMJDProj0 = np.append(xMJDProj0, [xDMlist[-(i+1)]])
+    yMJDProj0 = np.append(yMJDProj0, [yDMsmooth[-(i+1)] - np.log10(ds0_scale_min)])
+    xMJDProj1 = np.append(xMJDProj1, [xDMlist[-(i+1)]])
+    yMJDProj1 = np.append(yMJDProj1, [yDMsmooth[-(i+1)] - np.log10(ds0_scale_max)])
+xMJDProj0 = np.append(xMJDProj0, [xMJDProj0[0]])
+yMJDProj0 = np.append(yMJDProj0, [yMJDProj0[0]])
+xMJDProj1 = np.append(xMJDProj1, [xMJDProj1[0]])
+yMJDProj1 = np.append(yMJDProj1, [yMJDProj1[0]])
 if band:
     mjdProj = ROOT.TGraph(len(xMJDProj), xMJDProj, yMJDProj)
     mjdProj.SetName("mjdProj")
     mjdProj.SetFillColor(ROOT.kBlue-10)
 else:
-    n = (len(xMJDProj) - 1) / 2
-    mjdProj0 = ROOT.TGraph(n, xMJDProj[0:n+1], yMJDProj[0:n+1])
+    n = (len(xMJDProj0) - 1) / 2
+    mjdProj0 = ROOT.TGraph(n, xMJDProj0[0:n+1], yMJDProj0[0:n+1])
     mjdProj0.SetName("mjdProj0")
     mjdProj0.SetLineColor(ROOT.kBlack)
     mjdProj0.SetLineStyle(2)
-    mjdProj1 = ROOT.TGraph(n, xMJDProj[n:2*n], yMJDProj[n:2*n])
+    mjdProj1 = ROOT.TGraph(n, xMJDProj1[n:2*n], yMJDProj1[n:2*n])
     mjdProj1.SetName("mjdProj1")
     mjdProj1.SetLineColor(ROOT.kBlack)
     mjdProj1.SetLineWidth(4)
     mjdProj1.SetLineStyle(5)
 
 #EdelweissIII
-edelLim = read_CSV("/global/homes/j/jrager/LowE/Data/BDM_Limits/OtherExperiments/EdelweissIIIVector.csv")
+edelLim = read_CSV("EdelweissIIIVector.csv")
 edelLim.SetName("edelLim")
 edelLim.SetLineColor(ROOT.kOrange-1)
 edelLim.SetMarkerStyle(0)
@@ -194,10 +193,15 @@ xmass.SetLineColor(ROOT.kGreen - 1)
 
 #XENON
 #xenon = ROOT.TGraph(len(xXENON), np.array(xXENON), np.array(yXENON))
-xenon = read_datathief("/global/homes/j/jrager/LowE/Data/BDM_Limits/OtherExperiments/xenon100_vector_9_2017.txt")
+xenon = read_datathief("xenon100_vector_9_2017.txt")
 xenon.SetName("xenon")
-xenon.SetLineColor(ROOT.kBlue)
+xenon.SetLineColor(6)
 #xenon.SetLineStyle(ROOT.kDashed)
+
+#XENON Me
+xenonMe = ROOT.TGraph(len(xXenonME), np.array(xXenonME), np.array(yXenonME))
+xenonMe.SetName("xenonMe")
+xenonMe.SetLineColor(ROOT.kBlack)
 
 #DS0 graph
 vecLim  = ROOT.TGraph(len(xDMlist), np.array(xDMlist), np.array(yDMlist))
@@ -207,42 +211,27 @@ vecLim.SetLineColor(ROOT.kBlack)
 vecLim.SetMarkerStyle(0)
 vecLim.SetLineWidth(3)
 
-#MJD Recent
-unbinn = read_datathief("/global/homes/j/jrager/LowE/Data/BDM_Limits/NatEnrLimits/Vec_AllBinned.txt")
-unbinn.SetName("unbinn")
-unbinn.SetLineColor(ROOT.kCyan+1)
-unbinn.SetMarkerStyle(0)
-unbinn.SetLineWidth(2)
-
-#MJD Enr Only
-enr = read_datathief("/global/homes/j/jrager/LowE/Data/BDM_Limits/EnrOnlyLimits/Vec_EnrBinned.txt")
-enr.SetName("enr")
-enr.SetLineColor(ROOT.kRed)
-enr.SetMarkerStyle(0)
-enr.SetLineWidth(2)
-
 if band:
     mjdProj.Draw("same F")
 else:
     mjdProj0.Draw("L same")
-    #mjdProj1.Draw("L same")
+    mjdProj1.Draw("L same")
 vecLim.Draw("L same")
-##hbLim.Draw("L same")
-##rgLim.Draw("L same")
+hbLim.Draw("L same")
+rgLim.Draw("L same")
 if not zoom:
     gammaLim.Draw("L same")
     abun.Draw("L same")
 xmass.Draw("L same")
 xenon.Draw("L same")
 edelLim.Draw("L same")
-unbinn.Draw("L same")
-enr.Draw("L same")
+#xenonMe.Draw("same")
 
 legs = []
 if not zoom:
-    legs.append(ROOT.TLegend(0.5, 0.40, 0.6, 0.50))      
-    legs.append(ROOT.TLegend(0.3, 0.35, 0.4, 0.45))       
-    legs.append(ROOT.TLegend(0.23, 0.75, 0.33, 0.85))     
+    legs.append(ROOT.TLegend(0.5, 0.40, 0.6, 0.50))
+    legs.append(ROOT.TLegend(0.3, 0.35, 0.4, 0.45))
+    legs.append(ROOT.TLegend(0.23, 0.75, 0.33, 0.85))
     legs.append(ROOT.TLegend(0.15, 0.58, 0.25, 0.68))
     legs.append(ROOT.TLegend(0.8, 0.3, 0.9, 0.4))
     legs.append(ROOT.TLegend(0.1, 0.35, 0.2, 0.45))
@@ -252,24 +241,26 @@ if not zoom:
     if band:
         legs.append(ROOT.TLegend(0.62, 0.28, 0.72, 0.38))
     else:
-        legs.append(ROOT.TLegend(0.55, 0.18, 0.75, 0.28))    
+        legs.append(ROOT.TLegend(0.55, 0.18, 0.75, 0.28))
 else:
-    legs.append(ROOT.TLegend(0.5, 0.73, 0.6, 0.83))        #0 Kris
-    legs.append(ROOT.TLegend(0.25, 0.6, 0.35, 0.7))        #1 HB Stars
-    legs.append(ROOT.TLegend(0.23, 0.75, 0.33, 0.85))      #2 gamma
-    legs.append(ROOT.TLegend(0.15, 0.6, 0.25, 0.7))        #3 abundance
-    legs.append(ROOT.TLegend(0.8, 0.50, 0.9, 0.60))        #4 XMASS
-    legs.append(ROOT.TLegend(0.1, 0.63, 0.2, 0.73))        #5 Edel
-    legs.append(ROOT.TLegend(0.3, 0.2, 0.4, 0.3))          #6 RG Stars
-    legs.append(ROOT.TLegend(0.25, 0.6, 0.35, 0.7))        #7 Xenon
-    legs.append(ROOT.TLegend(0.15, 0.23, 0.41, 0.33))      #8 proj
-    legs.append(ROOT.TLegend(0.5, 0.47, 0.6, 0.57))          #9 all
-    legs.append(ROOT.TLegend(0.5, 0.5, 0.6, 0.6))        #10 enr
+    legs.append(ROOT.TLegend(0.5, 0.73, 0.6, 0.83))
+    legs.append(ROOT.TLegend(0.25, 0.6, 0.35, 0.7))
+    legs.append(ROOT.TLegend(0.23, 0.75, 0.33, 0.85))
+    legs.append(ROOT.TLegend(0.15, 0.6, 0.25, 0.7))
+    legs.append(ROOT.TLegend(0.8, 0.50, 0.9, 0.60))
+    legs.append(ROOT.TLegend(0.1, 0.63, 0.2, 0.73))
+    legs.append(ROOT.TLegend(0.3, 0.2, 0.4, 0.3))
+    legs.append(ROOT.TLegend(0.15, 0.23, 0.25, 0.33))
+    #legs.append(ROOT.TLegend(0.59, 0.65, 0.85, 0.85))
+    if band:
+        legs.append(ROOT.TLegend(0.62, 0.28, 0.72, 0.38))
+    else:
+        legs.append(ROOT.TLegend(0.55, 0.20, 0.75, 0.30))
 
 legs[0].AddEntry("vecLim", "M#scale[0.7]{AJORANA} PRL", "")
 legs[0].SetTextColor(ROOT.kBlack)
-##legs[1].AddEntry("hbLim", "HB Stars", "")
-##legs[1].SetTextColor(ROOT.kBlue)
+legs[1].AddEntry("hbLim", "HB Stars", "")
+legs[1].SetTextColor(ROOT.kBlue)
 if not zoom:
     legs[2].AddEntry("gammaLim", "#gamma BG", "")
     legs[2].SetTextColor(ROOT.kRed + 2)
@@ -279,16 +270,20 @@ legs[4].AddEntry("xmass", "XMASS", "")
 legs[4].SetTextColor(ROOT.kGreen - 1)
 legs[5].AddEntry("edelLim","Edelweiss", "")
 legs[5].SetTextColor(ROOT.kOrange-1)
-##legs[6].AddEntry("rgLim", "RG Stars", "")
-##legs[6].SetTextColor(ROOT.kGreen + 1)
+legs[6].AddEntry("rgLim", "RG Stars", "")
+legs[6].SetTextColor(ROOT.kGreen + 1)
 legs[7].AddEntry("xenon", "XENON100", "")
-legs[7].SetTextColor(ROOT.kBlue)
-legs[8].AddEntry("mjdProj0", "ProjectionDS1-6 open", "l")
-legs[8].SetTextColor(ROOT.kBlack)
-legs[9].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 open", "")
-legs[9].SetTextColor(ROOT.kCyan+2)
-legs[10].AddEntry("enr", "M#scale[0.7]{AJORANA} DS1-6 enr", "")
-legs[10].SetTextColor(ROOT.kRed)
+legs[7].SetTextColor(6)
+#legs[7].AddEntry("xenonME", "XENON100*", "")
+if band:
+    legs[8].AddEntry("mjdProj", "DS0-6 Projection", "")
+    legs[8].SetTextColor(ROOT.kBlue - 8)
+else:
+    #legs[8].AddEntry("mjdProj0", "M#scale[0.7]{AJORANA} Projected Sensitivity", "")
+    legs[8].AddEntry("mjdProj0", "DS1-6 open, 5626 kg-d", "l")
+    legs[8].AddEntry("mjdProj1", "DS1-6 all, 11395 kg-d", "l")
+    legs[8].SetTextColor(ROOT.kBlack)
+
 
 for i, l in enumerate(legs):
     l.SetTextFont(133)

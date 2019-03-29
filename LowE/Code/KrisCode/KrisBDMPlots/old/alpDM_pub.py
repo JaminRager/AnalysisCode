@@ -49,14 +49,6 @@ hist.SetYTitle("g_{Ae}")
 hist.GetXaxis().SetTitleOffset(1.3)
 hist.Draw()
 
-#Updated MAJORANA
-#xMJD = [5.6,5.8,6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.8,11,11.2,
-            #11.4,11.6,11.8,12,12.2,12.4,12.6,12.8,13,13.2,13.4,13.6,13.8,14,14.2,14.4,14.6,14.8,15,15.2,15.4,15.6,15.8,16,16.2,16.4,16.6,
-            #16.8,17,17.2,17.4,17.6,17.8,18,18.2,18.4,18.6,18.8,19,19.2,19.4,19.6,19.8,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,
-            #36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,
-            #77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93]
-
-#yMJD = []
 
 #EDELWEISS
 xEdel = [2.53, 2.64, 2.76, 2.87, 3, 3.13, 3.26, 3.4, 3.55, 3.7, 3.86, 4.02, 4.2, 4.38, 4.6, 4.76, 4.96, 5.18, 5.4, 5.63, 5.87, 6.08, 6.41, 6.66, 6.95, 7.19, 7.48, 7.77, 8.08, 8.32, 8.96, 9.3, 9.66, 9.96, 10.2, 10.4, 10.6, 10.6, 10.7, 10.8, 10.8, 10.9, 11, 11, 11.1, 11.2, 11.3, 11.5, 11.7, 11.9, 12.2, 12.5, 12.9, 13.5, 14.1, 14.7, 15.3, 15.9, 16.5, 17.3, 17.9, 18.6, 19.4, 20.3, 21, 21.5, 22, 22.5, 22.6, 23, 23.9, 24.4, 24.9, 25.5, 25.6, 26.1, 27, 27.9, 28.9, 29, 30.1, 31.1, 31.8, 33, 34, 34.4, 35, 35.5, 36.4, 37.3, 38.3, 39.6, 40.1, 41, 42, 43.3, 43.9, 45, 46.8, 48, 49.6, 51.8, 54, 55.3, 55.7, 57.7, 60, 62.1, 64.4, 66.7, 68.7, 70.7, 71, 71.7, 72.7, 74.9, 75.6, 76.8, 79.1, 80.2, 82.2, 85.6, 88.4, 90.2, 92.2, 92.7, 94.8, 97.4, 99.3, 102.]
@@ -123,8 +115,7 @@ xDMlist = [5.6,5.8,6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8,8.2,8.4,8.6,8.8,9,9.2,9
     
 yDMlist = [1.1092E-12, 1.44542E-12, 1.55233E-12, 1.55504E-12, 1.37592E-12, 1.20145E-12, 1.05687E-12, 1.05641E-12, 1.02476E-12, 7.81029E-13, 8.29634E-13, 1.08806E-12, 1.16591E-12, 1.1647E-12, 1.3387E-12, 1.87631E-12, 2.1204E-12, 2.09864E-12, 1.68556E-12, 9.95057E-13, 7.9215E-13, 8.351E-13, 1.31467E-12, 2.84169E-12, 2.96551E-12, 2.14213E-12, 1.72935E-12, 1.55753E-12, 1.35917E-12, 6.62232E-13, 5.72292E-13, 4.5212E-13, 4.47828E-13, 4.92653E-13, 4.84064E-13, 4.70606E-13, 5.5266E-13, 6.36907E-13, 5.1182E-13, 4.4239E-13, 5.71403E-13, 7.79294E-13, 8.80986E-13, 8.9723E-13, 8.25865E-13, 6.02298E-13, 5.01904E-13, 6.11924E-13, 8.62332E-13, 1.00203E-12, 1.01851E-12, 8.52839E-13, 6.14327E-13, 5.68615E-13, 5.51398E-13, 4.70022E-13, 5.01443E-13, 7.2106E-13, 7.87182E-13, 7.37072E-13, 9.5677E-13, 1.05623E-12, 9.99299E-13, 9.3539E-13, 1.01329E-12, 1.024E-12, 9.26737E-13, 9.17561E-13, 1.09886E-12, 1.16532E-12, 1.05436E-12, 7.70749E-13, 7.40374E-13, 1.12901E-12, 8.93703E-13, 1.54326E-12, 9.20604E-13, 9.80438E-13, 1.31258E-12, 1.17286E-12, 1.2853E-12, 1.50534E-12, 7.80115E-13, 8.12105E-13, 1.21658E-12, 1.581E-12, 1.79589E-12, 1.16989E-12, 2.44499E-12, 1.08329E-12, 2.07707E-12, 1.13431E-12, 1.8001E-12, 1.23037E-12, 1.24662E-12, 2.01224E-12, 1.36626E-12, 1.4092E-12, 2.77492E-12, 1.40654E-12, 1.75448E-12, 2.59673E-12, 1.65723E-12, 2.32933E-12, 1.84481E-12, 2.76011E-12, 1.89349E-12, 1.85955E-12, 1.445E-12, 3.27298E-12, 1.76929E-12, 1.7622E-12, 1.86808E-12, 3.09603E-12, 1.74026E-12, 2.49099E-12, 2.12717E-12, 1.78431E-12, 2.13414E-12, 4.3157E-12, 2.00276E-12, 2.60857E-12, 2.54638E-12, 3.43581E-12, 1.98814E-12, 2.33686E-12, 2.21073E-12, 3.91597E-12, 3.23402E-12, 2.17201E-12, 4.47881E-12, 2.24521E-12, 2.83947E-12, 3.26565E-12, 3.36944E-12, 3.66631E-12, 3.89961E-12, 3.61792E-12, 4.93242E-12, 6.01356E-12, 2.87398E-12, 3.58794E-12, 3.43092E-12, 4.46888E-12, 4.09817E-12, 6.85061E-12]
 
-#zoomX = True
-
+band = False
 yDMsmooth = []
 yDMsmooth.append((yDMlist[0]+yDMlist[1])/2)
 yDMsmooth.append((yDMlist[0]+yDMlist[1]+yDMlist[2])/3)
@@ -139,42 +130,54 @@ for i in xrange(len(yDMsmooth)-1):
     if xDMlist[i] > 20:
         yDMsmooth[i] = sum(yDMsmooth[i-1:i+2])/3
 yDMsmooth[-1] = (yDMsmooth[-1] + yDMsmooth[-1]) / 2
-xMJDProj0 = np.array(xDMlist)
-yMJDProj0 = np.array(yDMsmooth) / ds0_scale_min
-xMJDProj1 = np.array(xDMlist)
-yMJDProj1 = np.array(yDMsmooth) / ds0_scale_max
+xMJDProj = np.array(xDMlist)
+yMJDProj = np.array(yDMsmooth) / ds0_scale_min
 for i in xrange(len(xDMlist)):
-    xMJDProj1 = np.append(xMJDProj1, [xDMlist[-(i+1)]])
-    yMJDProj1 = np.append(yMJDProj1, [yDMsmooth[-(i+1)] / ds0_scale_max])
-    xMJDProj0 = np.append(xMJDProj0, [xDMlist[-(i+1)]])
-    yMJDProj0 = np.append(yMJDProj0, [yDMsmooth[-(i+1)] / ds0_scale_min])
-xMJDProj0 = np.append(xMJDProj0, [xMJDProj0[0]])
-yMJDProj0 = np.append(yMJDProj0, [yMJDProj0[0]])
-xMJDProj1 = np.append(xMJDProj1, [xMJDProj1[0]])
-yMJDProj1 = np.append(yMJDProj1, [yMJDProj1[0]])
-    
-n = (len(xMJDProj0) - 1) / 2
-mjdProj0 = ROOT.TGraph(n, xMJDProj0[0:n+1], yMJDProj0[0:n+1])
-mjdProj0.SetName("mjdProj0")
-mjdProj0.SetLineColor(ROOT.kBlack)
-mjdProj0.SetLineStyle(2)
-mjdProj1 = ROOT.TGraph(n, xMJDProj1[n:2*n], yMJDProj1[n:2*n])
-mjdProj1.SetName("mjdProj1")
-mjdProj1.SetLineColor(ROOT.kBlack)
-mjdProj1.SetLineWidth(4)
-mjdProj1.SetLineStyle(5)
+    xMJDProj = np.append(xMJDProj, [xDMlist[-(i+1)]])
+    yMJDProj = np.append(yMJDProj, [yDMsmooth[-(i+1)] / ds0_scale_max])
+xMJDProj = np.append(xMJDProj, [xMJDProj[0]])
+yMJDProj = np.append(yMJDProj, [yMJDProj[0]])
+if band:
+    mjdProj = ROOT.TGraph(len(xMJDProj), xMJDProj, yMJDProj)
+    mjdProj.SetName("mjdProj")
+    mjdProj.SetFillColor(ROOT.kBlue-10)
+else:
+    n = (len(xMJDProj) - 1) / 2
+    mjdProj0 = ROOT.TGraph(n, xMJDProj[0:n+1], yMJDProj[0:n+1])
+    mjdProj0.SetName("mjdProj0")
+    mjdProj0.SetLineColor(28)
+    mjdProj0.SetLineStyle(2)
+    mjdProj1 = ROOT.TGraph(n, xMJDProj[n:2*n], yMJDProj[n:2*n])
+    mjdProj1.SetName("mjdProj1")
+    mjdProj1.SetLineColor(ROOT.kBlack)
+    mjdProj1.SetLineWidth(4)
+    mjdProj1.SetLineStyle(5)
+
+#Edelweiss Old
+#edelLim = ROOT.TGraph(len(xEdel), np.array(xEdel), np.array(yEdel))
+#edelLim.SetName("edelLim")
+#edelLim.SetLineColor(ROOT.kOrange)
+#edelLim.SetMarkerStyle(0)
+#edelLim.SetLineWidth(2)
 
 #EdelweissIII
-edelLim = read_CSV("/global/homes/j/jrager/LowE/Data/BDM_Limits/OtherExperiments/EdelweissIIIALP.csv")
+edelLim = read_CSV("EdelweissIIIALP.csv")
 edelLim.SetName("edelLim")
 edelLim.SetLineColor(ROOT.kOrange-1)
 edelLim.SetMarkerStyle(0)
 edelLim.SetLineWidth(2)
 
+#XENON
+xenon = ROOT.TGraph(len(xXenon), np.array(xXenon), np.array(yXenon))
+xenon = read_datathief("xenon100_pseudoscalar_9_2017.txt")
+xenon.SetName("xenonLim")
+xenon.SetLineColor(ROOT.kBlue)
+xenon.SetLineWidth(2)
+
 #XENON POSPO
 xenonPo = ROOT.TGraph(len(xXenonPo), np.array(xXenonPo), np.array(yXenonPo))
 xenonPo.SetName("xenonPo")
-xenonPo.SetLineColor(ROOT.kBlue+1)
+xenonPo.SetLineColor(ROOT.kBlue)
 #xenonPo.SetLineStyle(ROOT.kDashed)
 xenonPo.SetLineWidth(2)
 
@@ -197,6 +200,7 @@ cdex = ROOT.TGraph(len(xCDEX), np.array(xCDEX), np.array(yCDEX))
 cdex.SetName("cdexLim")
 cdex.SetTitle("; m_{A} (keV); g_{Ae}")
 cdex.SetLineColor(6)
+#cdex.SetLineStyle(ROOT.kDashed)
 cdex.SetMarkerStyle(0)
 cdex.SetLineWidth(2)
 
@@ -209,97 +213,97 @@ alpLim.SetMarkerStyle(0)
 alpLim.SetLineWidth(3)
 
 #PandaXII
-pandaxII = read_datathief("/global/homes/j/jrager/LowE/Data/BDM_Limits/OtherExperiments/pandaxII_pseudoscalar_7_2017.txt")
+pandaxII = read_datathief("pandaxII_pseudoscalar_7_2017.txt")
 pandaxII.SetName("pandaxII")
-pandaxII.SetLineColor(13)
+pandaxII.SetLineColor(ROOT.kRed)
 pandaxII.SetMarkerStyle(0)
 pandaxII.SetLineWidth(2)
+#pandaxII.SetLineStyle(2)
 
-#Updated MJD
-unbinn = read_CSV("/global/homes/j/jrager/LowE/Data/BDM_Limits/NatEnrLimits/ALP_AllBinned.txt")
-unbinn.SetName("unbinn")
-unbinn.SetLineColor(ROOT.kCyan+1)
-unbinn.SetMarkerStyle(0)
-unbinn.SetLineWidth(2)
-
-#Updated MJD
-enr = read_CSV("/global/homes/j/jrager/LowE/Data/BDM_Limits/EnrOnlyLimits/ALP_EnrBinned.txt")
-enr.SetName("enr")
-enr.SetLineColor(ROOT.kRed)
-enr.SetMarkerStyle(0)
-enr.SetLineWidth(2)
 
 cdex.Draw("L")
-mjdProj0.Draw("L same")
+if band:
+    mjdProj.Draw("same F")
+else:
+    mjdProj1.Draw("L same")
 lux.Draw("L same")
 edelLim.Draw("L same")
+#xenon.Draw("L same")
 xmass.Draw("L same")
 alpLim.Draw("L same")
 xenonPo.Draw("L same")
 pandaxII.Draw("L same")
-#unbinn.Draw("L same")
-enr.Draw("L same")
 
 
 legs = []
-
-legs.append(ROOT.TLegend(0.68, 0.77, 0.84, 0.87)) #0 Edel
-legs.append(ROOT.TLegend(0.68, 0.18, 0.78, 0.28)) #1 XMASS
-legs.append(ROOT.TLegend(0.5, 0.62, 0.62, 0.72))  #1 Kris
-legs.append(ROOT.TLegend(0.37, 0.60, 0.5, 0.70))  #2 CDEX
-legs.append(ROOT.TLegend(0.07, 0.34, 0.27, 0.44)) #3 Xenon
-legs.append(ROOT.TLegend(0.12, 0.21, 0.24, 0.31)) #4 LUX
-legs.append(ROOT.TLegend(0.2, 0.15, 0.3, 0.25))   #5 Panda
-legs.append(ROOT.TLegend(0.68, 0.33, 0.78, 0.43)) #6 all
-legs.append(ROOT.TLegend(0.28, 0.2, 0.4, 0.3))    #7 proj
-legs.append(ROOT.TLegend(0.68, 0.33, 0.78, 0.47)) #8 enr
-legs.append(ROOT.TLegend(0.68, 0.18, 0.78, 0.28)) #9 XMASS
-
+if True:
+    legs.append(ROOT.TLegend(0.54, 0.68, 0.7, 0.78))
+    legs.append(ROOT.TLegend(0.44, 0.65, 0.7, 0.85))
+    #legs.append(ROOT.TLegend(0.7, 0.35, 0.8, 0.45))
+    legs.append(ROOT.TLegend(0.68, 0.18, 0.78, 0.28))
+    legs.append(ROOT.TLegend(0.08, 0.41, 0.3, 0.51))
+    legs.append(ROOT.TLegend(0.37, 0.60, 0.5, 0.70))
+    legs.append(ROOT.TLegend(0.4, 0.36, 0.6, 0.46))
+    #legs.append(ROOT.TLegend(0.28, 0.2, 0.4, 0.3))
+    legs.append(ROOT.TLegend(0.12, 0.21, 0.24, 0.31))
+    if band:
+        legs.append(ROOT.TLegend(0.52, 0.28, 0.72, 0.38))
+    else:
+        legs.append(ROOT.TLegend(0.53, 0.31, 0.73, 0.41))
+    legs.append(ROOT.TLegend(0.2, 0.15, 0.3, 0.25))
 for l in legs:
     l.SetTextFont(133)
     l.SetTextSize(25)
     l.SetFillStyle(0)
     l.SetBorderSize(0)
-
-legs[0].SetTextColor(ROOT.kOrange-1)   #0 Edel
-legs[9].SetTextColor(ROOT.kGreen-1)    #9 XMASS
-legs[1].SetTextColor(ROOT.kBlack)      #1 Kris
-legs[2].SetTextColor(6)                #2 CDEX
-legs[3].SetTextColor(ROOT.kBlue+1)     #3 Xenon
-legs[4].SetTextColor(ROOT.kGreen + 1)  #4 LUX
-legs[5].SetTextColor(13)               #5 Panda
-legs[6].SetTextColor(ROOT.kCyan+1)     #6 all
-legs[7].SetTextColor(ROOT.kBlack)      #7 proj
-legs[8].SetTextColor(ROOT.kRed)        #8 enr
+if True:
+    legs[0].SetTextColor(ROOT.kOrange-1)
+    legs[1].SetTextColor(ROOT.kBlue)
+    legs[2].SetTextColor(ROOT.kGreen-1)
+    legs[3].SetTextColor(ROOT.kBlack)
+    legs[4].SetTextColor(6)
+    legs[5].SetTextColor(ROOT.kBlue)
+    legs[6].SetTextColor(ROOT.kGreen + 1)
+    if band:
+        legs[7].SetTextColor(ROOT.kBlue - 8)
+    else:
+        legs[7].SetTextColor(ROOT.kBlack)
+    legs[8].SetTextColor(ROOT.kRed)
 legs[0].AddEntry(edelLim, "#font[132]{EDELWEISS}", "")
-legs[9].AddEntry("xmassLim", "XMASS", "")
-legs[1].AddEntry("alpLim", "M#scale[0.7]{AJORANA} PRL", "")
-legs[2].AddEntry("cdexLim", "CDEX", "")
-legs[3].AddEntry("xenonPo", "XENON100", "") #XENON Erratum, use this
-legs[4].AddEntry("lux", "LUX", "")
-legs[5].AddEntry("pandaxII", "PandaX-II", "")
-#legs[6].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "")
-legs[7].AddEntry("mjdProj0", "Projection DS1-6 enr+nat", "l")
-legs[8].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr", "")
+#legs[1].AddEntry("xenonLim", "XENON100", "") #2014 XENON
+legs[2].AddEntry("xmassLim", "XMASS", "")
+legs[3].AddEntry("alpLim", "M#scale[0.7]{AJORANA} PRL", "")
+legs[4].AddEntry("cdexLim", "CDEX", "")
+legs[5].AddEntry("xenonPo", "XENON100", "") #XENON Erratum, use this
+legs[6].AddEntry("lux", "LUX", "")
+if band:
+    legs[7].AddEntry("mjdProj", "DS0-6 Projection", "")
+else:
+    legs[7].AddEntry("mjdProj0", "M#scale[0.7]{AJORANA} Projected Sensitivity", "")
+    #legs[7].AddEntry("mjdProj0", "  4106 kg-d, 0.01 c/keV/kg/d", "l")
+    legs[7].AddEntry("mjdProj1", "11395 kg-d, 0.01 c/keV/kg/d", "l")
+legs[8].AddEntry("pandaxII", "PandaX-II", "")
 
 leg = ROOT.TLegend(0.6, 0.18, 0.8, 0.38)
 leg.SetTextFont(133)
 leg.SetTextSize(20)
 leg.SetFillStyle(0)
 leg.AddEntry("edelLim", "EDELWEISS", "l")
+#leg.AddEntry("xenonLim", "XENON100", "l") #2014 XENON
 leg.AddEntry("xmassLim", "XMASS", "l")
-leg.AddEntry("alpLim", "M#scale[0.7]{AJORANA} PRL", "l")
+leg.AddEntry("alpLim", "MAJORANA", "l")
 leg.AddEntry("cdexLim", "CDEX", "l")
 leg.AddEntry("xenonPo", "XENON100", "l") #XENON Erratum, use this
 leg.AddEntry("lux", "LUX", "l")
+leg.AddEntry("mjdProj", "DS0-6 Projection", "l")
 leg.AddEntry("pandaxII", "PandaX-II", "l")
-#leg.AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "l")
-leg.AddEntry("mjdProj0", "Projection DS1-6 enr+nat", "l")
-leg.AddEntry("enr", "M#scale[0.7]{AJORANA} DS1-6 enr", "l")
 
-for i, l in enumerate(legs):
-    if i != 1:
-        l.Draw()
+if True:
+    for i, l in enumerate(legs):
+        if i != 1:
+            l.Draw()
+else:
+    leg.Draw()
 
 canvas.Update()
 raw_input()

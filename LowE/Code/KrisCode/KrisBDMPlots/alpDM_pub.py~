@@ -229,15 +229,15 @@ enr.SetLineColor(ROOT.kRed)
 enr.SetMarkerStyle(0)
 enr.SetLineWidth(2)
 
-cdex.Draw("L")
+#cdex.Draw("L")
 mjdProj0.Draw("L same")
-lux.Draw("L same")
-edelLim.Draw("L same")
-xmass.Draw("L same")
+#lux.Draw("L same")
+#edelLim.Draw("L same")
+#xmass.Draw("L same")
 alpLim.Draw("L same")
-xenonPo.Draw("L same")
-pandaxII.Draw("L same")
-#unbinn.Draw("L same")
+#xenonPo.Draw("L same")
+#pandaxII.Draw("L same")
+unbinn.Draw("L same")
 enr.Draw("L same")
 
 
@@ -271,14 +271,14 @@ legs[5].SetTextColor(13)               #5 Panda
 legs[6].SetTextColor(ROOT.kCyan+1)     #6 all
 legs[7].SetTextColor(ROOT.kBlack)      #7 proj
 legs[8].SetTextColor(ROOT.kRed)        #8 enr
-legs[0].AddEntry(edelLim, "#font[132]{EDELWEISS}", "")
-legs[9].AddEntry("xmassLim", "XMASS", "")
+#legs[0].AddEntry(edelLim, "#font[132]{EDELWEISS}", "")
+#legs[9].AddEntry("xmassLim", "XMASS", "")
 legs[1].AddEntry("alpLim", "M#scale[0.7]{AJORANA} PRL", "")
-legs[2].AddEntry("cdexLim", "CDEX", "")
-legs[3].AddEntry("xenonPo", "XENON100", "") #XENON Erratum, use this
-legs[4].AddEntry("lux", "LUX", "")
-legs[5].AddEntry("pandaxII", "PandaX-II", "")
-#legs[6].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "")
+#legs[2].AddEntry("cdexLim", "CDEX", "")
+#legs[3].AddEntry("xenonPo", "XENON100", "") #XENON Erratum, use this
+#legs[4].AddEntry("lux", "LUX", "")
+#legs[5].AddEntry("pandaxII", "PandaX-II", "")
+legs[6].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "")
 legs[7].AddEntry("mjdProj0", "Projection DS1-6 enr+nat", "l")
 legs[8].AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr", "")
 
@@ -286,14 +286,14 @@ leg = ROOT.TLegend(0.6, 0.18, 0.8, 0.38)
 leg.SetTextFont(133)
 leg.SetTextSize(20)
 leg.SetFillStyle(0)
-leg.AddEntry("edelLim", "EDELWEISS", "l")
-leg.AddEntry("xmassLim", "XMASS", "l")
+#leg.AddEntry("edelLim", "EDELWEISS", "l")
+#leg.AddEntry("xmassLim", "XMASS", "l")
 leg.AddEntry("alpLim", "M#scale[0.7]{AJORANA} PRL", "l")
-leg.AddEntry("cdexLim", "CDEX", "l")
-leg.AddEntry("xenonPo", "XENON100", "l") #XENON Erratum, use this
-leg.AddEntry("lux", "LUX", "l")
-leg.AddEntry("pandaxII", "PandaX-II", "l")
-#leg.AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "l")
+#leg.AddEntry("cdexLim", "CDEX", "l")
+#leg.AddEntry("xenonPo", "XENON100", "l") #XENON Erratum, use this
+#leg.AddEntry("lux", "LUX", "l")
+#leg.AddEntry("pandaxII", "PandaX-II", "l")
+leg.AddEntry("unbinn", "M#scale[0.7]{AJORANA} DS1-6 enr+nat", "l")
 leg.AddEntry("mjdProj0", "Projection DS1-6 enr+nat", "l")
 leg.AddEntry("enr", "M#scale[0.7]{AJORANA} DS1-6 enr", "l")
 

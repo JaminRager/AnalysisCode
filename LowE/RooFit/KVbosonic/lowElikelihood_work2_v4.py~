@@ -180,13 +180,13 @@ massDict = {"P1D1":0.5099, "P1D2":0.9788, "P1D3":0.8113, "P1D4":0.9679,
 canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
 
 ##--------OUTPUT FILE----------
-text_file1 = open("ALP_Enrbinned21_100.txt", "w")
-text_file2 = open("Vec_Enrbinned21_100.txt", "w")
+text_file1 = open("ALP_Allbinned5_20.txt", "w")
+text_file2 = open("Vec_Allbinned5_20.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-##inFileName = "AnalysisSpectrumDS1_6.root"
-inFileName = "AnalysisSpectEnrOnly.root"
+inFileName = "AnalysisSpectrumDS1_6.root"
+##inFileName = "BkgSpectComb_0p25.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)
@@ -233,12 +233,12 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+lowEnRange = [x / 5.0 for x in range(int(5.0*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
 ##lowEnRange = [6.4] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
-##for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
-for enVal in xrange(21, 100): #(end at 93)
+for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
+##for enVal in xrange(21, 94): #(end at 93)
 ##for enVal in xrange(21, 25):
     #try: #python no garbage collecty, so keep doing this until we run out of memory. I know, I know...
         energyList.append(enVal)
@@ -621,15 +621,13 @@ for enVal in xrange(21, 100): #(end at 93)
         vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4378.6))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 3444.2))
+        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4378.6))
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
         vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4378.6)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 3444.2)))
+        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4378.6)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
         line = ROOT.TLine()
         line.SetLineColor(ROOT.kGreen + 3)

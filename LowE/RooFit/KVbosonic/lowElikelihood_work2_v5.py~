@@ -180,13 +180,13 @@ massDict = {"P1D1":0.5099, "P1D2":0.9788, "P1D3":0.8113, "P1D4":0.9679,
 canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
 
 ##--------OUTPUT FILE----------
-text_file1 = open("ALP_Enrbinned21_100.txt", "w")
-text_file2 = open("Vec_Enrbinned21_100.txt", "w")
+##text_file1 = open("ALP_Allbinned21_100.txt", "w")
+##text_file2 = open("Vec_Allbinned21_100.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-##inFileName = "AnalysisSpectrumDS1_6.root"
 inFileName = "AnalysisSpectEnrOnly.root"
+##inFileName = "AnalysisSpectEnrOnly.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)
@@ -233,12 +233,12 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
-##lowEnRange = [6.4] #UNCOMMENT ABOVE LINE for 5 - 20 keV
+##lowEnRange = [x / 4.0 for x in range(int(5.0*4), 20*4+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+lowEnRange = [46.5] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
-##for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
-for enVal in xrange(21, 100): #(end at 93)
+for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
+##for enVal in xrange(21, 100): #(end at 93)
 ##for enVal in xrange(21, 25):
     #try: #python no garbage collecty, so keep doing this until we run out of memory. I know, I know...
         energyList.append(enVal)
@@ -527,9 +527,9 @@ for enVal in xrange(21, 100): #(end at 93)
 
         ## I don't understand this part
         if enVal <= 20:
-                chiSquared = xframe.chiSquare(17)#chiSquare(10)
+                chiSquared = xframe.chiSquare(21)#chiSquare(10)
         else:
-                chiSquared = xframe.chiSquare(17)
+                chiSquared = xframe.chiSquare(21)
         print "The chi-squared / ndf =" + str(chiSquared)
         setWrapPeak = ROOT.RooArgSet(peakGaus)
         totalPdfConstrain.plotOn(xframe, RF.Components(setWrapPeak), RF.LineStyle(ROOT.kDotted))
@@ -550,7 +550,7 @@ for enVal in xrange(21, 100): #(end at 93)
         leg.SetBorderSize(1)
         leg.SetTextSize(22)
         leg.AddText("#chi^{2}/NDF = %.3f" %(chiSquared))
-        xframe.addObject(leg)
+        ##xframe.addObject(leg)
         print "canvas legend"
 
         xframe.Draw()
@@ -559,7 +559,7 @@ for enVal in xrange(21, 100): #(end at 93)
         if drawFlag:
             canvas.SetLogy()
             canvas.Update()
-            ##WaitForReturn()
+            WaitForReturn()
 
 
         ## Dealing with the machinery of Minuit
@@ -567,7 +567,7 @@ for enVal in xrange(21, 100): #(end at 93)
         nll = totalPdfConstrain.createNLL(data, RF.NumCPU(4))
         ROOT.RooMinuit(nll).migrad()
 
-        xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(200), ROOT.RooFit.Range(0., 200.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
+        xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(50), ROOT.RooFit.Range(0., 50.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
         #nll.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
 
         pll_pkYield = nll.createProfile(ROOT.RooArgSet(peakYieldInit))
@@ -612,29 +612,29 @@ for enVal in xrange(21, 100): #(end at 93)
 
         limit = 0
         if peakFitVal > 0:
-            limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,200,0.1) #peakYield instead of zero
+            limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,50,0.1) #peakYield instead of zero
         else:
-            limit = p_mu.findRoot(peakYieldInit, 1,200,0.1)  ## 0.1 for the 90% confidence interval
+            limit = p_mu.findRoot(peakYieldInit, 1,50,0.1)  ## 0.1 for the 90% confidence interval
         print "The limit in signal counts is: " + str(limit)
         r1.Print("v")
         #print str(enVal) + " " + str(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(enVal) * 478)))
         vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4378.6))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 3444.2))
+        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4378.6))
+        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 3444.2))
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
         vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4378.6)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 3444.2)))
+        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4378.6)))
+        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 3444.2)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
         line = ROOT.TLine()
         line.SetLineColor(ROOT.kGreen + 3)
         line.DrawLine(limit, 0, limit, 3)
-        line.DrawLine(0, 1.355, 200, 1.355)
+        line.DrawLine(0, 1.355, 50, 1.355)
 
         print "mA " + str(mA.getVal()) + " DONE!!"
         print "enVal " + str(enVal)
@@ -646,19 +646,21 @@ for enVal in xrange(21, 100): #(end at 93)
         print "resolution error " + str(sigma_res.getVal())
         print "eff function " + str(effValInit)
         print "efficiency " + str(eff.getVal())
-        print "mean efficiency " + str(sigma_eff.getVal())
-        print "efficiency error " + str(sigma_res.getVal())
+        print "mean efficiency " + str(mean_eff.getVal())
+        ##print "efficiency error " + str(sigma_res.getVal())
         print "AxioElectric(mA.getVal()) " + str(AxioElectric(mA.getVal()))
         print "limit " + str(limit)
         print "peakYieldInit " + str(peakYieldInit.getVal())
         print "peakFitVal " + str(peakFitVal)
-        ##print "peakFitRooVal " + str(peakFitRooVal.getVal())
+        print "peakFitRooVal " + str(peakFitRooVal.getVal())
         print "p_mu " + str(p_mu.getVal())
-        ##print "pll_pkYield " + str(pll_pkYield.getVal())
+        print "pll_pkYield " + str(pll_pkYield.getVal())
+        ##print "shiftVal " + str(shiftVal)
+        ##print "strVal " + strVal
 
         if drawFlag:
             canvas.Update()
-            ##WaitForReturn()
+            WaitForReturn()
 
         trapENFCal.IsA().Destructor(trapENFCal)
         ##enr.IsA().Destructor(enr)
@@ -736,9 +738,9 @@ for enVal in xrange(21, 100): #(end at 93)
     #    break
 
 for i in xrange(len(alpList)):
-    ##print str(energyList[i]) + " " + str(alpList[i])
-    text_file2.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
+    print str(energyList[i]) + " " + str(alpList[i])
+    ##text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
 
 for i in xrange(len(vecList)):
-    ##print str(energyList[i]) + " " + str(vecList[i])
-    text_file1.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")
+    print str(energyList[i]) + " " + str(vecList[i])
+    ##text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")

@@ -185,8 +185,8 @@ text_file2 = open("Vec_Enrbinned21_100.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-##inFileName = "AnalysisSpectrumDS1_6.root"
-inFileName = "AnalysisSpectEnrOnly.root"
+inFileName = "AnalysisSpectrumDS1_6.root"
+##inFileName = "BkgSpectComb_0p25.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)

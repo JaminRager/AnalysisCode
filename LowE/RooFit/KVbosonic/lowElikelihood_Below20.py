@@ -183,7 +183,8 @@ text_file2 = open("Vec_Allbinned5_20.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-inFileName = "AnalysisSpectrumDS1_6.root"
+##inFileName = "AnalysisSpectrumDS1_6.root"
+inFileName = "BkgSpectComb_0p25.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)
@@ -192,11 +193,11 @@ inFile.Close()
 ## Manually program in the resolution curve, easy enough
 #THE RESOLUTION CURVE
 ## I don't understand what this file is
-##sigConfFileName = "sigConfHist19Oct16.root"
-##sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
-##sigConfHist = sigConfFile.Get("confHist").Clone()
-##sigConfHist.SetDirectory(0)
-##sigConfFile.Close()
+sigConfFileName = "sigConfHist19Oct16.root"
+sigConfFile = ROOT.TFile(inFileDir + sigConfFileName)
+sigConfHist = sigConfFile.Get("confHist").Clone()
+sigConfHist.SetDirectory(0)
+sigConfFile.Close()
 
 ## the efficiency fit curve and bin by bin efficiency
 #THE T/E EFF CURVE
@@ -224,7 +225,7 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+lowEnRange = [x / 4.0 for x in range(int(5.0*4), 20*4+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
 ##lowEnRange = [5.8] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
@@ -262,10 +263,10 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         #res = ROOT.RooFormulaVar("res", "TMath::Sqrt(0.00000004*mA*mA + 0.0004*mA*mA + .01*mA*mA)", resList)
         #resValInit = sigmaFunc(enVal) #Parameters fit for sigma
         ## define nuisance parameters and energy variable
-        ##resValInit = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(enVal))
-        ##res = ROOT.RooRealVar("res", "Resolution, Sigma(E)", resValInit + 0.0000002, 0.001, 2.0, "keV")
-        resValInit = GetSigma(enVal)
-        res = ROOT.RooRealVar("res", "Resolution, Sigma(E)", resValInit, 0.001, 2.0, "keV")
+        resValInit = sigConfHist.GetBinContent(sigConfHist.GetXaxis().FindBin(enVal))
+        res = ROOT.RooRealVar("res", "Resolution, Sigma(E)", resValInit + 0.0000002, 0.001, 2.0, "keV")
+        ##resValInit = GetSigma(enVal)
+        ##res = ROOT.RooRealVar("res", "Resolution, Sigma(E)", resValInit, 0.001, 2.0, "keV")
         print "RESOLUTION CURVE"
 
         #INIT eff
@@ -383,7 +384,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         shapes.add(Pb210Gauss)
         shapes.add(mystGauss) ##added by Jamin
         shapes.add(tritPdf)
-        shapes.add(CrGauss)
+        ##shapes.add(CrGauss)
 
         yields = ROOT.RooArgList()
         yields.add(bkgdYield)
@@ -394,7 +395,7 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
         yields.add(Pb210GaussYield)
         yields.add(mystGaussYield)
         yields.add(tritYield)
-        yields.add(CrGaussYield)
+        ##yields.add(CrGaussYield)
 
         totalPdf = ROOT.RooAddPdf("totalPdf", "sum of signal and background PDF", shapes, yields)
         print "COMPOSITE PDF"
@@ -412,9 +413,9 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         ## I still don't understand this  stuff well
         mean_res = ROOT.RooRealVar("mean_res", "Res Value from function", resValInit)
-        ##sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
-        ##sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
-        ##print "RESOLUTION FUNCTION CONSTRAINTS"
+        sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
+        sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
+        print "RESOLUTION FUNCTION CONSTRAINTS"
 
         mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", eff.getVal())
         ##effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
@@ -445,9 +446,13 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
                         ##0.0,          0.0,             0.0,         (sigma_eff.getVal())**2],# 0.0,#],
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         ##dtype=numpy.float64)
+        ##elArray = numpy.array(
+                 ##[0.06985,     0.0,
+                 ##0.0,          0.007],
+                 ##dtype=numpy.float64)
         elArray = numpy.array(
-                 [0.06985,     0.0,
-                 0.0,          0.007],
+                 [(sigma_res.getVal())**2,     0.0,
+                 0.0,                          0.007],
                  dtype=numpy.float64)
         print "LOW ENERGY COVARIANCE MATRIX"
         ##covMatrix = ROOT.TMatrixDSym(3,elArray)
@@ -496,8 +501,8 @@ for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
 
         #Draw on a plot
         ###xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
-        ###bins = ROOT.RooBinning(enLowBound, enUpBound)
-        ###bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
+        bins = ROOT.RooBinning(enLowBound, enUpBound)
+        bins.addUniform((int(enUpBound - enLowBound)*4), enLowBound, enUpBound)
         ###data.plotOn(xframe, RF.Binning(bins))
         ###print "DRAW ON PLOT"
 

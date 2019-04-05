@@ -41,9 +41,9 @@ ROOT.gROOT.Reset()
 vectorDM = False #Probably deprecated
 
 def GetEff(energy):
-    p0 = 0.906052
-    p1 = -5.24802
-    p2 = 7.4811
+    p0 = 0.860909
+    p1 = -5.24796
+    p2 = 7.48103
     eff = p0*math.erf((energy-p1)/p2)
     return eff
 
@@ -51,7 +51,7 @@ def GetSigma(energy):
     p0 = 0.381089865044
     p1 = 0.00205439631322
     p2 = 0.00070345548259
-    sig = (numpy.sqrt(p0*p0 + p1*energy + p2*p2*energy*energy))/2.355
+    sig = (numpy.sqrt(p0*p0 + p1*p1*energy + p2*p2*energy*energy))/2.355
     return sig
 
 def WaitForReturn():
@@ -125,10 +125,8 @@ def AxioElectric(En): #This function computes the axio-electric cross section
     ## not sure what this stuff does, check the physics formulas in Kris's dissertation, chapter 6
     if vectorDM:
         return peVal #*(72.63 /75.23)#/ 72.64 #Formulas in papers are structured differently
-        print "vectorDM peVal " + str(peVal)
     else:
         return peVal/.001*3*En*En/(16*numpy.pi*1.0/137*511*511)*(1-0.01/3) * 1000 * (72.63 / 75.23)
-        print "alpDM peVal " + str(peVal)
 
 def SigErrProp(en, func, mat): #To estimate the uncertainty in the sigma values (**DEPRECATED**)
     errProp = 0
@@ -180,13 +178,12 @@ massDict = {"P1D1":0.5099, "P1D2":0.9788, "P1D3":0.8113, "P1D4":0.9679,
 canvas = ROOT.TCanvas("canvas", "canvas", 800, 600)
 
 ##--------OUTPUT FILE----------
-text_file1 = open("ALP_Enrbinned21_100.txt", "w")
-text_file2 = open("Vec_Enrbinned21_100.txt", "w")
+##text_file1 = open("ALP_Allbinned20_93.txt", "w")
+##text_file2 = open("Vec_Allbinned20_93.txt", "w")
 
 #---------LOAD DATA FROM TREE------
 inFileDir = "/global/homes/j/jrager/LowE/RooFit/KVbosonic/"
-##inFileName = "AnalysisSpectrumDS1_6.root"
-inFileName = "AnalysisSpectEnrOnly.root"
+inFileName = "AnalysisSpectrumDS1_6.root"
 inFile = ROOT.TFile(inFileDir + inFileName)
 enrSpec = inFile.Get("spect").Clone()
 enrSpec.SetDirectory(0)
@@ -204,12 +201,6 @@ sigConfFile.Close()
 ## the efficiency fit curve and bin by bin efficiency
 #THE T/E EFF CURVE
 #etaFileName = "toeEffCurves19Jul2016.root"
-##etaFileName = "CombinedEfficiency.root"
-##etaFile = ROOT.TFile(inFileDir + etaFileName)
-##etaFunc = etaFile.Get("effFit").Clone()
-##etaInterval = etaFile.Get("fInts").Clone()
-##etaInterval.SetDirectory(0) #TH1s need this, otherwise segfault.
-##etaFile.Close()
 etaFileName = "P5D2_12Sep16.root"
 etaFile = ROOT.TFile(inFileDir + etaFileName)
 etaFunc = etaFile.Get("effFit").Clone()
@@ -233,12 +224,12 @@ vecList = []
 
 drawFlag = True #*!*!*!*SET TO TRUE TO SEE PLOTS, FALSE TO GENERATE LIMITS ONLY*!*!*!*
 
-##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
-##lowEnRange = [6.4] #UNCOMMENT ABOVE LINE for 5 - 20 keV
+##lowEnRange = [x / 5.0 for x in range(int(5.6*5), 20*5+1)] #At low energy, set limit every 0.2 keV (start at 5.6)
+lowEnRange = [6.5] #UNCOMMENT ABOVE LINE for 5 - 20 keV
 ##lowEnRange = [x / 5.0 for x in range(int(5.0*5), 6*5+1)]
 
-##for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
-for enVal in xrange(21, 100): #(end at 93)
+for enVal in lowEnRange: #EXCHANGE THIS LINE FOR NEXT LINE FOR 21 - 100 keV
+##for enVal in xrange(21, 94): #(end at 93)
 ##for enVal in xrange(21, 25):
     #try: #python no garbage collecty, so keep doing this until we run out of memory. I know, I know...
         energyList.append(enVal)
@@ -279,8 +270,8 @@ for enVal in xrange(21, 100): #(end at 93)
 
         #INIT eff
         ## where cut efficiency gets applied
-        effValInit = GetEff(enVal)
-        eff = ROOT.RooRealVar("eff", "T/E Efficiency", effValInit, 0.8, 1.0)
+        eff = ROOT.RooRealVar("eff", "T/E Efficiency", GetEff(enVal), 0.8, 1.0)
+        ##eff = ROOT.RooRealVar("eff", "T/E Efficiency", etaFunc(enVal)+.000001, 0.9, 1.0)
         print "EFFICIENCY CURVE"
 
         peakGaus = ROOT.RooGaussian("peak_gaus", "gaussian for DM signal", trapENFCal, mA, res) #change to x for the alphas
@@ -288,7 +279,6 @@ for enVal in xrange(21, 100): #(end at 93)
         peakYieldList = ROOT.RooArgList(eff, peakYieldInit)
         ##peakYield = peakYieldInit
         peakYield = ROOT.RooFormulaVar("peakYield", "eff*peakYieldInit", peakYieldList)
-        ##peakYield = ROOT.RooFormulaVar("peakYield", "peakYieldInit/eff", peakYieldList)
         ##if enVal < 20: #Only worry about eff for less than 20 keV, 1 otherwise
             ##peakYield = ROOT.RooFormulaVar("peakYield", "eff*peakYieldInit", peakYieldList)
         print "GAUSSIAN FOR DARK MATTER SIGNAL"
@@ -367,13 +357,6 @@ for enVal in xrange(21, 100): #(end at 93)
         FeGaussYield = ROOT.RooRealVar("FeGaussYield", "Yield of 6.5 keV peak", 600.0, 0.0, 100000.)
         print "6.5 COSMOGENIC PEAK"
 
-        #---------5.5 keV Cr51 cosmogenic peak------
-        cent5p5 = ROOT.RooRealVar("cent5p5", "True Energy of 5.5 keV peak", 5.5, 5.0, 6.0)
-        sig5p5val = GetSigma(5.5)
-        sig5p5 = ROOT.RooRealVar("sig5p5", "Sigma of 5.5 keV peak", sig5p5val, sig5p5val - 0.07, sig5p5val + 0.07)
-        CrGauss = ROOT.RooGaussian("CrGauss", "Gaussian for 5.5 keV peak", trapENFCal, cent5p5, sig5p5)
-        CrGaussYield = ROOT.RooRealVar("CrGaussYield", "Yield of 5.5 keV peak", 100.0, 0.0, 100000.)
-
         #--------Tritium background----------
         tritList = ROOT.RooArgList(trapENFCal)
         tritSet = ROOT.RooArgSet(trapENFCal)
@@ -391,9 +374,8 @@ for enVal in xrange(21, 100): #(end at 93)
         shapes.add(ZnGauss)
         shapes.add(FeGauss)
         shapes.add(Pb210Gauss)
-        ##shapes.add(mystGauss) ##added by Jamin
+        shapes.add(mystGauss) ##added by Jamin
         shapes.add(tritPdf)
-        shapes.add(CrGauss)
 
         yields = ROOT.RooArgList()
         yields.add(bkgdYield)
@@ -402,9 +384,8 @@ for enVal in xrange(21, 100): #(end at 93)
         yields.add(ZnGaussYield)
         yields.add(FeGaussYield)
         yields.add(Pb210GaussYield)
-        ##yields.add(mystGaussYield)
+        yields.add(mystGaussYield)
         yields.add(tritYield)
-        yields.add(CrGaussYield)
 
         totalPdf = ROOT.RooAddPdf("totalPdf", "sum of signal and background PDF", shapes, yields)
         print "COMPOSITE PDF"
@@ -422,13 +403,13 @@ for enVal in xrange(21, 100): #(end at 93)
 
         ## I still don't understand this  stuff well
         mean_res = ROOT.RooRealVar("mean_res", "Res Value from function", resValInit)
-        sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
-        sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
-        print "RESOLUTION FUNCTION CONSTRAINTS"
+        ##sigErr = sigConfHist.GetBinError(sigConfHist.GetXaxis().FindBin(enVal))
+        ##sigma_res = ROOT.RooRealVar("sigma_res", "Resolution Uncertainty", sigErr)#resValRange (was .06/2.355)
+        ##print "RESOLUTION FUNCTION CONSTRAINTS"
 
-        mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", effValInit)
-        effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
-        sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
+        mean_eff = ROOT.RooRealVar("mean_eff", "Eff Val from function", eff.getVal())
+        ##effErr = etaInterval.GetBinError(etaInterval.GetXaxis().FindBin(enVal))
+        ##sigma_eff = ROOT.RooRealVar("sigma_eff", "Eff. Unc", effErr)
         print "EFFICIENCY CONSTRAINTS"
 
         ##mean_exp = ROOT.RooRealVar("mean_exp", "Exp Val", 1./4608.0)
@@ -455,18 +436,10 @@ for enVal in xrange(21, 100): #(end at 93)
                         ##0.0,          0.0,             0.0,         (sigma_eff.getVal())**2],# 0.0,#],
                         #0.0, 0.0, 0.0, 0.0, 0.004*0.004],
                         ##dtype=numpy.float64)
-        ##elArray = numpy.array(
-                 ##[0.06985,     0.0,
-                 ##0.0,          0.007],
-                 ##dtype=numpy.float64)
         elArray = numpy.array(
-                 [0.005,     0.0,
-                 0.0,        0.00005],
+                 [0.06985,     0.0,
+                 0.0,          0.007],
                  dtype=numpy.float64)
-        ##elArray = numpy.array(
-                 ##[(sigma_res.getVal())**2,     0.0,
-                 ##0.0,                          (sigma_eff.getVal())**2],
-                 ##dtype=numpy.float64)
         print "LOW ENERGY COVARIANCE MATRIX"
         ##covMatrix = ROOT.TMatrixDSym(3,elArray)
         ##if enVal < 20:
@@ -516,7 +489,6 @@ for enVal in xrange(21, 100): #(end at 93)
         xframe = trapENFCal.frame(RF.Title(";Energy(keV)"))
         bins = ROOT.RooBinning(enLowBound, enUpBound)
         bins.addUniform((int(enUpBound - enLowBound)*5), enLowBound, enUpBound)
-        ##bins.addUniform((int(enUpBound - enLowBound)*4), enLowBound, enUpBound)
         data.plotOn(xframe, RF.Binning(bins))
         print "DRAW ON PLOT"
 
@@ -527,9 +499,9 @@ for enVal in xrange(21, 100): #(end at 93)
 
         ## I don't understand this part
         if enVal <= 20:
-                chiSquared = xframe.chiSquare(17)#chiSquare(10)
+                chiSquared = xframe.chiSquare(0)#chiSquare(10)
         else:
-                chiSquared = xframe.chiSquare(17)
+                chiSquared = xframe.chiSquare(9)
         print "The chi-squared / ndf =" + str(chiSquared)
         setWrapPeak = ROOT.RooArgSet(peakGaus)
         totalPdfConstrain.plotOn(xframe, RF.Components(setWrapPeak), RF.LineStyle(ROOT.kDotted))
@@ -559,7 +531,7 @@ for enVal in xrange(21, 100): #(end at 93)
         if drawFlag:
             canvas.SetLogy()
             canvas.Update()
-            ##WaitForReturn()
+            #WaitForReturn()
 
 
         ## Dealing with the machinery of Minuit
@@ -567,7 +539,7 @@ for enVal in xrange(21, 100): #(end at 93)
         nll = totalPdfConstrain.createNLL(data, RF.NumCPU(4))
         ROOT.RooMinuit(nll).migrad()
 
-        xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(200), ROOT.RooFit.Range(0., 200.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
+        xframe2 = peakYieldInit.frame(ROOT.RooFit.Bins(50), ROOT.RooFit.Range(0., 50.), ROOT.RooFit.Title("LL and profileLL in peakYield"))
         #nll.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
 
         pll_pkYield = nll.createProfile(ROOT.RooArgSet(peakYieldInit))
@@ -576,89 +548,69 @@ for enVal in xrange(21, 100): #(end at 93)
         peakFitRooVal = ROOT.RooRealVar("peakFitLoc", "Location of best fit", peakFitVal)
         print "THE DAMN min is " + str(pll_pkYield.getVal()) + " at " + str(peakFitVal)
         print peakFitRooVal.getVal()
+        WaitForReturn()
+
+        ###p_mu = 0
+        ###if peakFitVal >= 0:
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+            ##pll_pkYield.plotOn(xframe2)
+            ###p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*@0,1.)",ROOT.RooArgList(pll_pkYield))
+        ###else:
+            ###shiftVal = pll_pkYield.asTF(ROOT.RooArgList(peakYield))(0.0)
+            ###strVal = str(shiftVal)
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
+            ##pll_pkYield.plotOn(xframe2)
+            ###pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
+            ##pll_pkYield.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
+            ###p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*(@0 - "+ strVal +"),1.)",ROOT.RooArgList(pll_pkYield))
+
+        ###xframe2.SetMinimum(0)
+        ###xframe2.SetMaximum(3)
+
+        #canvas.Update()
         #WaitForReturn()
 
-        p_mu = 0
-        if peakFitVal >= 0:
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
-            ##pll_pkYield.plotOn(xframe2)
-            p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*@0,1.)",ROOT.RooArgList(pll_pkYield))
-        else:
-            shiftVal = pll_pkYield.asTF(ROOT.RooArgList(peakYield))(0.0)
-            strVal = str(shiftVal)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kRed))#, ROOT.RooFit.ShiftToZero())
-            ##pll_pkYield.plotOn(xframe2)
-            pll_pkYield.plotOn(xframe2, ROOT.RooFit.LineColor(ROOT.kBlue), ROOT.RooFit.ShiftToZero())
-            ##pll_pkYield.plotOn(xframe2, ROOT.RooFit.ShiftToZero())
-            p_mu = ROOT.RooFormulaVar("p_mu","p_{#mu} using asymptotic formulae","TMath::Prob(2*(@0 - "+ strVal +"),1.)",ROOT.RooArgList(pll_pkYield))
-
-        xframe2.SetMinimum(0)
-        xframe2.SetMaximum(3)
-
-        canvas.Update()
-        ##WaitForReturn()
-
         #p_mu.plotOn(xframe2,ROOT.RooFit.LineColor(ROOT.kGreen))
-        xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
-        xframe2.Draw()
+        ###xframe2.SetTitle("; S (peak yield); -Log #lambda(S)")
+        ###xframe2.Draw()
 
-        xframe2.Print("v")
+        ###xframe2.Print("v")
 
         #plCurve = xframe2.getCurve("nll_totalPdf_data_Profile[peakYield]_Norm[peakYield]")
         #plCurve.SetName("plCurve")
 
 
-        ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
+        ###ROOT.gPad.SetLogy(0) #Pump$&G@ug3$
 
-        limit = 0
-        if peakFitVal > 0:
-            limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,200,0.1) #peakYield instead of zero
-        else:
-            limit = p_mu.findRoot(peakYieldInit, 1,200,0.1)  ## 0.1 for the 90% confidence interval
-        print "The limit in signal counts is: " + str(limit)
-        r1.Print("v")
+        ###limit = 0
+        ###if peakFitVal > 0:
+            ###limit = p_mu.findRoot(peakYieldInit, peakFitVal+1.0,50,0.1) #peakYield instead of zero
+        ###else:
+            ###limit = p_mu.findRoot(peakYieldInit, 1,50,0.1)
+        ###print "The limit in signal counts is: " + str(limit)
+        ###r1.Print("v")
         #print str(enVal) + " " + str(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(enVal) * 478)))
-        vectorDM = True
+        ###vectorDM = True
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 478)) #0.664 = 10^24 / 6.02E23 * 0.4 (see Pospelov Form)
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 460.052))
-        ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4378.6))
-        alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 3444.2))
+        ###alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal()) * 4608.2))
         ##alpList.append(limit / (0.664*1.0E24/enVal * AxioElectric(mA.getVal())))
         #above has to convert cm^2/g to barn / atom, the Ge atomic mass cancels out with A in conversion 
-        vectorDM = False
+        ###vectorDM = False
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 478)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 460.052)))
-        ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4378.6)))
-        vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 3444.2)))
+        ###vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()) * 4608.2)))
         ##vecList.append(ROOT.TMath.Sqrt(limit / (9.0E15*.001/enVal * 86400 * AxioElectric(mA.getVal()))))
-        line = ROOT.TLine()
-        line.SetLineColor(ROOT.kGreen + 3)
-        line.DrawLine(limit, 0, limit, 3)
-        line.DrawLine(0, 1.355, 200, 1.355)
+        ###line = ROOT.TLine()
+        ###line.SetLineColor(ROOT.kGreen + 3)
+        ###line.DrawLine(limit, 0, limit, 3)
+        ###line.DrawLine(0, 1.355, 50, 1.355)
 
-        print "mA " + str(mA.getVal()) + " DONE!!"
-        print "enVal " + str(enVal)
-        print "signal counts " + str(peakYield.getVal())
-        print "Tritium counts " + str(tritYield.getVal())
-        print "res function " + str(resValInit)
-        print "resolution " + str(res.getVal())
-        print "mean resolution " + str(mean_res.getVal())
-        print "resolution error " + str(sigma_res.getVal())
-        print "eff function " + str(effValInit)
-        print "efficiency " + str(eff.getVal())
-        print "mean efficiency " + str(sigma_eff.getVal())
-        print "efficiency error " + str(sigma_res.getVal())
-        print "AxioElectric(mA.getVal()) " + str(AxioElectric(mA.getVal()))
-        print "limit " + str(limit)
-        print "peakYieldInit " + str(peakYieldInit.getVal())
-        print "peakFitVal " + str(peakFitVal)
-        ##print "peakFitRooVal " + str(peakFitRooVal.getVal())
-        print "p_mu " + str(p_mu.getVal())
-        ##print "pll_pkYield " + str(pll_pkYield.getVal())
+        ###print "ENERGY " + str(mA.getVal()) + " DONE!!"
 
-        if drawFlag:
-            canvas.Update()
-            ##WaitForReturn()
+        ###if drawFlag:
+            ###canvas.Update()
+            #WaitForReturn()
 
         trapENFCal.IsA().Destructor(trapENFCal)
         ##enr.IsA().Destructor(enr)
@@ -731,14 +683,14 @@ for enVal in xrange(21, 100): #(end at 93)
         peakFitRooVal.IsA().Destructor(peakFitRooVal)
         #exp.IsA().Destructor(exp)
         ##mean_exp.IsA().Destructor(mean_exp)
-        ##sigma_exp.IsA().Destructor(sigma_exp)
+        sigma_exp.IsA().Destructor(sigma_exp)
     #except:
     #    break
 
 for i in xrange(len(alpList)):
-    ##print str(energyList[i]) + " " + str(alpList[i])
-    text_file2.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
+    print str(energyList[i]) + " " + str(alpList[i])
+    ##text_file1.write(str(energyList[i]) + ", " + str(alpList[i]) + "\n")
 
 for i in xrange(len(vecList)):
-    ##print str(energyList[i]) + " " + str(vecList[i])
-    text_file1.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")
+    print str(energyList[i]) + " " + str(vecList[i])
+    ##text_file2.write(str(energyList[i]) + ", " + str(vecList[i]) + "\n")
